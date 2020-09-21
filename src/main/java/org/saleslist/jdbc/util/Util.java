@@ -1,4 +1,4 @@
-package org.example.jdbc.Util;
+package org.saleslist.jdbc.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

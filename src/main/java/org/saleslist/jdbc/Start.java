@@ -1,6 +1,6 @@
-package org.example.jdbc;
+package org.saleslist.jdbc;
 
-import org.example.jdbc.Util.Util;
+import org.saleslist.jdbc.util.Util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
