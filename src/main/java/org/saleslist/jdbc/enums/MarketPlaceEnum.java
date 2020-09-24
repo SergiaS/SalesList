@@ -1,6 +1,6 @@
 package org.saleslist.jdbc.enums;
 
-public enum MarketPlace {
+public enum MarketPlaceEnum {
 	OLX,
 	OTHER
 }

@@ -1,6 +1,6 @@
 package org.saleslist.jdbc.enums;
 
-public enum PaymentMethod {
+public enum PaymentMethodEnum {
 	CASH_ON_DELIVERY, // C.O.D. - Наложенный платеж
 	COMPLETE_PREPAYMENT,
 	PARTIAL_PREPAYMENT,

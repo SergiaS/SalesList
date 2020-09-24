@@ -1,6 +1,6 @@
 package org.saleslist.jdbc.enums;
 
-public enum OrderStatus {
+public enum OrderStatusEnum {
 	IN_PROCESS,
 	SUCCESS,
 	DENIED

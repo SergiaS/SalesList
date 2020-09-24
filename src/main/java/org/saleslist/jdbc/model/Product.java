@@ -1,9 +1,9 @@
 package org.saleslist.jdbc.model;
 
-import org.saleslist.jdbc.enums.DeliveryService;
-import org.saleslist.jdbc.enums.MarketPlace;
-import org.saleslist.jdbc.enums.OrderStatus;
-import org.saleslist.jdbc.enums.PaymentMethod;
+import org.saleslist.jdbc.enums.DeliveryServiceEnum;
+import org.saleslist.jdbc.enums.MarketPlaceEnum;
+import org.saleslist.jdbc.enums.OrderStatusEnum;
+import org.saleslist.jdbc.enums.PaymentMethodEnum;
 
 import java.time.LocalDateTime;
 
@@ -12,16 +12,18 @@ public class Product {
 	private int id;
 	private LocalDateTime localDateTime;
 	private String title;
-	private MarketPlace marketPlace;
-	private DeliveryService deliveryService;
-	private PaymentMethod paymentMethod;
-	private boolean isMyPacking;
-	private boolean isOwn;
+
+	private MarketPlaceEnum marketPlace;
+	private DeliveryServiceEnum deliveryService;
+	private PaymentMethodEnum paymentMethod;
+
 	private String notes;
-	private OrderStatus orderStatus;
-	private double soldAtPrice;
-	private double soldIncludingExpenses;
-	private double payoutForCooperation;
+
+	private OrderStatusEnum orderStatus;
+
+	private double soldAtPrice; // including expenses
+	private double payoutPercentage;
+
 
 	public int getId() {
 		return id;
@@ -47,44 +49,28 @@ public class Product {
 		this.title = title;
 	}
 
-	public MarketPlace getMarketPlace() {
+	public MarketPlaceEnum getMarketPlace() {
 		return marketPlace;
 	}
 
-	public void setMarketPlace(MarketPlace marketPlace) {
+	public void setMarketPlace(MarketPlaceEnum marketPlace) {
 		this.marketPlace = marketPlace;
 	}
 
-	public DeliveryService getDeliveryService() {
+	public DeliveryServiceEnum getDeliveryService() {
 		return deliveryService;
 	}
 
-	public void setDeliveryService(DeliveryService deliveryService) {
+	public void setDeliveryService(DeliveryServiceEnum deliveryService) {
 		this.deliveryService = deliveryService;
 	}
 
-	public PaymentMethod getPaymentMethod() {
+	public PaymentMethodEnum getPaymentMethod() {
 		return paymentMethod;
 	}
 
-	public void setPaymentMethod(PaymentMethod paymentMethod) {
+	public void setPaymentMethod(PaymentMethodEnum paymentMethod) {
 		this.paymentMethod = paymentMethod;
-	}
-
-	public boolean isMyPacking() {
-		return isMyPacking;
-	}
-
-	public void setMyPacking(boolean myPacking) {
-		isMyPacking = myPacking;
-	}
-
-	public boolean isOwn() {
-		return isOwn;
-	}
-
-	public void setOwn(boolean own) {
-		isOwn = own;
 	}
 
 	public String getNotes() {
@@ -95,11 +81,11 @@ public class Product {
 		this.notes = notes;
 	}
 
-	public OrderStatus getOrderStatus() {
+	public OrderStatusEnum getOrderStatus() {
 		return orderStatus;
 	}
 
-	public void setOrderStatus(OrderStatus orderStatus) {
+	public void setOrderStatus(OrderStatusEnum orderStatus) {
 		this.orderStatus = orderStatus;
 	}
 
@@ -111,20 +97,12 @@ public class Product {
 		this.soldAtPrice = soldAtPrice;
 	}
 
-	public double getSoldIncludingExpenses() {
-		return soldIncludingExpenses;
+	public double getPayoutPercentage() {
+		return payoutPercentage;
 	}
 
-	public void setSoldIncludingExpenses(double soldIncludingExpenses) {
-		this.soldIncludingExpenses = soldIncludingExpenses;
-	}
-
-	public double getPayoutForCooperation() {
-		return payoutForCooperation;
-	}
-
-	public void setPayoutForCooperation(double payoutForCooperation) {
-		this.payoutForCooperation = payoutForCooperation;
+	public void setPayoutPercentage(double payoutPercentage) {
+		this.payoutPercentage = payoutPercentage;
 	}
 
 	@Override
@@ -136,13 +114,10 @@ public class Product {
 				", marketPlace=" + marketPlace +
 				", deliveryService=" + deliveryService +
 				", paymentMethod=" + paymentMethod +
-				", isMyPacking=" + isMyPacking +
-				", isOwn=" + isOwn +
 				", notes='" + notes + '\'' +
 				", orderStatus=" + orderStatus +
 				", soldAtPrice=" + soldAtPrice +
-				", soldIncludingExpenses=" + soldIncludingExpenses +
-				", payoutForCooperation=" + payoutForCooperation +
+				", payoutPercentage=" + payoutPercentage +
 				'}';
 	}
 }
