@@ -9,6 +9,7 @@ public class Util {
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/sales_list?useTimezone=true&serverTimezone=UTC";
 	private static final String DB_USERNAME = "root";
 	private static final String DB_PASSWORD = "root";
+	private static int numberOfConnections = 0;
 
 	public static Connection getConnection() {
 		Connection connection = null;
@@ -21,6 +22,9 @@ public class Util {
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 			System.out.println("Connection ERROR!");
+		} finally {
+			numberOfConnections++;
+			System.out.println(" >>> Number of connections: " + numberOfConnections);
 		}
 		return connection;
 	}

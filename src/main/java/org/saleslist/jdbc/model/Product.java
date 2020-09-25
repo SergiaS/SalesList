@@ -24,6 +24,20 @@ public class Product {
 	private double soldAtPrice; // including expenses
 	private double payoutPercentage;
 
+	public Product() {
+	}
+
+	public Product(LocalDateTime localDateTime, String title, MarketPlaceEnum marketPlace, DeliveryServiceEnum deliveryService, PaymentMethodEnum paymentMethod, String notes, OrderStatusEnum orderStatus, double soldAtPrice, double payoutPercentage) {
+		this.localDateTime = localDateTime;
+		this.title = title;
+		this.marketPlace = marketPlace;
+		this.deliveryService = deliveryService;
+		this.paymentMethod = paymentMethod;
+		this.notes = notes;
+		this.orderStatus = orderStatus;
+		this.soldAtPrice = soldAtPrice;
+		this.payoutPercentage = payoutPercentage;
+	}
 
 	public int getId() {
 		return id;
