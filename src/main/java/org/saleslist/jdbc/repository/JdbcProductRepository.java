@@ -5,7 +5,7 @@ import org.saleslist.jdbc.enums.MarketPlaceEnum;
 import org.saleslist.jdbc.enums.OrderStatusEnum;
 import org.saleslist.jdbc.enums.PaymentMethodEnum;
 import org.saleslist.jdbc.model.Product;
-import org.saleslist.jdbc.util.Util;
+import org.saleslist.jdbc.util.ConnectionDB;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,13 +13,14 @@ import java.util.List;
 
 public class JdbcProductRepository implements ProductRepository {
 
+	private final ConnectionDB conn = ConnectionDB.getInstance();
+
 	@Override
 	public Product save(Product product) {
 
 		String sql = "insert into sales(date_time, title, market_place, delivery_service, payment_method, notes, order_status, sold_at_price, payout_percentage) " +
 				"values (?,?,?,?,?,?,?,?,?)";
-		try (Connection connection = Util.getConnection();
-		     PreparedStatement ps = connection.prepareStatement(sql)) {
+		try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
 			ps.setTimestamp(1, Timestamp.valueOf(product.getLocalDateTime()));
 			ps.setString(2, product.getTitle());
 			ps.setString(3, product.getMarketPlace().name());
@@ -42,11 +43,10 @@ public class JdbcProductRepository implements ProductRepository {
 	}
 
 	@Override
-	public Product getById(int id) {
+	public Product getProductById(int id) {
 		String sql = "select * from sales where id = ?";
 		Product product = new Product();
-		try (Connection connection = Util.getConnection();
-		     PreparedStatement ps = connection.prepareStatement(sql)) {
+		try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
@@ -71,8 +71,7 @@ public class JdbcProductRepository implements ProductRepository {
 	@Override
 	public Product update(int id, Product product) {
 		String sql = "update sales SET title=?, market_place=?, delivery_service=?, payment_method=?, notes=?, order_status=?, sold_at_price=?, payout_percentage=? where id = ?";
-		try (Connection connection = Util.getConnection();
-		     PreparedStatement ps = connection.prepareStatement(sql)) {
+		try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
 			ps.setString(1, product.getTitle());
 			ps.setString(2, product.getMarketPlace().name());
 			ps.setString(3, product.getDeliveryService().name());
@@ -97,8 +96,7 @@ public class JdbcProductRepository implements ProductRepository {
 	public boolean delete(int id) {
 		String sql = "delete from sales where id = ?";
 		int rowsStatus = 0;
-		try (Connection connection = Util.getConnection();
-		     PreparedStatement ps = connection.prepareStatement(sql)) {
+		try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
 			ps.setInt(1, id);
 
 			rowsStatus = ps.executeUpdate();
@@ -113,11 +111,10 @@ public class JdbcProductRepository implements ProductRepository {
 
 	@Override
 	public List<Product> getAllProducts() {
-		List<Product> productList = new ArrayList<>();
 		String sql = "select * from sales";
+		List<Product> productList = new ArrayList<>();
 
-		try (Connection connection = Util.getConnection();
-		     PreparedStatement ps = connection.prepareStatement(sql)) {
+		try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Product product = new Product();

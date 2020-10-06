@@ -1,20 +1,8 @@
 package org.saleslist.jdbc;
 
-import org.saleslist.jdbc.enums.DeliveryServiceEnum;
-import org.saleslist.jdbc.enums.MarketPlaceEnum;
-import org.saleslist.jdbc.enums.OrderStatusEnum;
-import org.saleslist.jdbc.enums.PaymentMethodEnum;
 import org.saleslist.jdbc.model.Product;
 import org.saleslist.jdbc.repository.JdbcProductRepository;
-import org.saleslist.jdbc.util.Util;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Start {

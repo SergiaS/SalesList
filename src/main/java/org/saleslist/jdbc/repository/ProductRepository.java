@@ -8,7 +8,7 @@ public interface ProductRepository {
 
 	Product save(Product product);
 
-	Product getById(int id);
+	Product getProductById(int id);
 
 	Product update(int id, Product product);
 
