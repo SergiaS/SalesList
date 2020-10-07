@@ -1,0 +1,15 @@
+tr[data-payoutPercentage="false"] {
+    color: green;
+}
+
+tr[data-payoutPercentage="true"] {
+    color: blue;
+}
+
+.con {
+    color: orange;
+}
+
+.my {
+    color: green;
+}

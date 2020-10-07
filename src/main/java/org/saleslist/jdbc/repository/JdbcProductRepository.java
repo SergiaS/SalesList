@@ -21,7 +21,7 @@ public class JdbcProductRepository implements ProductRepository {
 		String sql = "insert into sales(date_time, title, market_place, delivery_service, payment_method, notes, order_status, sold_at_price, payout_percentage) " +
 				"values (?,?,?,?,?,?,?,?,?)";
 		try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
-			ps.setTimestamp(1, Timestamp.valueOf(product.getLocalDateTime()));
+			ps.setTimestamp(1, Timestamp.valueOf(product.getDateTime()));
 			ps.setString(2, product.getTitle());
 			ps.setString(3, product.getMarketPlace().name());
 			ps.setString(4, product.getDeliveryService().name());
@@ -51,7 +51,7 @@ public class JdbcProductRepository implements ProductRepository {
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				product.setId(rs.getInt(1));
-				product.setLocalDateTime(rs.getTimestamp(2).toLocalDateTime());
+				product.setDateTime(rs.getTimestamp(2).toLocalDateTime());
 				product.setTitle(rs.getString(3));
 				product.setMarketPlace(MarketPlaceEnum.valueOf(rs.getString(4)));
 				product.setDeliveryService(DeliveryServiceEnum.valueOf(rs.getString(5)));
@@ -119,7 +119,7 @@ public class JdbcProductRepository implements ProductRepository {
 			while (rs.next()) {
 				Product product = new Product();
 				product.setId(rs.getInt(1));
-				product.setLocalDateTime(rs.getTimestamp(2).toLocalDateTime());
+				product.setDateTime(rs.getTimestamp(2).toLocalDateTime());
 				product.setTitle(rs.getString(3));
 				product.setMarketPlace(MarketPlaceEnum.valueOf(rs.getString(4)));
 				product.setDeliveryService(DeliveryServiceEnum.valueOf(rs.getString(5)));

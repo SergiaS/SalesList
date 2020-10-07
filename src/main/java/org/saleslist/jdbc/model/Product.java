@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class Product {
 
 	private int id;
-	private LocalDateTime localDateTime;
+	private LocalDateTime dateTime;
 	private String title;
 
 	private MarketPlaceEnum marketPlace;
@@ -27,8 +27,8 @@ public class Product {
 	public Product() {
 	}
 
-	public Product(LocalDateTime localDateTime, String title, MarketPlaceEnum marketPlace, DeliveryServiceEnum deliveryService, PaymentMethodEnum paymentMethod, String notes, OrderStatusEnum orderStatus, double soldAtPrice, double payoutPercentage) {
-		this.localDateTime = localDateTime;
+	public Product(LocalDateTime dateTime, String title, MarketPlaceEnum marketPlace, DeliveryServiceEnum deliveryService, PaymentMethodEnum paymentMethod, String notes, OrderStatusEnum orderStatus, double soldAtPrice, double payoutPercentage) {
+		this.dateTime = dateTime;
 		this.title = title;
 		this.marketPlace = marketPlace;
 		this.deliveryService = deliveryService;
@@ -47,12 +47,12 @@ public class Product {
 		this.id = id;
 	}
 
-	public LocalDateTime getLocalDateTime() {
-		return localDateTime;
+	public LocalDateTime getDateTime() {
+		return dateTime;
 	}
 
-	public void setLocalDateTime(LocalDateTime localDateTime) {
-		this.localDateTime = localDateTime;
+	public void setDateTime(LocalDateTime dateTime) {
+		this.dateTime = dateTime;
 	}
 
 	public String getTitle() {
@@ -123,7 +123,7 @@ public class Product {
 	public String toString() {
 		return "Product{" +
 				"id=" + id +
-				", localDateTime=" + localDateTime +
+				", localDateTime=" + dateTime +
 				", title='" + title + '\'' +
 				", marketPlace=" + marketPlace +
 				", deliveryService=" + deliveryService +
