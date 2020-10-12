@@ -6,11 +6,12 @@ import org.saleslist.jdbc.enums.OrderStatusEnum;
 import org.saleslist.jdbc.enums.PaymentMethodEnum;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class Product {
 
 	private int id;
-	private LocalDateTime localDateTime;
+	private LocalDateTime dateTime;
 	private String title;
 
 	private MarketPlaceEnum marketPlace;
@@ -22,13 +23,13 @@ public class Product {
 	private OrderStatusEnum orderStatus;
 
 	private double soldAtPrice; // including expenses
-	private double payoutPercentage;
+	private int payoutPercentage;
 
 	public Product() {
 	}
 
-	public Product(LocalDateTime localDateTime, String title, MarketPlaceEnum marketPlace, DeliveryServiceEnum deliveryService, PaymentMethodEnum paymentMethod, String notes, OrderStatusEnum orderStatus, double soldAtPrice, double payoutPercentage) {
-		this.localDateTime = localDateTime;
+	public Product(LocalDateTime dateTime, String title, MarketPlaceEnum marketPlace, DeliveryServiceEnum deliveryService, PaymentMethodEnum paymentMethod, String notes, OrderStatusEnum orderStatus, double soldAtPrice, int payoutPercentage) {
+		this.dateTime = dateTime.truncatedTo(ChronoUnit.MINUTES);
 		this.title = title;
 		this.marketPlace = marketPlace;
 		this.deliveryService = deliveryService;
@@ -47,12 +48,12 @@ public class Product {
 		this.id = id;
 	}
 
-	public LocalDateTime getLocalDateTime() {
-		return localDateTime;
+	public LocalDateTime getDateTime() {
+		return dateTime;
 	}
 
-	public void setLocalDateTime(LocalDateTime localDateTime) {
-		this.localDateTime = localDateTime;
+	public void setDateTime(LocalDateTime dateTime) {
+		this.dateTime = dateTime;
 	}
 
 	public String getTitle() {
@@ -111,11 +112,11 @@ public class Product {
 		this.soldAtPrice = soldAtPrice;
 	}
 
-	public double getPayoutPercentage() {
+	public int getPayoutPercentage() {
 		return payoutPercentage;
 	}
 
-	public void setPayoutPercentage(double payoutPercentage) {
+	public void setPayoutPercentage(int payoutPercentage) {
 		this.payoutPercentage = payoutPercentage;
 	}
 
@@ -123,7 +124,7 @@ public class Product {
 	public String toString() {
 		return "Product{" +
 				"id=" + id +
-				", localDateTime=" + localDateTime +
+				", localDateTime=" + dateTime +
 				", title='" + title + '\'' +
 				", marketPlace=" + marketPlace +
 				", deliveryService=" + deliveryService +
