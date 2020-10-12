@@ -29,19 +29,17 @@ public class ConnectionDB {
 	}
 
 	public ConnectionDB() {
-
 		try {
 			System.out.println("Registering JDBC driver...");
 			Class.forName(DB_DRIVER);
 			System.out.println("Creating database connection...");
 			connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 			System.out.println("Connection SUCCESS!");
+			numberOfConnections++;
+			System.out.println(" > Number of connections: " + numberOfConnections);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 			System.out.println("Connection ERROR!");
-		} finally {
-			numberOfConnections++;
-			System.out.println(" >>> Number of connections: " + numberOfConnections);
 		}
 	}
 
@@ -66,7 +64,7 @@ public class ConnectionDB {
 
 	private static Properties dbProperties() {
 		String rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("db/database.properties")).getPath();
-		InputStream input = null;
+		InputStream input;
 		Properties properties = new Properties();
 		try {
 			input = new FileInputStream(rootPath);

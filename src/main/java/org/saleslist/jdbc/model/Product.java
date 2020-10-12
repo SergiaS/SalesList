@@ -6,6 +6,7 @@ import org.saleslist.jdbc.enums.OrderStatusEnum;
 import org.saleslist.jdbc.enums.PaymentMethodEnum;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class Product {
 
@@ -22,13 +23,13 @@ public class Product {
 	private OrderStatusEnum orderStatus;
 
 	private double soldAtPrice; // including expenses
-	private double payoutPercentage;
+	private int payoutPercentage;
 
 	public Product() {
 	}
 
-	public Product(LocalDateTime dateTime, String title, MarketPlaceEnum marketPlace, DeliveryServiceEnum deliveryService, PaymentMethodEnum paymentMethod, String notes, OrderStatusEnum orderStatus, double soldAtPrice, double payoutPercentage) {
-		this.dateTime = dateTime;
+	public Product(LocalDateTime dateTime, String title, MarketPlaceEnum marketPlace, DeliveryServiceEnum deliveryService, PaymentMethodEnum paymentMethod, String notes, OrderStatusEnum orderStatus, double soldAtPrice, int payoutPercentage) {
+		this.dateTime = dateTime.truncatedTo(ChronoUnit.MINUTES);
 		this.title = title;
 		this.marketPlace = marketPlace;
 		this.deliveryService = deliveryService;
@@ -111,11 +112,11 @@ public class Product {
 		this.soldAtPrice = soldAtPrice;
 	}
 
-	public double getPayoutPercentage() {
+	public int getPayoutPercentage() {
 		return payoutPercentage;
 	}
 
-	public void setPayoutPercentage(double payoutPercentage) {
+	public void setPayoutPercentage(int payoutPercentage) {
 		this.payoutPercentage = payoutPercentage;
 	}
 

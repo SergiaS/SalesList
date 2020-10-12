@@ -1,0 +1,43 @@
+tr[data-payoutPercentage="false"] {
+    color: green;
+}
+
+tr[data-payoutPercentage="true"] {
+    color: blue;
+}
+
+a {
+    text-decoration: none;  /* links without underlines */
+}
+
+select {
+    width: 200px;
+}
+
+::placeholder {
+    font-style: italic;
+    color: lightgray;
+}
+
+.asterisk{
+    color: red;
+}
+
+table.product-table {
+    width: 100%;
+}
+
+.product-table tr, th  {
+    width: 50%;
+}
+
+.product-table th {
+    text-align: right;
+    border: 0;
+    padding: 5px;
+    border-spacing: 0;
+}
+
+.test {
+    color: orange;
+}
