@@ -1,7 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%--<%@ taglib prefix="fn" uri="http://topjava.javawebinar.ru/functions" %>--%>
 <html>
 <head>
     <title>Products list</title>
@@ -33,13 +31,7 @@
             <c:forEach items="${products}" var="product">
                 <jsp:useBean id="product" type="org.saleslist.jdbc.model.Product"/>
                 <tr data-payoutPercentage="${product.payoutPercentage > 0}">
-                    <td>
-                        ${product.dateTime}
-<%--                            ${product.dateTime.toLocalDate()} ${product.dateTime.toLocalTime()}--%>
-<%--                            <%=TimeUtil.toString(product.getDateTime())%>--%>
-<%--                            ${fn:replace(product.dateTime, 'T', ' ')}--%>
-<%--                            ${fn:formatDateTime(product.dateTime)}--%>
-                    </td>
+                    <td>${product.dateTime.toLocalDate()}, ${product.dateTime.toLocalTime()}</td>
                     <td>${product.title}</td>
                     <td>${product.marketPlace}</td>
                     <td>${product.deliveryService}</td>
