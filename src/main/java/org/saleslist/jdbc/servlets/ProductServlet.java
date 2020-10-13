@@ -1,12 +1,13 @@
 package org.saleslist.jdbc.servlets;
 
-import com.mysql.cj.util.StringUtils;
 import org.saleslist.jdbc.enums.DeliveryServiceEnum;
 import org.saleslist.jdbc.enums.MarketPlaceEnum;
 import org.saleslist.jdbc.enums.OrderStatusEnum;
 import org.saleslist.jdbc.enums.PaymentMethodEnum;
 import org.saleslist.jdbc.model.Product;
 import org.saleslist.jdbc.repository.JdbcProductRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +23,8 @@ import java.util.Objects;
 
 @WebServlet("/products")
 public class ProductServlet extends HttpServlet {
+
+	private static final Logger logger = LoggerFactory.getLogger(ProductServlet.class);
 
 	private JdbcProductRepository repository;
 
@@ -44,22 +47,21 @@ public class ProductServlet extends HttpServlet {
 				Double.parseDouble(request.getParameter("price").replace(",", ".")),
 				Integer.parseInt(request.getParameter("payout"))
 		);
+		int productId = getId(request);
+		logger.info("doPost: productId = {}, product = {}", productId, product);
 
 		if (request.getParameter("id").equals("0")) {
 			repository.save(product);
 		} else {
-			repository.update(getId(request), product);
+			repository.update(productId, product);
 		}
 		response.sendRedirect("products");
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String path = request.getServletPath();
-		System.out.println(" > PATH = " + path);
-
 		String action = request.getParameter("action");
-		System.out.println(" > ACTION = " + action);
+		logger.info("doGet: PATH = {}, ACTION = {}", request.getServletPath(), action);
 
 		switch (action == null ? "all" : action) {
 			case "delete" -> {
