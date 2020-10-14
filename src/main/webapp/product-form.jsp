@@ -1,14 +1,14 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
 <head>
     <title>Product Form</title>
+    <link rel="stylesheet" type="text/css" href="resources/css/style.css">
 </head>
 <body>
     <section>
         <h3>> <a href="/">Home</a></h3>
-        <link rel="stylesheet" type="text/css" href="resources/css/style.css">
         <hr>
         <h1 style="text-align: center">${param.action == 'create' ? 'Add new product' : 'Edit product'}</h1>
         <hr>

@@ -38,15 +38,16 @@ public class ProductServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		Product product = new Product(
 				LocalDateTime.parse(request.getParameter("dateTime")),
-				request.getParameter("title").stripLeading(),
+				request.getParameter("title").trim(),
 				MarketPlaceEnum.valueOf(request.getParameter("marketPlace")),
 				DeliveryServiceEnum.valueOf(request.getParameter("deliveryService")),
 				PaymentMethodEnum.valueOf(request.getParameter("paymentMethod")),
-				request.getParameter("notes").stripLeading(),
+				request.getParameter("notes").trim(),
 				OrderStatusEnum.valueOf(request.getParameter("orderStatus")),
 				Double.parseDouble(request.getParameter("price").replace(",", ".")),
 				Integer.parseInt(request.getParameter("payout"))
 		);
+
 		int productId = getId(request);
 		logger.info("doPost: productId = {}, product = {}", productId, product);
 
