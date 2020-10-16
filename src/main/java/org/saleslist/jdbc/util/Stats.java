@@ -4,9 +4,9 @@ import org.saleslist.jdbc.model.Product;
 import org.saleslist.jdbc.repository.JdbcProductRepository;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Stats {
@@ -56,51 +56,37 @@ public class Stats {
 	}
 
 
-	// try refactor all Counters methods to one by generics
-	private Map<String, Integer> deliveryCounterMap = new HashMap<>();
-	private Map<String, Integer> marketPlaceCounterMap = new HashMap<>();
-	private Map<String, Integer> paymentMethodCounterMap = new HashMap<>();
-	private Map<String, Integer> orderStatusCounterMap = new HashMap<>();
+	private final Map<String, Long> deliveryCounterMap;
+	private final Map<String, Long> marketPlaceCounterMap;
+	private final Map<String, Long> paymentMethodCounterMap;
+	private final Map<String, Long> orderStatusCounterMap;
 
 	static int iStatic = 0;
 	{
-		counter();
-		System.out.println("Stats object counter: " + ++iStatic);
+		deliveryCounterMap = counter(productList -> productList.getDeliveryService().toString());
+		marketPlaceCounterMap = counter(productList -> productList.getMarketPlace().toString());
+		paymentMethodCounterMap = counter(productList -> productList.getPaymentMethod().toString());
+		orderStatusCounterMap = counter(productList -> productList.getOrderStatus().toString());
+		System.out.println("Stats object connection counter: " + ++iStatic);
 	}
 
-	private void counter() {
-		for (Product product : productList) {
-			String deliveryTmp = product.getDeliveryService().toString();
-			deliveryCounterMap.putIfAbsent(deliveryTmp, 0);
-			deliveryCounterMap.computeIfPresent(deliveryTmp, (k, v) -> v + 1);
-
-			String marketPlaceTmp = product.getMarketPlace().toString();
-			marketPlaceCounterMap.putIfAbsent(marketPlaceTmp, 0);
-			marketPlaceCounterMap.computeIfPresent(marketPlaceTmp, (k, v) -> v + 1);
-
-			String paymentMethodTmp = product.getPaymentMethod().toString();
-			paymentMethodCounterMap.putIfAbsent(paymentMethodTmp, 0);
-			paymentMethodCounterMap.computeIfPresent(paymentMethodTmp, (k, v) -> v + 1);
-
-			String orderStatusTmp = product.getOrderStatus().toString();
-			orderStatusCounterMap.putIfAbsent(orderStatusTmp, 0);
-			orderStatusCounterMap.computeIfPresent(orderStatusTmp, (k, v) -> v + 1);
-		}
+	private Map<String, Long> counter(Function<Product, String> f) {
+		return productList.stream().collect(Collectors.groupingBy(f, Collectors.counting()));
 	}
 
-	public Map<String, Integer> getDeliveryCounterMap() {
+	public Map<String, Long> getDeliveryCounterMap() {
 		return deliveryCounterMap;
 	}
 
-	public Map<String, Integer> getMarketPlaceCounterMap() {
+	public Map<String, Long> getMarketPlaceCounterMap() {
 		return marketPlaceCounterMap;
 	}
 
-	public Map<String, Integer> getPaymentMethodCounterMap() {
+	public Map<String, Long> getPaymentMethodCounterMap() {
 		return paymentMethodCounterMap;
 	}
 
-	public Map<String, Integer> getStatusOrderCounterMap() {
+	public Map<String, Long> getStatusOrderCounterMap() {
 		return orderStatusCounterMap;
 	}
 }
