@@ -10,6 +10,7 @@ import org.saleslist.jdbc.util.ConnectionDB;
 import java.sql.*;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class JdbcProductRepository implements ProductRepository {
@@ -111,6 +112,7 @@ public class JdbcProductRepository implements ProductRepository {
 		return rowsStatus > 0;
 	}
 
+	// last product will be first in the list
 	@Override
 	public List<Product> getAllProducts() {
 		String sql = "select * from sales";
@@ -135,6 +137,7 @@ public class JdbcProductRepository implements ProductRepository {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		Collections.reverse(productList);
 		return productList;
 	}
 }
