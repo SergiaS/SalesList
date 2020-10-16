@@ -6,6 +6,7 @@ import org.saleslist.jdbc.enums.OrderStatusEnum;
 import org.saleslist.jdbc.enums.PaymentMethodEnum;
 import org.saleslist.jdbc.model.Product;
 import org.saleslist.jdbc.repository.JdbcProductRepository;
+import org.saleslist.jdbc.util.Stats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +64,9 @@ public class ProductServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
 		logger.info("doGet: PATH = {}, ACTION = {}", request.getServletPath(), action);
+
+		Stats statistics = new Stats();
+		request.setAttribute("stats", statistics);
 
 		switch (action == null ? "all" : action) {
 			case "delete" -> {
