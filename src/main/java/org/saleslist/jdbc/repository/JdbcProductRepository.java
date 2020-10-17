@@ -6,6 +6,7 @@ import org.saleslist.jdbc.enums.OrderStatusEnum;
 import org.saleslist.jdbc.enums.PaymentMethodEnum;
 import org.saleslist.jdbc.model.Product;
 import org.saleslist.jdbc.util.ConnectionDB;
+import org.saleslist.jdbc.util.Stats;
 
 import java.sql.*;
 import java.time.temporal.ChronoUnit;
@@ -19,19 +20,20 @@ public class JdbcProductRepository implements ProductRepository {
 
 	@Override
 	public Product save(Product product) {
-
-		String sql = "insert into sales(date_time, title, market_place, delivery_service, payment_method, notes, order_status, sold_at_price, payout_percentage) " +
-				"values (?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into sales(date_time, title, market_place, delivery_service, payment_method, order_status, spent, sold_at_price, payout_percentage, profit, notes) " +
+				"values (?,?,?,?,?,?,?,?,?,?,?)";
 		try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
 			ps.setTimestamp(1, Timestamp.valueOf(product.getDateTime()));
 			ps.setString(2, product.getTitle());
 			ps.setString(3, product.getMarketPlace().name());
 			ps.setString(4, product.getDeliveryService().name());
 			ps.setString(5, product.getPaymentMethod().name());
-			ps.setString(6, product.getNotes());
-			ps.setString(7, product.getOrderStatus().name());
-			ps.setDouble(8, product.getSoldAtPrice());
-			ps.setDouble(9, product.getPayoutPercentage());
+			ps.setString(6, product.getOrderStatus().name());
+			ps.setDouble(7, Double.parseDouble(Stats.doubleTemplate.format(product.getSpent())));
+			ps.setDouble(8, Double.parseDouble(Stats.doubleTemplate.format(product.getSoldAtPrice())));
+			ps.setInt(9, product.getPayoutPercentage());
+			ps.setDouble(10, Double.parseDouble(Stats.doubleTemplate.format(product.getProfit())));
+			ps.setString(11, product.getNotes());
 
 			int rowsInserted = ps.executeUpdate();
 			if (rowsInserted > 0) {
@@ -40,7 +42,6 @@ public class JdbcProductRepository implements ProductRepository {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return product;
 	}
 
@@ -58,32 +59,35 @@ public class JdbcProductRepository implements ProductRepository {
 				product.setMarketPlace(MarketPlaceEnum.valueOf(rs.getString(4)));
 				product.setDeliveryService(DeliveryServiceEnum.valueOf(rs.getString(5)));
 				product.setPaymentMethod(PaymentMethodEnum.valueOf(rs.getString(6)));
-				product.setNotes(rs.getString(7));
-				product.setOrderStatus(OrderStatusEnum.valueOf(rs.getString(8)));
+				product.setOrderStatus(OrderStatusEnum.valueOf(rs.getString(7)));
+				product.setSpent(rs.getDouble(8));
 				product.setSoldAtPrice(rs.getDouble(9));
 				product.setPayoutPercentage(rs.getInt(10));
+				product.setProfit(rs.getDouble(11));
+				product.setNotes(rs.getString(12));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return product;
 	}
 
 	@Override
 	public Product update(int id, Product product) {
-		String sql = "update sales SET date_time=?, title=?, market_place=?, delivery_service=?, payment_method=?, notes=?, order_status=?, sold_at_price=?, payout_percentage=? where id = ?";
+		String sql = "update sales SET date_time=?, title=?, market_place=?, delivery_service=?, payment_method=?, order_status=?, spent=?, sold_at_price=?, payout_percentage=?, profit=?, notes=? where id = ?";
 		try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
 			ps.setTimestamp(1, Timestamp.valueOf(product.getDateTime()));
 			ps.setString(2, product.getTitle());
 			ps.setString(3, product.getMarketPlace().name());
 			ps.setString(4, product.getDeliveryService().name());
 			ps.setString(5, product.getPaymentMethod().name());
-			ps.setString(6, product.getNotes());
-			ps.setString(7, product.getOrderStatus().name());
-			ps.setDouble(8, product.getSoldAtPrice());
+			ps.setString(6, product.getOrderStatus().name());
+			ps.setDouble(7, Double.parseDouble(Stats.doubleTemplate.format(product.getSpent())));
+			ps.setDouble(8, Double.parseDouble(Stats.doubleTemplate.format(product.getSoldAtPrice())));
 			ps.setInt(9, product.getPayoutPercentage());
-			ps.setInt(10, id);
+			ps.setDouble(10, Double.parseDouble(Stats.doubleTemplate.format(product.getProfit())));
+			ps.setString(11, product.getNotes());
+			ps.setInt(12, id);
 
 			int rowsUpdated = ps.executeUpdate();
 			if (rowsUpdated > 0) {
@@ -128,10 +132,12 @@ public class JdbcProductRepository implements ProductRepository {
 				product.setMarketPlace(MarketPlaceEnum.valueOf(rs.getString(4)));
 				product.setDeliveryService(DeliveryServiceEnum.valueOf(rs.getString(5)));
 				product.setPaymentMethod(PaymentMethodEnum.valueOf(rs.getString(6)));
-				product.setNotes(rs.getString(7));
-				product.setOrderStatus(OrderStatusEnum.valueOf(rs.getString(8)));
+				product.setOrderStatus(OrderStatusEnum.valueOf(rs.getString(7)));
+				product.setSpent(rs.getDouble(8));
 				product.setSoldAtPrice(rs.getDouble(9));
 				product.setPayoutPercentage(rs.getInt(10));
+				product.setProfit(rs.getDouble(11));
+				product.setNotes(rs.getString(12));
 				productList.add(product);
 			}
 		} catch (SQLException e) {

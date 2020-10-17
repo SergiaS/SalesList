@@ -64,12 +64,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>Notes:</th>
-                    <td>
-                        <textarea cols=40 name="notes"> <c:out value="${product.notes}"/> </textarea>
-                    </td>
-                </tr>
-                <tr>
                     <th>Order Status:</th>
                     <td>
                         <select name="orderStatus" required>
@@ -82,17 +76,30 @@
                     </td>
                 </tr>
                 <tr>
+                    <th>Spent, UAH:</th>
+                    <td>
+                        <input type="number" value="${product.spent == 0 ? "" : product.spent}" name="spent" placeholder="How much did it cost?" size="5" required>
+                        <span class="asterisk">*</span>
+                    </td>
+                </tr>
+                <tr>
                     <th>Sold At Price, UAH:</th>
                     <td>
-                        <input type="text" value="${product.soldAtPrice == 0 ? "" : product.soldAtPrice}" name="price" placeholder="Price" size="5" required>
+                        <input type="number" value="${product.soldAtPrice == 0 ? "" : product.soldAtPrice}" name="price" placeholder="How much you got for it?" size="5" required>
                         <span class="asterisk">*</span>
                     </td>
                 </tr>
                 <tr>
                     <th>Payout Percentage, %:</th>
                     <td>
-                        <input type="text" value="${product.payoutPercentage}" name="payout" placeholder="Payout Percentage" size="5" required>
+                        <input type="text" value="${product.payoutPercentage}" name="payout" placeholder="Payout" size="5" required>
                         <span class="asterisk">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Notes:</th>
+                    <td>
+                        <textarea cols=40 name="notes"> <c:out value="${product.notes}"/> </textarea>
                     </td>
                 </tr>
                 <tr>

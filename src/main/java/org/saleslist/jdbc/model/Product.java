@@ -17,28 +17,49 @@ public class Product {
 	private MarketPlaceEnum marketPlace;
 	private DeliveryServiceEnum deliveryService;
 	private PaymentMethodEnum paymentMethod;
+	private OrderStatusEnum orderStatus;
+
+	private double spent;
+	private double soldAtPrice;
+	private int payoutPercentage;
+	private double profit;
 
 	private String notes;
 
-	private OrderStatusEnum orderStatus;
-
-	private double soldAtPrice; // including expenses
-	private int payoutPercentage;
-
 	public Product() {
 	}
-
-	public Product(LocalDateTime dateTime, String title, MarketPlaceEnum marketPlace, DeliveryServiceEnum deliveryService, PaymentMethodEnum paymentMethod, String notes, OrderStatusEnum orderStatus, double soldAtPrice, int payoutPercentage) {
+	// for reading product from db
+	public Product(LocalDateTime dateTime, String title, MarketPlaceEnum marketPlace, DeliveryServiceEnum deliveryService, PaymentMethodEnum paymentMethod, OrderStatusEnum orderStatus, double spent, double soldAtPrice, int payoutPercentage, double profit, String notes) {
 		this.dateTime = dateTime.truncatedTo(ChronoUnit.MINUTES);
 		this.title = title;
 		this.marketPlace = marketPlace;
 		this.deliveryService = deliveryService;
 		this.paymentMethod = paymentMethod;
-		this.notes = notes;
 		this.orderStatus = orderStatus;
+		this.spent = spent;
 		this.soldAtPrice = soldAtPrice;
 		this.payoutPercentage = payoutPercentage;
+		this.profit = profit;
+		this.notes = notes;
 	}
+
+	// for saving product to db
+	public Product(LocalDateTime dateTime, String title, MarketPlaceEnum marketPlace, DeliveryServiceEnum deliveryService, PaymentMethodEnum paymentMethod, OrderStatusEnum orderStatus, double spent, double soldAtPrice, int payoutPercentage, String notes) {
+//		this(dateTime, title, marketPlace, deliveryService, paymentMethod, orderStatus, spent, soldAtPrice, payoutPercentage, profitCalculation(), notes);
+		this.dateTime = dateTime.truncatedTo(ChronoUnit.MINUTES);
+		this.title = title;
+		this.marketPlace = marketPlace;
+		this.deliveryService = deliveryService;
+		this.paymentMethod = paymentMethod;
+		this.orderStatus = orderStatus;
+		this.spent = spent;
+		this.soldAtPrice = soldAtPrice;
+		this.payoutPercentage = payoutPercentage;
+		this.notes = notes;
+		this.profit = profitCalculation();
+	}
+
+
 
 	public int getId() {
 		return id;
@@ -88,20 +109,20 @@ public class Product {
 		this.paymentMethod = paymentMethod;
 	}
 
-	public String getNotes() {
-		return notes;
-	}
-
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
-
 	public OrderStatusEnum getOrderStatus() {
 		return orderStatus;
 	}
 
 	public void setOrderStatus(OrderStatusEnum orderStatus) {
 		this.orderStatus = orderStatus;
+	}
+
+	public double getSpent() {
+		return spent;
+	}
+
+	public void setSpent(double spent) {
+		this.spent = spent;
 	}
 
 	public double getSoldAtPrice() {
@@ -120,19 +141,49 @@ public class Product {
 		this.payoutPercentage = payoutPercentage;
 	}
 
+	public double getProfit() {
+		return profit;
+	}
+
+	public void setProfit(double profit) {
+		this.profit = profit;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	private double profitCalculation() {
+		if (payoutPercentage == 0) {
+			return this.soldAtPrice - this.spent;
+		} else if (spent == 0) {
+			return this.soldAtPrice - this.soldAtPrice * (this.payoutPercentage / 100.0);
+		} else {
+			return this.soldAtPrice - this.spent - (this.spent / this.payoutPercentage);
+		}
+	}
+
 	@Override
 	public String toString() {
-		return "Product{" +
+		return
+				"> Product{" +
 				"id=" + id +
-				", localDateTime=" + dateTime +
+				", dateTime=" + dateTime +
 				", title='" + title + '\'' +
 				", marketPlace=" + marketPlace +
 				", deliveryService=" + deliveryService +
 				", paymentMethod=" + paymentMethod +
-				", notes='" + notes + '\'' +
 				", orderStatus=" + orderStatus +
+				", spent=" + spent +
 				", soldAtPrice=" + soldAtPrice +
 				", payoutPercentage=" + payoutPercentage +
+				", profit=" + profit +
+				", notes='" + notes + '\'' +
 				'}';
+//		id + " | " + dateTime + " | " + title + " | " + marketPlace + " | " + deliveryService + " | " + paymentMethod + " | " + orderStatus + " | " + spent + " | " + soldAtPrice + " | " + paymentMethod + " | " + notes;
 	}
 }

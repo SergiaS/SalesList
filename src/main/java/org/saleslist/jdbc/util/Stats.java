@@ -13,7 +13,13 @@ public class Stats {
 
 	private final JdbcProductRepository repository = new JdbcProductRepository();
 	private final List<Product> productList = repository.getAllProducts();
-	private final DecimalFormat df = new DecimalFormat("#.##");
+	public static final DecimalFormat doubleTemplate = new DecimalFormat("#.##");
+
+	public double getTotalSpent() {
+		return productList.stream()
+				.mapToDouble(Product::getSpent)
+				.sum();
+	}
 
 	// how much total money did i get
 	public double getTotalPrice() {
@@ -23,30 +29,30 @@ public class Stats {
 	}
 
 	// how much profit did i get on each product
-	public List<Double> getAllProfits() {
+	public List<Double> getEachProfit() {
 		return productList.stream()
-				.map(p -> Double.valueOf(df.format(p.getSoldAtPrice() - p.getSoldAtPrice() * (p.getPayoutPercentage() / 100.0))))
+				.map(Product::getProfit)
 				.collect(Collectors.toList());
 	}
 
 	// how much total profit did i get
 	public double getTotalProfit() {
 		return productList.stream()
-				.mapToDouble(p -> Double.parseDouble(df.format(p.getSoldAtPrice() - p.getSoldAtPrice() * (p.getPayoutPercentage() / 100.0))))
+				.mapToDouble(Product::getProfit)
 				.sum();
 	}
 
 	// how much i paid for each product
-	public List<Double> getAllPayouts() {
+	public List<Double> getEachPayout() {
 		return productList.stream()
-				.map(p -> Double.valueOf(df.format(p.getSoldAtPrice() * (p.getPayoutPercentage() / 100.0))))
+				.map(p -> Double.valueOf(doubleTemplate.format(p.getSoldAtPrice() * (p.getPayoutPercentage() / 100.0))))
 				.collect(Collectors.toList());
 	}
 
 	// how much total did i pay
 	public double getTotalPayouts() {
 		return productList.stream()
-				.mapToDouble(p -> Double.parseDouble(df.format(p.getSoldAtPrice() * (p.getPayoutPercentage() / 100.0))))
+				.mapToDouble(p -> Double.parseDouble(doubleTemplate.format(p.getSoldAtPrice() * (p.getPayoutPercentage() / 100.0))))
 				.sum();
 	}
 

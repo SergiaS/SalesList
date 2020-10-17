@@ -10,7 +10,9 @@
     <section>
         <h2>> <a href="/">Home</a></h2>
         <hr/>
-        <h3>Products from db</h3>
+        <span>Products from db.</span><br>
+        <a href="products?action=create">Add new product</a>
+        <hr>
         <table border="1" cellpadding="8" cellspacing="0">
             <thead>
             <tr>
@@ -19,10 +21,12 @@
                 <th>Market Place</th>
                 <th>Delivery Service</th>
                 <th>Payment Method</th>
-                <th>Notes</th>
                 <th>Order Status</th>
-                <th>Profit<br>Price</th>
+                <th>Spent</th>
+                <th>Sold At Price</th>
                 <th>Payout</th>
+                <th>Profit</th>
+                <th>Notes</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -46,19 +50,28 @@
                         <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>
                     </c:forEach>
                 </td>
-                <td></td>
                 <td>
                     <c:forEach var="entry" items="${stats.statusOrderCounterMap}">
                         <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>
                     </c:forEach>
                 </td>
                 <td>
-                    <fmt:formatNumber type="number" maxFractionDigits="2" value="${stats.totalProfit}"/>
-                    <fmt:formatNumber type="number" maxFractionDigits="2" value="${stats.totalPrice}"/>
+                    <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
+                                      value="${stats.totalSpent}"/>
                 </td>
                 <td>
-                    <fmt:formatNumber type="number" maxFractionDigits="2" value="${stats.totalPayouts}"/>
+                    <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
+                                      value="${stats.totalPrice}"/>
+                    </td>
+                <td>
+                    <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
+                                      value="${stats.totalPayouts}"/>
+                    </td>
+                <td>
+                    <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
+                                      value="${stats.totalProfit}"/>
                 </td>
+                <td></td>
                 <td></td>
                 <td></td>
             </tr>
@@ -70,23 +83,20 @@
                     <td>${product.marketPlace}</td>
                     <td>${product.deliveryService}</td>
                     <td>${product.paymentMethod}</td>
-                    <td>${product.notes}</td>
                     <td>${product.orderStatus}</td>
                     <td>
-                        <c:choose>
-                            <c:when test="${product.payoutPercentage > 0}">
-                                <fmt:formatNumber type="number" maxFractionDigits="2"
-                                                  value="${product.soldAtPrice - product.soldAtPrice * (product.payoutPercentage / 100.0)}"/><br>
-                            </c:when>
-                        </c:choose>
-                        <fmt:formatNumber type="number" maxFractionDigits="2"
+                        <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
+                                          value="${product.spent}"/>
+                    </td>
+                    <td>
+                        <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
                                           value="${product.soldAtPrice}"/>
                     </td>
                     <td>
                         <c:choose>
                             <c:when test="${product.payoutPercentage > 0}">
-                                <fmt:formatNumber type="number" maxFractionDigits="2"
-                                                  value="${product.soldAtPrice * (product.payoutPercentage / 100.0)}"/>
+                                <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
+                                                  value="${product.soldAtPrice * (product.payoutPercentage / 100)}"/>
                                 (${product.payoutPercentage}%)
                             </c:when>
                             <c:otherwise>
@@ -94,6 +104,11 @@
                             </c:otherwise>
                         </c:choose>
                     </td>
+                    <td>
+                        <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
+                                          value="${product.profit}"/>
+                        </td>
+                    <td>${product.notes}</td>
                     <td><a href="products?action=update&id=${product.id}">✏️</a></td>
                     <td><a href="products?action=delete&id=${product.id}">❌</a></td>
                 </tr>

@@ -37,16 +37,24 @@ public class ProductServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
+
+		double spent = Double.parseDouble(request.getParameter("spent").replace(",", "."));
+		double price = Double.parseDouble(request.getParameter("price").replace(",", "."));
+		int payoutPercentage = Integer.parseInt(request.getParameter("payout"));
+		double profit = profitCalculator(spent, price, payoutPercentage);
+
 		Product product = new Product(
 				LocalDateTime.parse(request.getParameter("dateTime")),
 				request.getParameter("title").trim(),
 				MarketPlaceEnum.valueOf(request.getParameter("marketPlace")),
 				DeliveryServiceEnum.valueOf(request.getParameter("deliveryService")),
 				PaymentMethodEnum.valueOf(request.getParameter("paymentMethod")),
-				request.getParameter("notes").trim(),
 				OrderStatusEnum.valueOf(request.getParameter("orderStatus")),
-				Double.parseDouble(request.getParameter("price").replace(",", ".")),
-				Integer.parseInt(request.getParameter("payout"))
+				spent,
+				price,
+				payoutPercentage,
+				profit,
+				request.getParameter("notes").trim()
 		);
 
 		int productId = getId(request);
@@ -96,6 +104,12 @@ public class ProductServlet extends HttpServlet {
 		return Integer.parseInt(paramId);
 	}
 
+	private double profitCalculator(double spent, double price, int payoutPercentage) {
+		if (payoutPercentage == 0) return price - spent;
+		else if (spent == 0) return price - price * (payoutPercentage / 100.0);
+		return price - spent - (price / payoutPercentage);
+	}
+
 	private Product getDefaultProduct() {
 		return new Product(
 				LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
@@ -103,10 +117,11 @@ public class ProductServlet extends HttpServlet {
 				null,
 				null,
 				null,
-				"",
 				null,
 				0.0,
-				0
+				0.0,
+				0,
+				""
 		);
 	}
 }
