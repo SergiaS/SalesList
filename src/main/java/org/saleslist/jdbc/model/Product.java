@@ -26,10 +26,12 @@ public class Product {
 
 	private String notes;
 
+	private boolean isPayoutPaid;
+
 	public Product() {
 	}
 	// for reading product from db
-	public Product(LocalDateTime dateTime, String title, MarketPlaceEnum marketPlace, DeliveryServiceEnum deliveryService, PaymentMethodEnum paymentMethod, OrderStatusEnum orderStatus, double spent, double soldAtPrice, int payoutPercentage, double profit, String notes) {
+	public Product(LocalDateTime dateTime, String title, MarketPlaceEnum marketPlace, DeliveryServiceEnum deliveryService, PaymentMethodEnum paymentMethod, OrderStatusEnum orderStatus, double spent, double soldAtPrice, int payoutPercentage, double profit, String notes, boolean isPayoutPaid) {
 		this.dateTime = dateTime.truncatedTo(ChronoUnit.MINUTES);
 		this.title = title;
 		this.marketPlace = marketPlace;
@@ -41,10 +43,11 @@ public class Product {
 		this.payoutPercentage = payoutPercentage;
 		this.profit = profit;
 		this.notes = notes;
+		this.isPayoutPaid = isPayoutPaid;
 	}
 
 	// for saving product to db
-	public Product(LocalDateTime dateTime, String title, MarketPlaceEnum marketPlace, DeliveryServiceEnum deliveryService, PaymentMethodEnum paymentMethod, OrderStatusEnum orderStatus, double spent, double soldAtPrice, int payoutPercentage, String notes) {
+	public Product(LocalDateTime dateTime, String title, MarketPlaceEnum marketPlace, DeliveryServiceEnum deliveryService, PaymentMethodEnum paymentMethod, OrderStatusEnum orderStatus, double spent, double soldAtPrice, int payoutPercentage, String notes, boolean isPayoutPaid) {
 //		this(dateTime, title, marketPlace, deliveryService, paymentMethod, orderStatus, spent, soldAtPrice, payoutPercentage, profitCalculation(), notes);
 		this.dateTime = dateTime.truncatedTo(ChronoUnit.MINUTES);
 		this.title = title;
@@ -56,10 +59,10 @@ public class Product {
 		this.soldAtPrice = soldAtPrice;
 		this.payoutPercentage = payoutPercentage;
 		this.notes = notes;
+		this.isPayoutPaid = isPayoutPaid;
+
 		this.profit = profitCalculation();
 	}
-
-
 
 	public int getId() {
 		return id;
@@ -157,6 +160,14 @@ public class Product {
 		this.notes = notes;
 	}
 
+	public boolean isPayoutPaid() {
+		return isPayoutPaid;
+	}
+
+	public void setPayoutPaid(boolean payoutPaid) {
+		isPayoutPaid = payoutPaid;
+	}
+
 	private double profitCalculation() {
 		if (payoutPercentage == 0) {
 			return this.soldAtPrice - this.spent;
@@ -183,7 +194,8 @@ public class Product {
 				", payoutPercentage=" + payoutPercentage +
 				", profit=" + profit +
 				", notes='" + notes + '\'' +
+				", isPayoutPaid='" + isPayoutPaid + '\'' +
 				'}';
-//		id + " | " + dateTime + " | " + title + " | " + marketPlace + " | " + deliveryService + " | " + paymentMethod + " | " + orderStatus + " | " + spent + " | " + soldAtPrice + " | " + paymentMethod + " | " + notes;
+//		id + " | " + dateTime + " | " + title + " | " + marketPlace + " | " + deliveryService + " | " + paymentMethod + " | " + orderStatus + " | " + spent + " | " + soldAtPrice + " | " + paymentMethod + " | " + notes + " | " + isPayoutPaid;
 	}
 }

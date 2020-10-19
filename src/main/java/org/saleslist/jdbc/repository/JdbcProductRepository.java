@@ -20,8 +20,8 @@ public class JdbcProductRepository implements ProductRepository {
 
 	@Override
 	public Product save(Product product) {
-		String sql = "insert into sales(date_time, title, market_place, delivery_service, payment_method, order_status, spent, sold_at_price, payout_percentage, profit, notes) " +
-				"values (?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into sales(date_time, title, market_place, delivery_service, payment_method, order_status, spent, sold_at_price, payout_percentage, profit, notes, is_payout_paid) " +
+				"values (?,?,?,?,?,?,?,?,?,?,?,?)";
 		try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
 			ps.setTimestamp(1, Timestamp.valueOf(product.getDateTime()));
 			ps.setString(2, product.getTitle());
@@ -34,6 +34,7 @@ public class JdbcProductRepository implements ProductRepository {
 			ps.setInt(9, product.getPayoutPercentage());
 			ps.setDouble(10, Double.parseDouble(Stats.doubleTemplate.format(product.getProfit())));
 			ps.setString(11, product.getNotes());
+			ps.setBoolean(12, product.isPayoutPaid());
 
 			int rowsInserted = ps.executeUpdate();
 			if (rowsInserted > 0) {
@@ -65,6 +66,7 @@ public class JdbcProductRepository implements ProductRepository {
 				product.setPayoutPercentage(rs.getInt(10));
 				product.setProfit(rs.getDouble(11));
 				product.setNotes(rs.getString(12));
+				product.setPayoutPaid(rs.getBoolean(13));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -74,7 +76,7 @@ public class JdbcProductRepository implements ProductRepository {
 
 	@Override
 	public Product update(int id, Product product) {
-		String sql = "update sales SET date_time=?, title=?, market_place=?, delivery_service=?, payment_method=?, order_status=?, spent=?, sold_at_price=?, payout_percentage=?, profit=?, notes=? where id = ?";
+		String sql = "update sales SET date_time=?, title=?, market_place=?, delivery_service=?, payment_method=?, order_status=?, spent=?, sold_at_price=?, payout_percentage=?, profit=?, notes=?, is_payout_paid=? where id = ?";
 		try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
 			ps.setTimestamp(1, Timestamp.valueOf(product.getDateTime()));
 			ps.setString(2, product.getTitle());
@@ -87,7 +89,8 @@ public class JdbcProductRepository implements ProductRepository {
 			ps.setInt(9, product.getPayoutPercentage());
 			ps.setDouble(10, Double.parseDouble(Stats.doubleTemplate.format(product.getProfit())));
 			ps.setString(11, product.getNotes());
-			ps.setInt(12, id);
+			ps.setBoolean(12, product.isPayoutPaid());
+			ps.setInt(13, id);
 
 			int rowsUpdated = ps.executeUpdate();
 			if (rowsUpdated > 0) {
@@ -138,6 +141,7 @@ public class JdbcProductRepository implements ProductRepository {
 				product.setPayoutPercentage(rs.getInt(10));
 				product.setProfit(rs.getDouble(11));
 				product.setNotes(rs.getString(12));
+				product.setPayoutPaid(rs.getBoolean(13));
 				productList.add(product);
 			}
 		} catch (SQLException e) {

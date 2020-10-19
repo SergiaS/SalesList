@@ -13,6 +13,7 @@ CREATE TABLE `sales_list`.`sales` (
   `payout_percentage` DOUBLE NULL,
   `profit` DOUBLE DEFAULT 0 NOT NULL,
   `notes` VARCHAR(200) NULL,
+  `is_payout_paid` BOOLEAN DEFAULT FALSE NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
 ENGINE = InnoDB

@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" language="java"%>
+<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
@@ -19,87 +19,129 @@
             <table class="product-table">
                 <tr>
                     <th>DateTime:</th>
-                    <td><input type="datetime-local" value="${product.dateTime}" name="dateTime" required></td>
+                    <td>
+                        <label><input type="datetime-local" value="${product.dateTime}" name="dateTime" required></label>
+                    </td>
                 </tr>
                 <tr>
                     <th>Title:</th>
                     <td>
-                        <textarea cols=40 name="title" required> <c:out value="${product.title}"/> </textarea>
+                        <label><textarea cols=40 name="title" required> <c:out value="${product.title}"/></textarea></label>
                     </td>
                 </tr>
                 <tr>
                     <th>Market Place:</th>
                     <td>
-                        <select name="marketPlace" required>
-                            <c:if test="${product.marketPlace == null}"> <option selected hidden value=""></option> </c:if>
-                            <c:forEach items="${marketPlace}" var="market">
-                                <option ${market == product.marketPlace ? "selected" : ""} value="${market}">${market}</option>
-                            </c:forEach>
-                        </select>
+                        <label>
+                            <select name="marketPlace" required>
+                                <c:if test="${product.marketPlace == null}">
+                                    <option selected hidden value=""></option>
+                                </c:if>
+                                <c:forEach items="${marketPlace}" var="market">
+                                    <option ${market == product.marketPlace ? "selected" : ""}
+                                            value="${market}">${market}</option>
+                                </c:forEach>
+                            </select>
+                        </label>
                         <span class="asterisk">*</span>
                     </td>
                 </tr>
                 <tr>
                     <th>Delivery Service:</th>
                     <td>
-                        <select name="deliveryService" required>
-                            <c:if test="${product.deliveryService == null}"> <option selected hidden value=""></option> </c:if>
-                            <c:forEach items="${deliveryService}" var="delivery">
-                                <option ${delivery == product.deliveryService ? "selected" : ""} value="${delivery}">${delivery}</option>
-                            </c:forEach>
-                        </select>
+                        <label>
+                            <select name="deliveryService" required>
+                                <c:if test="${product.deliveryService == null}">
+                                    <option selected hidden value=""></option>
+                                </c:if>
+                                <c:forEach items="${deliveryService}" var="delivery">
+                                    <option ${delivery == product.deliveryService ? "selected" : ""}
+                                            value="${delivery}">${delivery}</option>
+                                </c:forEach>
+                            </select>
+                        </label>
                         <span class="asterisk">*</span>
                     </td>
                 </tr>
                 <tr>
                     <th>Payment Method:</th>
                     <td>
-                        <select name="paymentMethod" required>
-                            <c:if test="${product.paymentMethod == null}"> <option selected hidden value=""></option> </c:if>
-                            <c:forEach items="${paymentMethod}" var="payment">
-                                <option ${payment == product.paymentMethod ? "selected" : ""} value="${payment}">${payment}</option>
-                            </c:forEach>
-                        </select>
+                        <label>
+                            <select name="paymentMethod" required>
+                                <c:if test="${product.paymentMethod == null}">
+                                    <option selected hidden value=""></option>
+                                </c:if>
+                                <c:forEach items="${paymentMethod}" var="payment">
+                                    <option ${payment == product.paymentMethod ? "selected" : ""}
+                                            value="${payment}">${payment}</option>
+                                </c:forEach>
+                            </select>
+                        </label>
                         <span class="asterisk">*</span>
                     </td>
                 </tr>
                 <tr>
                     <th>Order Status:</th>
                     <td>
-                        <select name="orderStatus" required>
-                            <c:if test="${product.orderStatus == null}"> <option selected hidden value=""></option> </c:if>
-                            <c:forEach items="${orderStatus}" var="status">
-                                <option ${status == product.orderStatus ? "selected" : ""} value="${status}">${status}</option>
-                            </c:forEach>
-                        </select>
+                        <label>
+                            <select name="orderStatus" required>
+                                <c:if test="${product.orderStatus == null}">
+                                    <option selected hidden value=""></option>
+                                </c:if>
+                                <c:forEach items="${orderStatus}" var="status">
+                                    <option ${status == product.orderStatus ? "selected" : ""}
+                                            value="${status}">${status}</option>
+                                </c:forEach>
+                            </select>
+                        </label>
                         <span class="asterisk">*</span>
                     </td>
                 </tr>
                 <tr>
                     <th>Spent, UAH:</th>
                     <td>
-                        <input type="number" value="${product.spent == 0 ? "" : product.spent}" name="spent" placeholder="How much did it cost?" size="5" required>
+                        <label>
+                            <input type="number" value="${product.spent == 0 ? '' : product.spent}" name="spent" placeholder="How much did it cost?"
+                                   size="5" required>
+                        </label>
                         <span class="asterisk">*</span>
                     </td>
                 </tr>
                 <tr>
                     <th>Sold At Price, UAH:</th>
                     <td>
-                        <input type="number" value="${product.soldAtPrice == 0 ? "" : product.soldAtPrice}" name="price" placeholder="How much you got for it?" size="5" required>
+                        <label>
+                            <input type="number" value="${product.soldAtPrice == 0 ? '' : product.soldAtPrice}" name="price"
+                                   placeholder="How much you got for it?" size="5" required>
+                        </label>
                         <span class="asterisk">*</span>
                     </td>
                 </tr>
                 <tr>
                     <th>Payout Percentage, %:</th>
                     <td>
-                        <input type="text" value="${product.payoutPercentage}" name="payout" placeholder="Payout" size="5" required>
+                        <label>
+                            <input type="number" value="${product.payoutPercentage == 0 ? '' : product.payoutPercentage}" name="payout" placeholder="Payout"
+                                   size="5" required>
+                        </label>
                         <span class="asterisk">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Is Payout Paid?:</th>
+                    <td>
+                        <label>
+                            <input type="checkbox" value="${product.payoutPaid}"
+                                   name="payoutPaid" ${product.payoutPaid == 'true' ? 'checked' : ''}>
+                        </label>
                     </td>
                 </tr>
                 <tr>
                     <th>Notes:</th>
                     <td>
-                        <textarea cols=40 name="notes"> <c:out value="${product.notes}"/> </textarea>
+                        <label>
+                            <textarea cols=40 name="notes"> <c:out value="${product.notes}"/> </textarea>
+                        </label>
                     </td>
                 </tr>
                 <tr>

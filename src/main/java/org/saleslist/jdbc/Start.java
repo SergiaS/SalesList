@@ -16,7 +16,7 @@ public class Start {
 	public static void main(String[] args) {
 
 		// creating new product
-//		Product product = new Product(LocalDateTime.now(), "CCC", MarketPlaceEnum.OTHER, DeliveryServiceEnum.COLLECTION_IN_PERSON, PaymentMethodEnum.OLX_DELIVERY, OrderStatusEnum.SUCCESS, 0, 5500, 0, "my box");
+//		Product product = new Product(LocalDateTime.now(), "CCC", MarketPlaceEnum.OTHER, DeliveryServiceEnum.COLLECTION_IN_PERSON, PaymentMethodEnum.OLX_DELIVERY, OrderStatusEnum.SUCCESS, 0, 5500, 0, "my box", false);
 
 		// save new product to DB
 //		jdbcProductRepository.save(product);
@@ -35,7 +35,6 @@ public class Start {
 		List<Product> productList = jdbcProductRepository.getAllProducts();
 		for (Product p : productList) {
 			System.out.println(p);
-//			System.out.println(p.getId() + " | " + p.getDateTime() + " | " + p.getTitle() + " | " + p.getMarketPlace() + " | " + p.getDeliveryService() + " | " + p.getPaymentMethod() + " | " + p.getOrderStatus() + " | " + p.getPaid() + " | " + p.getSoldAtPrice() + " | " + p.getPaymentMethod() + " | " + p.getNotes());
 		}
 	}
 }

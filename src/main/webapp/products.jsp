@@ -16,6 +16,7 @@
         <table border="1" cellpadding="8" cellspacing="0">
             <thead>
             <tr>
+                <th>№</th>
                 <th>Date</th>
                 <th>Title</th>
                 <th>Market Place</th>
@@ -27,12 +28,14 @@
                 <th>Payout</th>
                 <th>Profit</th>
                 <th>Notes</th>
+                <th>Payout Paid?</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
             </thead>
             <tr>
                 <jsp:useBean id="stats" class="org.saleslist.jdbc.util.Stats"/>
+                <td></td>
                 <td></td>
                 <td>Total products = ${stats.totalPositions}</td>
                 <td>
@@ -74,10 +77,16 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
             </tr>
+<%--            <c:set var="count" value="0" scope="page" />--%>
             <c:forEach items="${products}" var="product">
                 <jsp:useBean id="product" type="org.saleslist.jdbc.model.Product"/>
                 <tr data-payoutPercentage="${product.payoutPercentage > 0}">
+                    <td width="50">
+                        <c:set var="count" value="${count + 1}" scope="page"/>
+                        <c:out value="${count}"/>
+                    </td>
                     <td>${product.dateTime.toLocalDate()}, ${product.dateTime.toLocalTime()}</td>
                     <td>${product.title}</td>
                     <td>${product.marketPlace}</td>
@@ -109,6 +118,7 @@
                                           value="${product.profit}"/>
                         </td>
                     <td>${product.notes}</td>
+                    <td>${product.payoutPaid}</td>
                     <td><a href="products?action=update&id=${product.id}">✏️</a></td>
                     <td><a href="products?action=delete&id=${product.id}">❌</a></td>
                 </tr>
@@ -116,6 +126,6 @@
         </table>
     </section>
     <hr>
-    <a href="products?action=create">Add product</a>
+    <a href="products?action=create">Add new product</a>
 </body>
 </html>

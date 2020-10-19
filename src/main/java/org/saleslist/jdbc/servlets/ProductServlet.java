@@ -38,6 +38,11 @@ public class ProductServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 
+		System.out.println(">>> payoutPaid: " + request.getParameter("payoutPaid"));
+		System.out.println(">>> Boolean payoutPaid: " + Boolean.parseBoolean(request.getParameter("payoutPaid")));
+		System.out.print(">>> Boolean statement: ");
+		System.out.println(request.getParameter("payoutPaid") == null ? false : true);
+
 		double spent = Double.parseDouble(request.getParameter("spent").replace(",", "."));
 		double price = Double.parseDouble(request.getParameter("price").replace(",", "."));
 		int payoutPercentage = Integer.parseInt(request.getParameter("payout"));
@@ -54,7 +59,8 @@ public class ProductServlet extends HttpServlet {
 				price,
 				payoutPercentage,
 				profit,
-				request.getParameter("notes").trim()
+				request.getParameter("notes").trim(),
+				request.getParameter("payoutPaid") == null ? false : true
 		);
 
 		int productId = getId(request);
@@ -121,7 +127,8 @@ public class ProductServlet extends HttpServlet {
 				0.0,
 				0.0,
 				0,
-				""
+				"",
+				false
 		);
 	}
 }
