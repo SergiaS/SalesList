@@ -4,9 +4,13 @@ import org.saleslist.jdbc.enums.DeliveryServiceEnum;
 import org.saleslist.jdbc.enums.MarketPlaceEnum;
 import org.saleslist.jdbc.enums.OrderStatusEnum;
 import org.saleslist.jdbc.enums.PaymentMethodEnum;
+import org.saleslist.jdbc.model.Payout;
 import org.saleslist.jdbc.model.Product;
+import org.saleslist.jdbc.repository.JdbcPayoutRepository;
 import org.saleslist.jdbc.repository.JdbcProductRepository;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class Start {
@@ -14,9 +18,17 @@ public class Start {
 	private static JdbcProductRepository jdbcProductRepository = new JdbcProductRepository();
 
 	public static void main(String[] args) {
+		// Payout functionality
+//		Payout payout = new Payout();
+//		payout.setProductId(28);
+//		payout.setDateTime(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
+//		payout.setAmount(50);
+//		payout.setNotes("");
+//		JdbcPayoutRepository payoutRepository = new JdbcPayoutRepository();
+//		payoutRepository.add(payout);
 
 		// creating new product
-//		Product product = new Product(LocalDateTime.now(), "CCC", MarketPlaceEnum.OTHER, DeliveryServiceEnum.COLLECTION_IN_PERSON, PaymentMethodEnum.OLX_DELIVERY, OrderStatusEnum.SUCCESS, 0, 5500, 0, "my box", false);
+//		Product product = new Product(LocalDateTime.now(), "CCC", MarketPlaceEnum.OTHER, DeliveryServiceEnum.COLLECTION_IN_PERSON, PaymentMethodEnum.OLX_DELIVERY, OrderStatusEnum.SUCCESS, 0, 5500, 10, "my box", false);
 
 		// save new product to DB
 //		jdbcProductRepository.save(product);

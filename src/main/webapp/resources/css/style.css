@@ -23,15 +23,17 @@ select {
     color: red;
 }
 
-table.product-table {
+table {
+    width: 100%;
+    /*border-color: red;*/
+}
+
+.forms {
     width: 100%;
 }
 
-.product-table tr, th  {
+.forms th {
     width: 50%;
-}
-
-.product-table th {
     text-align: right;
     border: 0;
     padding: 5px;

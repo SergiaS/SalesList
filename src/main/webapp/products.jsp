@@ -9,8 +9,8 @@
 <body>
     <section>
         <h2>> <a href="/">Home</a></h2>
-        <hr/>
-        <span>Products from db.</span><br>
+        <hr>
+        <span>Products from sales db.</span><br>
         <a href="products?action=create">Add new product</a>
         <hr>
         <table border="1" cellpadding="8" cellspacing="0">
@@ -28,7 +28,7 @@
                 <th>Payout</th>
                 <th>Profit</th>
                 <th>Notes</th>
-                <th>Payout Paid?</th>
+<%--                    <th>Payout Paid?</th>--%>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -65,17 +65,17 @@
                 <td>
                     <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
                                       value="${stats.totalPrice}"/>
-                    </td>
+                </td>
                 <td>
                     <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
                                       value="${stats.totalPayouts}"/>
-                    </td>
+                </td>
                 <td>
                     <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
                                       value="${stats.totalProfit}"/>
                 </td>
                 <td></td>
-                <td></td>
+<%--                <td></td>--%>
                 <td></td>
                 <td></td>
             </tr>
@@ -83,7 +83,7 @@
             <c:forEach items="${products}" var="product">
                 <jsp:useBean id="product" type="org.saleslist.jdbc.model.Product"/>
                 <tr data-payoutPercentage="${product.payoutPercentage > 0}">
-                    <td width="50">
+                    <td>
                         <c:set var="count" value="${count + 1}" scope="page"/>
                         <c:out value="${count}"/>
                     </td>
@@ -105,7 +105,7 @@
                         <c:choose>
                             <c:when test="${product.payoutPercentage > 0}">
                                 <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
-                                                  value="${product.soldAtPrice * (product.payoutPercentage / 100)}"/>
+                                                  value="${product.payoutCurrency}"/>
                                 (${product.payoutPercentage}%)
                             </c:when>
                             <c:otherwise>
@@ -116,9 +116,9 @@
                     <td>
                         <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
                                           value="${product.profit}"/>
-                        </td>
+                    </td>
                     <td>${product.notes}</td>
-                    <td>${product.payoutPaid}</td>
+<%--                    <td>${product.payoutPaid}</td>--%>
                     <td><a href="products?action=update&id=${product.id}">✏️</a></td>
                     <td><a href="products?action=delete&id=${product.id}">❌</a></td>
                 </tr>

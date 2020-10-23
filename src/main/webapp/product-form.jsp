@@ -1,6 +1,5 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <html>
 <head>
     <title>Product Form</title>
@@ -8,25 +7,26 @@
 </head>
 <body>
     <section>
-        <h3>> <a href="/">Home</a></h3>
+        <h2>> <a href="/">Home</a></h2>
         <hr>
         <h1 style="text-align: center">${param.action == 'create' ? 'Add new product' : 'Edit product'}</h1>
         <hr>
         <jsp:useBean id="product" type="org.saleslist.jdbc.model.Product" scope="request"/>
-
         <form method="post" action="products">
             <input type="hidden" name="id" value="${product.id}">
-            <table class="product-table">
+            <table class="forms">
                 <tr>
                     <th>DateTime:</th>
                     <td>
-                        <label><input type="datetime-local" value="${product.dateTime}" name="dateTime" required></label>
+                        <label><input type="datetime-local" value="${product.dateTime}" name="dateTime"
+                                      required></label>
                     </td>
                 </tr>
                 <tr>
                     <th>Title:</th>
                     <td>
-                        <label><textarea cols=40 name="title" required> <c:out value="${product.title}"/></textarea></label>
+                        <label><textarea cols=40 name="title" autocomplete="on" required> <c:out
+                                value="${product.title}"/></textarea></label>
                     </td>
                 </tr>
                 <tr>
@@ -101,7 +101,8 @@
                     <th>Spent, UAH:</th>
                     <td>
                         <label>
-                            <input type="number" value="${product.spent == 0 ? '' : product.spent}" name="spent" placeholder="How much did it cost?"
+                            <input type="text" value="${product.spent > 0 ? product.spent : 0}" name="spent"
+                                   placeholder="How much did it cost?"
                                    size="5" required>
                         </label>
                         <span class="asterisk">*</span>
@@ -111,7 +112,7 @@
                     <th>Sold At Price, UAH:</th>
                     <td>
                         <label>
-                            <input type="number" value="${product.soldAtPrice == 0 ? '' : product.soldAtPrice}" name="price"
+                            <input type="text" value="${product.soldAtPrice > 0 ? product.soldAtPrice : 0}" name="price"
                                    placeholder="How much you got for it?" size="5" required>
                         </label>
                         <span class="asterisk">*</span>
@@ -121,26 +122,28 @@
                     <th>Payout Percentage, %:</th>
                     <td>
                         <label>
-                            <input type="number" value="${product.payoutPercentage == 0 ? '' : product.payoutPercentage}" name="payout" placeholder="Payout"
+                            <input type="number" value="${product.payoutPercentage > 0 ? product.payoutPercentage : 0}"
+                                   name="payoutPercentage" placeholder="Payout"
                                    size="5" required>
                         </label>
                         <span class="asterisk">*</span>
                     </td>
                 </tr>
-                <tr>
-                    <th>Is Payout Paid?:</th>
-                    <td>
-                        <label>
-                            <input type="checkbox" value="${product.payoutPaid}"
-                                   name="payoutPaid" ${product.payoutPaid == 'true' ? 'checked' : ''}>
-                        </label>
-                    </td>
-                </tr>
+<%--                <tr>--%>
+<%--                    <th>Is Payout Paid?:</th>--%>
+<%--                    <td>--%>
+<%--                        <label>--%>
+<%--                            <input type="checkbox" value="${product.payoutPaid}"--%>
+<%--                                   name="payoutPaid" ${product.payoutPaid == 'true' ? 'checked' : ''}>--%>
+<%--                        </label>--%>
+<%--                    </td>--%>
+<%--                </tr>--%>
                 <tr>
                     <th>Notes:</th>
                     <td>
                         <label>
-                            <textarea cols=40 name="notes"> <c:out value="${product.notes}"/> </textarea>
+                            <textarea cols=40 name="notes" autocomplete="on"> <c:out
+                                    value="${product.notes}"/> </textarea>
                         </label>
                     </td>
                 </tr>

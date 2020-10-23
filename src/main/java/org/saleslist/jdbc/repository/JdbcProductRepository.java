@@ -11,7 +11,6 @@ import org.saleslist.jdbc.util.Stats;
 import java.sql.*;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class JdbcProductRepository implements ProductRepository {
@@ -20,8 +19,8 @@ public class JdbcProductRepository implements ProductRepository {
 
 	@Override
 	public Product save(Product product) {
-		String sql = "insert into sales(date_time, title, market_place, delivery_service, payment_method, order_status, spent, sold_at_price, payout_percentage, profit, notes, is_payout_paid) " +
-				"values (?,?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into sales(date_time, title, market_place, delivery_service, payment_method, order_status, spent, sold_at_price, payout_percentage, payout_currency, profit, notes, is_payout_paid) " +
+				"values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
 			ps.setTimestamp(1, Timestamp.valueOf(product.getDateTime()));
 			ps.setString(2, product.getTitle());
@@ -32,9 +31,10 @@ public class JdbcProductRepository implements ProductRepository {
 			ps.setDouble(7, Double.parseDouble(Stats.doubleTemplate.format(product.getSpent())));
 			ps.setDouble(8, Double.parseDouble(Stats.doubleTemplate.format(product.getSoldAtPrice())));
 			ps.setInt(9, product.getPayoutPercentage());
-			ps.setDouble(10, Double.parseDouble(Stats.doubleTemplate.format(product.getProfit())));
-			ps.setString(11, product.getNotes());
-			ps.setBoolean(12, product.isPayoutPaid());
+			ps.setDouble(10, Double.parseDouble(Stats.doubleTemplate.format(product.getPayoutCurrency())));
+			ps.setDouble(11, Double.parseDouble(Stats.doubleTemplate.format(product.getProfit())));
+			ps.setString(12, product.getNotes());
+			ps.setBoolean(13, product.isPayoutPaid());
 
 			int rowsInserted = ps.executeUpdate();
 			if (rowsInserted > 0) {
@@ -64,9 +64,10 @@ public class JdbcProductRepository implements ProductRepository {
 				product.setSpent(rs.getDouble(8));
 				product.setSoldAtPrice(rs.getDouble(9));
 				product.setPayoutPercentage(rs.getInt(10));
-				product.setProfit(rs.getDouble(11));
-				product.setNotes(rs.getString(12));
-				product.setPayoutPaid(rs.getBoolean(13));
+				product.setPayoutCurrency(rs.getInt(11));
+				product.setProfit(rs.getDouble(12));
+				product.setNotes(rs.getString(13));
+				product.setPayoutPaid(rs.getBoolean(14));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -76,7 +77,7 @@ public class JdbcProductRepository implements ProductRepository {
 
 	@Override
 	public Product update(int id, Product product) {
-		String sql = "update sales SET date_time=?, title=?, market_place=?, delivery_service=?, payment_method=?, order_status=?, spent=?, sold_at_price=?, payout_percentage=?, profit=?, notes=?, is_payout_paid=? where id = ?";
+		String sql = "update sales SET date_time=?, title=?, market_place=?, delivery_service=?, payment_method=?, order_status=?, spent=?, sold_at_price=?, payout_percentage=?, payout_currency=?, profit=?, notes=?, is_payout_paid=? where id = ?";
 		try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
 			ps.setTimestamp(1, Timestamp.valueOf(product.getDateTime()));
 			ps.setString(2, product.getTitle());
@@ -87,10 +88,11 @@ public class JdbcProductRepository implements ProductRepository {
 			ps.setDouble(7, Double.parseDouble(Stats.doubleTemplate.format(product.getSpent())));
 			ps.setDouble(8, Double.parseDouble(Stats.doubleTemplate.format(product.getSoldAtPrice())));
 			ps.setInt(9, product.getPayoutPercentage());
-			ps.setDouble(10, Double.parseDouble(Stats.doubleTemplate.format(product.getProfit())));
-			ps.setString(11, product.getNotes());
-			ps.setBoolean(12, product.isPayoutPaid());
-			ps.setInt(13, id);
+			ps.setDouble(10, product.getPayoutCurrency());
+			ps.setDouble(11, Double.parseDouble(Stats.doubleTemplate.format(product.getProfit())));
+			ps.setString(12, product.getNotes());
+			ps.setBoolean(13, product.isPayoutPaid());
+			ps.setInt(14, id);
 
 			int rowsUpdated = ps.executeUpdate();
 			if (rowsUpdated > 0) {
@@ -119,10 +121,9 @@ public class JdbcProductRepository implements ProductRepository {
 		return rowsStatus > 0;
 	}
 
-	// last product will be first in the list
 	@Override
 	public List<Product> getAllProducts() {
-		String sql = "select * from sales";
+		String sql = "select * from sales order by date_time desc";
 		List<Product> productList = new ArrayList<>();
 
 		try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
@@ -139,15 +140,15 @@ public class JdbcProductRepository implements ProductRepository {
 				product.setSpent(rs.getDouble(8));
 				product.setSoldAtPrice(rs.getDouble(9));
 				product.setPayoutPercentage(rs.getInt(10));
-				product.setProfit(rs.getDouble(11));
-				product.setNotes(rs.getString(12));
-				product.setPayoutPaid(rs.getBoolean(13));
+				product.setPayoutCurrency(rs.getDouble(11));
+				product.setProfit(rs.getDouble(12));
+				product.setNotes(rs.getString(13));
+				product.setPayoutPaid(rs.getBoolean(14));
 				productList.add(product);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		Collections.reverse(productList);
 		return productList;
 	}
 }

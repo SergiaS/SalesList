@@ -4,7 +4,9 @@ import org.saleslist.jdbc.enums.DeliveryServiceEnum;
 import org.saleslist.jdbc.enums.MarketPlaceEnum;
 import org.saleslist.jdbc.enums.OrderStatusEnum;
 import org.saleslist.jdbc.enums.PaymentMethodEnum;
+import org.saleslist.jdbc.model.Payout;
 import org.saleslist.jdbc.model.Product;
+import org.saleslist.jdbc.repository.JdbcPayoutRepository;
 import org.saleslist.jdbc.repository.JdbcProductRepository;
 import org.saleslist.jdbc.util.Stats;
 import org.slf4j.Logger;
@@ -27,26 +29,18 @@ public class ProductServlet extends HttpServlet {
 
 	private static final Logger logger = LoggerFactory.getLogger(ProductServlet.class);
 
-	private JdbcProductRepository repository;
+	private JdbcProductRepository productRepository;
+	private JdbcPayoutRepository payoutRepository;
 
 	@Override
 	public void init() throws ServletException {
-		repository = new JdbcProductRepository();
+		productRepository = new JdbcProductRepository();
+		payoutRepository = new JdbcPayoutRepository();
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-
-		System.out.println(">>> payoutPaid: " + request.getParameter("payoutPaid"));
-		System.out.println(">>> Boolean payoutPaid: " + Boolean.parseBoolean(request.getParameter("payoutPaid")));
-		System.out.print(">>> Boolean statement: ");
-		System.out.println(request.getParameter("payoutPaid") == null ? false : true);
-
-		double spent = Double.parseDouble(request.getParameter("spent").replace(",", "."));
-		double price = Double.parseDouble(request.getParameter("price").replace(",", "."));
-		int payoutPercentage = Integer.parseInt(request.getParameter("payout"));
-		double profit = profitCalculator(spent, price, payoutPercentage);
 
 		Product product = new Product(
 				LocalDateTime.parse(request.getParameter("dateTime")),
@@ -55,22 +49,42 @@ public class ProductServlet extends HttpServlet {
 				DeliveryServiceEnum.valueOf(request.getParameter("deliveryService")),
 				PaymentMethodEnum.valueOf(request.getParameter("paymentMethod")),
 				OrderStatusEnum.valueOf(request.getParameter("orderStatus")),
-				spent,
-				price,
-				payoutPercentage,
-				profit,
+				Double.parseDouble(request.getParameter("spent").replace(",", ".")),
+				Double.parseDouble(request.getParameter("price").replace(",", ".")),
+				Integer.parseInt(request.getParameter("payoutPercentage")),
 				request.getParameter("notes").trim(),
 				request.getParameter("payoutPaid") == null ? false : true
 		);
+		product.setPayoutCurrency(product.payoutCurrencyCalculation());
+		product.setProfit(product.profitCalculation());
 
 		int productId = getId(request);
 		logger.info("doPost: productId = {}, product = {}", productId, product);
 
 		if (request.getParameter("id").equals("0")) {
-			repository.save(product);
+			productRepository.save(product);
 		} else {
-			repository.update(productId, product);
+			productRepository.update(productId, product);
 		}
+
+		if (product.getPayoutPercentage() > 0) {
+			Payout payout = new Payout();
+			if (productId != 0) {
+				payout.setProductId(productId);
+			} else {
+				payout.setProductId(payoutRepository.getLastProductIdFromDb());
+			}
+			payout.setDateTime(LocalDateTime.now());
+			payout.setAmount(-product.getPayoutCurrency());
+			payout.setNotes("За товар:\n" + product.getTitle());
+
+			System.out.println("record to PAYOUT db");
+			payoutRepository.addOrUpdate(payout);
+		} else {
+			System.out.println("delete from PAYOUT db");
+			payoutRepository.delete("product_id", productId);
+		}
+
 		response.sendRedirect("products");
 	}
 
@@ -85,11 +99,12 @@ public class ProductServlet extends HttpServlet {
 		switch (action == null ? "all" : action) {
 			case "delete" -> {
 				int id = getId(request);
-				repository.delete(id);
+				payoutRepository.delete("product_id", id);
+				productRepository.delete(id);
 				response.sendRedirect("products");
 			}
 			case "create", "update" -> {
-				Product product = "create".equals(action) ? getDefaultProduct() : repository.getProductById(getId(request));
+				Product product = "create".equals(action) ? getDefaultProduct() : productRepository.getProductById(getId(request));
 				request.setAttribute("product", product);
 
 				request.setAttribute("marketPlace", new ArrayList<>(Arrays.asList(MarketPlaceEnum.values())));
@@ -99,7 +114,7 @@ public class ProductServlet extends HttpServlet {
 				request.getRequestDispatcher("/product-form.jsp").forward(request, response);
 			}
 			default -> {
-				request.setAttribute("products", repository.getAllProducts());
+				request.setAttribute("products", productRepository.getAllProducts());
 				request.getRequestDispatcher("/products.jsp").forward(request, response);
 			}
 		}
@@ -108,12 +123,6 @@ public class ProductServlet extends HttpServlet {
 	private int getId(HttpServletRequest request) {
 		String paramId = Objects.requireNonNull(request.getParameter("id"));
 		return Integer.parseInt(paramId);
-	}
-
-	private double profitCalculator(double spent, double price, int payoutPercentage) {
-		if (payoutPercentage == 0) return price - spent;
-		else if (spent == 0) return price - price * (payoutPercentage / 100.0);
-		return price - spent - (price / payoutPercentage);
 	}
 
 	private Product getDefaultProduct() {
