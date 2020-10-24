@@ -13,7 +13,7 @@
         <span>Products from sales db.</span><br>
         <a href="products?action=create">Add new product</a>
         <hr>
-        <table border="1" cellpadding="8" cellspacing="0">
+        <table border="1" cellpadding="4" cellspacing="0">
             <thead>
             <tr>
                 <th>№</th>
@@ -37,7 +37,12 @@
                 <jsp:useBean id="stats" class="org.saleslist.jdbc.util.Stats"/>
                 <td></td>
                 <td></td>
-                <td>Total products = ${stats.totalPositions}</td>
+                <td>
+                    Total products = ${stats.totalPositions}
+<%--                    <span style="color: blue"><b>Qty Cooperations: ${payoutsStats.qtyCooperations}</b></span><br>--%>
+<%--                    <span style="color: green"><b>Qty Payouts: ${payoutsStats.qtyPayouts}</b></span><br>--%>
+<%--                    <span><b>Total Qty: ${payoutsStats.qtyCooperations + payoutsStats.qtyPayouts}</b></span>--%>
+                </td>
                 <td>
                     <c:forEach var="entry" items="${stats.marketPlaceCounterMap}">
                         <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>

@@ -13,7 +13,7 @@
         <span>Payouts from payouts db.</span><br>
         <a href="payouts?action=create">Make payout</a>
         <hr>
-        <table border="1" cellpadding="8" cellspacing="0">
+        <table border="1" cellpadding="4" cellspacing="0">
             <tr>
                 <th>№</th>
                 <th>Date</th>
@@ -58,7 +58,16 @@
                         <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
                                           value="${payout.amount}"/>
                     </td>
-                    <td>${payout.notes}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${payout.amount < 0}">
+                                <a href="products?action=update&id=${payout.productId}">${payout.notes}</a>
+                            </c:when>
+                            <c:otherwise>
+                                ${payout.notes}
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
                     <td><a href="payouts?action=update&id=${payout.id}">✏️</a></td>
                     <td><a href="payouts?action=delete&id=${payout.id}">❌</a></td>
                 </tr>

@@ -74,7 +74,7 @@ public class ProductServlet extends HttpServlet {
 			} else {
 				payout.setProductId(payoutRepository.getLastProductIdFromDb());
 			}
-			payout.setDateTime(LocalDateTime.now());
+			payout.setDateTime(product.getDateTime());
 			payout.setAmount(-product.getPayoutCurrency());
 			payout.setNotes("За товар:\n" + product.getTitle());
 
@@ -98,9 +98,7 @@ public class ProductServlet extends HttpServlet {
 
 		switch (action == null ? "all" : action) {
 			case "delete" -> {
-				int id = getId(request);
-				payoutRepository.delete("product_id", id);
-				productRepository.delete(id);
+				productRepository.delete(getId(request));
 				response.sendRedirect("products");
 			}
 			case "create", "update" -> {
@@ -129,12 +127,12 @@ public class ProductServlet extends HttpServlet {
 		return new Product(
 				LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
 				"New product",
-				null,
-				null,
-				null,
-				null,
-				0.0,
-				0.0,
+				MarketPlaceEnum.OLX,
+				DeliveryServiceEnum.NOVA_POST,
+				PaymentMethodEnum.OLX_DELIVERY,
+				OrderStatusEnum.SUCCESS,
+				0,
+				0,
 				0,
 				"",
 				false

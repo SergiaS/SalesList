@@ -45,14 +45,14 @@ public class Stats {
 	// how much i paid for each product
 	public List<Double> getEachPayout() {
 		return productList.stream()
-				.map(p -> Double.valueOf(doubleTemplate.format(p.getSoldAtPrice() * (p.getPayoutPercentage() / 100.0))))
+				.map(p -> Double.parseDouble(doubleTemplate.format(p.getPayoutCurrency())))
 				.collect(Collectors.toList());
 	}
 
 	// how much total did i pay
 	public double getTotalPayouts() {
 		return productList.stream()
-				.mapToDouble(p -> Double.parseDouble(doubleTemplate.format(p.getSoldAtPrice() * (p.getPayoutPercentage() / 100.0))))
+				.mapToDouble(p -> Double.parseDouble(doubleTemplate.format(p.getPayoutCurrency())))
 				.sum();
 	}
 
