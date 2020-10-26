@@ -13,7 +13,7 @@
         <span>Payouts from payouts db.</span><br>
         <a href="payouts?action=create">Make payout</a>
         <hr>
-        <table border="1" cellpadding="4" cellspacing="0">
+        <table>
             <tr>
                 <th>№</th>
                 <th>Date</th>
@@ -24,9 +24,9 @@
             </tr>
             <tr>
                 <jsp:useBean id="payoutsStats" scope="request" type="org.saleslist.jdbc.util.PayoutsStats"/>
-                <td></td>
-                <td></td>
-                <td>
+                <th></th>
+                <th></th>
+                <th>
                     <span style="color: blue"><b>Cooperations: <fmt:formatNumber type="number" maxFractionDigits="2"
                                                                                  groupingUsed="false"
                                                                                  value="${payoutsStats.cooperationsAmount}"/></b></span><br>
@@ -36,15 +36,14 @@
                     <span style=${payoutsStats.totalAmount < 0 ? '"color: red"' : '"color: purple"'}><b>Pay: <fmt:formatNumber
                             type="number" maxFractionDigits="2" groupingUsed="false"
                             value="${payoutsStats.totalAmount}"/></b></span>
-                </td>
-                <td>
+                </th>
+                <th>
                     <span style="color: blue"><b>Qty Cooperations: ${payoutsStats.qtyCooperations}</b></span><br>
                     <span style="color: green"><b>Qty Payouts: ${payoutsStats.qtyPayouts}</b></span><br>
                     <span><b>Total Qty: ${payoutsStats.qtyCooperations + payoutsStats.qtyPayouts}</b></span>
-                </td>
-                </b>
-                <td></td>
-                <td></td>
+                </th>
+                <th></th>
+                <th></th>
             </tr>
             <c:forEach items="${payouts}" var="payout">
                 <jsp:useBean id="payout" type="org.saleslist.jdbc.model.Payout"/>

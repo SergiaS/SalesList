@@ -1,9 +1,11 @@
 tr[data-payoutPercentage="false"] {
     color: green;
+    background-color: #D3FAC3;
 }
 
 tr[data-payoutPercentage="true"] {
-    color: blue;
+    color: royalblue;
+    background-color: #D1E8F9;
 }
 
 a {
@@ -25,7 +27,23 @@ select {
 
 table {
     width: 100%;
+    font: normal small-caps 13px/14px Arial, serif;
+    border: 1px;
     /*border-color: red;*/
+}
+
+th {
+    background-color: gainsboro;
+    padding: 5px;
+}
+
+td {
+    padding: 5px;
+}
+
+tr:hover {
+    background-color: #F9F5D1;
+    font-weight: bold;
 }
 
 .forms {
@@ -40,6 +58,7 @@ table {
     border-spacing: 0;
 }
 
-.test {
-    color: orange;
+body {
+    font: normal small-caps 13px/14px Arial, serif;
+    background-color: cadetblue;
 }

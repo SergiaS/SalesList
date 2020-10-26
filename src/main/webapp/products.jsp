@@ -13,7 +13,7 @@
         <span>Products from sales db.</span><br>
         <a href="products?action=create">Add new product</a>
         <hr>
-        <table border="1" cellpadding="4" cellspacing="0">
+        <table>
             <thead>
             <tr>
                 <th>№</th>
@@ -35,53 +35,53 @@
             </thead>
             <tr>
                 <jsp:useBean id="stats" class="org.saleslist.jdbc.util.Stats"/>
-                <td></td>
-                <td></td>
-                <td>
+                <th></th>
+                <th></th>
+                <th>
                     Total Sold Items: ${stats.numberOfSoldItems}<br>
                     Sold Cooperation Items: ${stats.numberOfCooperationItems}<br>
-                    Sold own Items: ${stats.numberOfMyItems}
-                </td>
-                <td>
+                    Sold Own Items: ${stats.numberOfMyItems}
+                </th>
+                <th>
                     <c:forEach var="entry" items="${stats.marketPlaceCounterMap}">
                         <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>
                     </c:forEach>
-                </td>
-                <td>
+                </th>
+                <th>
                     <c:forEach var="entry" items="${stats.deliveryCounterMap}">
                         <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>
                     </c:forEach>
-                </td>
-                <td>
+                </th>
+                <th>
                     <c:forEach var="entry" items="${stats.paymentMethodCounterMap}">
                         <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>
                     </c:forEach>
-                </td>
-                <td>
+                </th>
+                <th>
                     <c:forEach var="entry" items="${stats.statusOrderCounterMap}">
                         <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>
                     </c:forEach>
-                </td>
-                <td>
+                </th>
+                <th>
                     <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
                                       value="${stats.amountOfExpenses}"/>
-                </td>
-                <td>
+                </th>
+                <th>
                     <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
                                       value="${stats.amountAtSoldPrice}"/>
-                </td>
-                <td>
+                </th>
+                <th>
                     <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
                                       value="${stats.amountOfPayouts}"/>
-                </td>
-                <td>
+                </th>
+                <th>
                     <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
                                       value="${stats.amountOfProfit}"/>
-                </td>
-                <td></td>
-<%--                <td></td>--%>
-                <td></td>
-                <td></td>
+                </th>
+                <th></th>
+<%--                <th></th>--%>
+                <th></th>
+                <th></th>
             </tr>
 <%--            <c:set var="count" value="0" scope="page" />--%>
             <c:forEach items="${products}" var="product">
@@ -91,7 +91,7 @@
                         <c:set var="count" value="${count + 1}" scope="page"/>
                         <c:out value="${count}"/>
                     </td>
-                    <td>${product.dateTime.toLocalDate()}, ${product.dateTime.toLocalTime()}</td>
+                    <td style="white-space: nowrap">${product.dateTime.toLocalDate()}, ${product.dateTime.toLocalTime()}</td>
                     <td>${product.title}</td>
                     <td>${product.marketPlace}</td>
                     <td>${product.deliveryService}</td>
@@ -105,7 +105,7 @@
                         <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
                                           value="${product.soldAtPrice}"/>
                     </td>
-                    <td>
+                    <td style="white-space: nowrap">
                         <c:choose>
                             <c:when test="${product.payoutPercentage > 0}">
                                 <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
