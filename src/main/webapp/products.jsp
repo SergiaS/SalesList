@@ -38,10 +38,9 @@
                 <td></td>
                 <td></td>
                 <td>
-                    Total products = ${stats.totalPositions}
-<%--                    <span style="color: blue"><b>Qty Cooperations: ${payoutsStats.qtyCooperations}</b></span><br>--%>
-<%--                    <span style="color: green"><b>Qty Payouts: ${payoutsStats.qtyPayouts}</b></span><br>--%>
-<%--                    <span><b>Total Qty: ${payoutsStats.qtyCooperations + payoutsStats.qtyPayouts}</b></span>--%>
+                    Total Sold Items: ${stats.numberOfSoldItems}<br>
+                    Sold Cooperation Items: ${stats.numberOfCooperationItems}<br>
+                    Sold own Items: ${stats.numberOfMyItems}
                 </td>
                 <td>
                     <c:forEach var="entry" items="${stats.marketPlaceCounterMap}">
@@ -65,19 +64,19 @@
                 </td>
                 <td>
                     <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
-                                      value="${stats.totalSpent}"/>
+                                      value="${stats.amountOfExpenses}"/>
                 </td>
                 <td>
                     <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
-                                      value="${stats.totalPrice}"/>
+                                      value="${stats.amountAtSoldPrice}"/>
                 </td>
                 <td>
                     <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
-                                      value="${stats.totalPayouts}"/>
+                                      value="${stats.amountOfPayouts}"/>
                 </td>
                 <td>
                     <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
-                                      value="${stats.totalProfit}"/>
+                                      value="${stats.amountOfProfit}"/>
                 </td>
                 <td></td>
 <%--                <td></td>--%>
