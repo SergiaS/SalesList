@@ -23,3 +23,6 @@ tr[data-mealExcess="true"] {
     color: red;
 }
 
+select {
+    width: 200px;
+}

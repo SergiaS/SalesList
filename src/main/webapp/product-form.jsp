@@ -112,12 +112,9 @@
                             <input type="text" value="${product.payoutPercentage > 0 ? product.payoutPercentage : 0}"
                                    name="payoutPercentage" placeholder="Payout" size="5" required>
                         </label>
-
                         <c:choose>
                             <c:when test="${param.action != 'create'}">
-                                <label>
-                                    <input type="text" size="5" value="${product.payoutCurrency}" readonly>
-                                </label>
+                                <label>= ₴${product.payoutCurrency}</label>
                             </c:when>
                         </c:choose>
                     </dd>
