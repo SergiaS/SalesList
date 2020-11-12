@@ -1,4 +1,4 @@
-package org.saleslist.repository.inmemory;
+package ru.javawebinar.mySells.repository.inmemory;
 
 import org.saleslist.enums.DeliveryServiceEnum;
 import org.saleslist.enums.MarketPlaceEnum;
@@ -25,8 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static org.saleslist.repository.inmemory.InMemoryUserRepository.ADMIN_ID;
-import static org.saleslist.repository.inmemory.InMemoryUserRepository.USER_ID;
+import static ru.javawebinar.mySells.UserTestData.ADMIN_ID;
+import static ru.javawebinar.mySells.UserTestData.USER_ID;
 
 @Repository
 public class InMemoryProductRepository implements ProductRepository {

@@ -1,18 +1,25 @@
-package org.saleslist.repository.inmemory;
+package ru.javawebinar.mySells.repository.inmemory;
 
 import org.saleslist.model.User;
 import org.saleslist.repository.UserRepository;
 import org.springframework.stereotype.Repository;
+import ru.javawebinar.mySells.UserTestData;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.javawebinar.mySells.UserTestData.ADMIN;
+import static ru.javawebinar.mySells.UserTestData.USER;
+
 @Repository
 public class InMemoryUserRepository extends InMemoryBaseRepository<User> implements UserRepository {
 
-    static final int USER_ID = 1;
-    static final int ADMIN_ID = 2;
+    public void init() {
+        map.clear();
+        map.put(UserTestData.USER_ID, USER);
+        map.put(UserTestData.ADMIN_ID, ADMIN);
+    }
 
     @Override
     public List<User> getAll() {

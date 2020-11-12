@@ -1,4 +1,4 @@
-package org.saleslist;
+package ru.javawebinar.mySells;
 
 import org.saleslist.model.Role;
 import org.saleslist.model.User;
