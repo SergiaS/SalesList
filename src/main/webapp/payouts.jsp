@@ -23,7 +23,7 @@
                 <th>Delete</th>
             </tr>
             <tr>
-                <jsp:useBean id="payoutsStats" scope="request" type="org.saleslist.jdbc.util.PayoutsStats"/>
+                <jsp:useBean id="payoutsStats" scope="request" type="org.saleslist.util.PayoutsStats"/>
                 <th></th>
                 <th></th>
                 <th>

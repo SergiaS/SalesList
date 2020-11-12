@@ -6,16 +6,26 @@
 http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
-    <display-name>Archetype Created Web Application</display-name>
+    <display-name>Sale List</display-name>
 
 <!--    <servlet>-->
 <!--        <servlet-name>productServlet</servlet-name>-->
-<!--        <servlet-class>org.saleslist.jdbc.servlets.ProductServlet</servlet-class>-->
+<!--        <servlet-class>org.saleslist.web.ProductServlet</servlet-class>-->
 <!--        <load-on-startup>0</load-on-startup>-->
 <!--    </servlet>-->
 <!--    <servlet-mapping>-->
 <!--        <servlet-name>productServlet</servlet-name>-->
 <!--        <url-pattern>/products</url-pattern>-->
+<!--    </servlet-mapping>-->
+
+<!--    <servlet>-->
+<!--        <servlet-name>userServlet</servlet-name>-->
+<!--        <servlet-class>org.saleslist.web.UserServlet</servlet-class>-->
+<!--        <load-on-startup>0</load-on-startup>-->
+<!--    </servlet>-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>userServlet</servlet-name>-->
+<!--        <url-pattern>/users</url-pattern>-->
 <!--    </servlet-mapping>-->
 
 </web-app>
