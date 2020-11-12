@@ -8,8 +8,12 @@ import org.saleslist.model.Product;
 import org.saleslist.repository.ProductRepository;
 import org.saleslist.util.ProductsUtil;
 import org.saleslist.util.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -26,7 +30,9 @@ import static org.saleslist.repository.inmemory.InMemoryUserRepository.USER_ID;
 
 @Repository
 public class InMemoryProductRepository implements ProductRepository {
+    private static final Logger log = LoggerFactory.getLogger(InMemoryProductRepository.class);
 
+    // Map userId -> productRepository
     private final Map<Integer, InMemoryBaseRepository<Product>> usersProductsMap = new ConcurrentHashMap<>();
     {
         ProductsUtil.PRODUCTS.forEach(product -> save(product, USER_ID));
@@ -39,6 +45,16 @@ public class InMemoryProductRepository implements ProductRepository {
     public Product save(Product product, int userId) {
         InMemoryBaseRepository<Product> products = usersProductsMap.computeIfAbsent(userId, uid -> new InMemoryBaseRepository<>());
         return products.save(product);
+    }
+
+    @PostConstruct
+    public void postConstract() {
+        log.info("+++ PostConstract");
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        log.info("+++ PreDestroy");
     }
 
     @Override
