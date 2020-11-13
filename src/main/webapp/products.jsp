@@ -58,7 +58,7 @@
 
             <%--            stats block--%>
             <%--            <tr>--%>
-            <%--                <jsp:useBean id="stats" class="org.saleslist.util.Stats"/>--%>
+            <%--                <jsp:useBean id="stats" class="org.mySells.util.Stats"/>--%>
             <%--                <th></th>--%>
             <%--                <th></th>--%>
             <%--                <th>--%>
@@ -108,7 +108,7 @@
 
             <%--            <c:set var="count" value="0" scope="page" />--%>
             <c:forEach items="${products}" var="product">
-                <jsp:useBean id="product" type="org.saleslist.to.ProductTo"/>
+                <jsp:useBean id="product" type="org.mySells.to.ProductTo"/>
                 <tr data-payoutPercentage="${product.payoutPercentage > 0}">
                     <td>
                         <c:set var="count" value="${count + 1}" scope="page"/>

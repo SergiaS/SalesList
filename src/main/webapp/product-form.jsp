@@ -11,7 +11,7 @@
         <hr>
         <h1>${param.action == 'create' ? 'Add Product' : 'Edit Product'}</h1>
         <hr>
-        <jsp:useBean id="product" type="org.saleslist.model.Product" scope="request"/>
+        <jsp:useBean id="product" type="org.mySells.model.Product" scope="request"/>
         <form method="post" action="products">
             <input type="hidden" name="id" value="${product.id}">
             <dl>

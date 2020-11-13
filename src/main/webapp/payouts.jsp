@@ -23,7 +23,7 @@
                 <th>Delete</th>
             </tr>
             <tr>
-                <jsp:useBean id="payoutsStats" scope="request" type="org.saleslist.util.PayoutsStats"/>
+                <jsp:useBean id="payoutsStats" scope="request" type="org.mySells.util.PayoutsStats"/>
                 <th></th>
                 <th></th>
                 <th>
@@ -46,7 +46,7 @@
                 <th></th>
             </tr>
             <c:forEach items="${payouts}" var="payout">
-                <jsp:useBean id="payout" type="org.saleslist.jdbc.model.Payout"/>
+                <jsp:useBean id="payout" type="org.mySells.jdbc.model.Payout"/>
                 <tr data-payoutPercentage="${payout.amount < 0}">
                     <td>
                         <c:set var="count" value="${count + 1}" scope="page"/>

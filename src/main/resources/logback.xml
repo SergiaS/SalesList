@@ -21,7 +21,7 @@
         </encoder>
     </appender>
 
-    <logger name="org.saleslist" level="info"/>
+    <logger name="org.mySells" level="info"/>
 
     <root level="info">
         <appender-ref ref="file"/>

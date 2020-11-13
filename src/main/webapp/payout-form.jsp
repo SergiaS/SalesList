@@ -11,7 +11,7 @@
         <hr>
         <h1 style="text-align: center">${param.action == 'create' ? 'Make new payout' : 'Edit'}</h1>
         <hr>
-        <jsp:useBean id="payout" type="org.saleslist.jdbc.model.Payout" scope="request"/>
+        <jsp:useBean id="payout" type="org.mySells.jdbc.model.Payout" scope="request"/>
         <form method="post" action="payouts">
             <input type="hidden" name="id" value="${payout.id}">
             <input type="hidden" name="productId" value="${payout.productId}">

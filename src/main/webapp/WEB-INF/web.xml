@@ -10,7 +10,7 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
 
 <!--    <servlet>-->
 <!--        <servlet-name>productServlet</servlet-name>-->
-<!--        <servlet-class>org.saleslist.web.ProductServlet</servlet-class>-->
+<!--        <servlet-class>org.mySells.web.ProductServlet</servlet-class>-->
 <!--        <load-on-startup>0</load-on-startup>-->
 <!--    </servlet>-->
 <!--    <servlet-mapping>-->
@@ -20,7 +20,7 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
 
 <!--    <servlet>-->
 <!--        <servlet-name>userServlet</servlet-name>-->
-<!--        <servlet-class>org.saleslist.web.UserServlet</servlet-class>-->
+<!--        <servlet-class>org.mySells.web.UserServlet</servlet-class>-->
 <!--        <load-on-startup>0</load-on-startup>-->
 <!--    </servlet>-->
 <!--    <servlet-mapping>-->
