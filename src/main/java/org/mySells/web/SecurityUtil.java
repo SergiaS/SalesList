@@ -1,10 +1,12 @@
 package org.mySells.web;
 
+import org.mySells.model.AbstractBaseEntity;
+
 import static org.mySells.util.ProductsUtil.PROFIT_PER_DAY;
 
 public class SecurityUtil {
 
-    private static int id = 1;
+    private static int id = AbstractBaseEntity.START_SEQ;
 
     public static int authUserId() {
         return id;
