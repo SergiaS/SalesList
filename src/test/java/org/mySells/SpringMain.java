@@ -20,7 +20,7 @@ public class SpringMain {
         try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
-            adminUserController.create(new User(null, "bla93", "qwerty", Role.ADMIN));
+            adminUserController.create(new User(null, "Admin", "password", Role.ADMIN));
             System.out.println();
 
             ProductRestController productController = appCtx.getBean(ProductRestController.class);

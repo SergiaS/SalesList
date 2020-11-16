@@ -37,7 +37,7 @@ public class JdbcUserRepository implements UserRepository {
     public User save(User user) {
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", user.getId())
-                .addValue("name", user.getNickname())
+                .addValue("nickname", user.getNickname())
                 .addValue("password", user.getPassword())
                 .addValue("registered", user.getRegistered())
                 .addValue("profited", user.isProfited())
