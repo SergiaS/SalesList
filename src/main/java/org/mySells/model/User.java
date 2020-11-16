@@ -1,5 +1,8 @@
 package org.mySells.model;
 
+import org.springframework.util.CollectionUtils;
+
+import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Set;
@@ -18,16 +21,24 @@ public class User extends AbstractNamedEntity {
 
     private int profitsPerDay = PROFIT_PER_DAY;
 
-    public User(Integer id, String nickname, String password, Role role, Role... roles) {
-        this(id, nickname, password, PROFIT_PER_DAY, true, EnumSet.of(role, roles));
+    public User() {
     }
 
-    public User(Integer id, String nickName, String password, int profitsPerDay, boolean profited, Set<Role> roles) {
+    public User(User u) {
+        this(u.getId(), u.getNickname(), u.getPassword(), u.getProfitsPerDay(), u.isProfited(), u.getRegistered(), u.getRoles());
+    }
+
+    public User(Integer id, String nickname, String password, Role role, Role... roles) {
+        this(id, nickname, password, PROFIT_PER_DAY, true, new Date(), EnumSet.of(role, roles));
+    }
+
+    public User(Integer id, String nickName, String password, int profitsPerDay, boolean profited, Date registered, Set<Role> roles) {
         super(id, nickName);
         this.password = password;
-        this.profited = profited;
-        this.roles = roles;
         this.profitsPerDay = profitsPerDay;
+        this.profited = profited;
+        this.registered = registered;
+        setRoles(roles);
     }
 
     public String getPassword() {
@@ -64,6 +75,10 @@ public class User extends AbstractNamedEntity {
 
     public void setProfitsPerDay(int profitsPerDay) {
         this.profitsPerDay = profitsPerDay;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
 
     @Override

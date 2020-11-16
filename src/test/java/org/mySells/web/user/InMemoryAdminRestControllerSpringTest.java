@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.mySells.UserTestData.NOT_FOUND;
 import static org.mySells.UserTestData.USER_ID;
 
 @ContextConfiguration("classpath:spring/spring-app.xml")
@@ -35,6 +36,6 @@ public class InMemoryAdminRestControllerSpringTest {
 
     @Test
     public void deleteNotFound() throws Exception {
-        Assert.assertThrows(NotFoundException.class, () -> controller.delete(10));
+        Assert.assertThrows(NotFoundException.class, () -> controller.delete(NOT_FOUND));
     }
 }

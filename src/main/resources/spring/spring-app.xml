@@ -8,7 +8,7 @@
 <!--        <constructor-arg name="repository" ref="inMemoryUserRepository"/>-->
 <!--    </bean>-->
 
-    <context:component-scan base-package="org.mySells.repository"/>
+    <context:component-scan base-package="org.mySells.repository.jdbc"/>
     <context:component-scan base-package="org.mySells.service"/>
     <context:component-scan base-package="org.mySells.web"/>
 
