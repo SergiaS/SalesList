@@ -42,7 +42,7 @@ public class ProductServlet extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+		springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
 		productController = springContext.getBean(ProductRestController.class);
 	}
 

@@ -21,9 +21,9 @@ public class JdbcProductRepository implements ProductRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private SimpleJdbcInsert insertProduct;
+    private final SimpleJdbcInsert insertProduct;
 
     @Autowired
     public JdbcProductRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -33,11 +33,6 @@ public class JdbcProductRepository implements ProductRepository {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
-
-//    public static void main(String[] args) {
-//        JdbcProductRepository repository = new JdbcProductRepository();
-//
-//    }
 
     @Override
     public Product save(Product product, int userId) {
@@ -58,11 +53,13 @@ public class JdbcProductRepository implements ProductRepository {
         if (product.isNew()) {
             Number newKey = insertProduct.executeAndReturnKey(map);
             product.setId(newKey.intValue());
-        } else if (namedParameterJdbcTemplate.update(
-                "UPDATE products SET date_time=:date_time, title=:title, market_place=:market_place, delivery_service=:delivery_service, payment_method=:payment_method, order_status=:order_status, " +
-                        "sold_at_price=:sold_at_price, spent=:spent, payout_percentage=:payout_percentage, payout_currency=:payout_currency, profit=:profit, notes=:notes " +
-                        "WHERE id=:id AND user_id=:user_id", map) == 0) {
-            return null;
+        } else {
+            if (namedParameterJdbcTemplate.update(
+                    "UPDATE products SET date_time=:date_time, title=:title, market_place=:market_place, delivery_service=:delivery_service, payment_method=:payment_method, order_status=:order_status, " +
+                            "sold_at_price=:sold_at_price, spent=:spent, payout_percentage=:payout_percentage, payout_currency=:payout_currency, profit=:profit, notes=:notes " +
+                            "WHERE id=:id AND user_id=:user_id", map) == 0) {
+                return null;
+            }
         }
         return product;
     }
@@ -89,6 +86,4 @@ public class JdbcProductRepository implements ProductRepository {
                 "WHERE user_id=:? AND date_time >= ? AND date_time <= ?" +
                 "ORDER BY date_time DESC", ROW_MAPPER, userId, startDateTime, endDateTime);
     }
-
-
 }
