@@ -10,6 +10,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Arrays;
 
+import static org.mySells.UserTestData.NOT_FOUND;
 import static org.mySells.UserTestData.USER_ID;
 
 public class InMemoryAdminRestControllerTest {
@@ -46,6 +47,6 @@ public class InMemoryAdminRestControllerTest {
 
     @Test
     public void deleteNotFound() throws Exception {
-        Assert.assertThrows(NotFoundException.class, () -> controller.delete(10));
+        Assert.assertThrows(NotFoundException.class, () -> controller.delete(NOT_FOUND));
     }
 }

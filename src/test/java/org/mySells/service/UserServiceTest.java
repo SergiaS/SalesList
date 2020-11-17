@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mySells.model.Role;
 import org.mySells.model.User;
-import org.mySells.repository.UserRepository;
 import org.mySells.util.exception.NotFoundException;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.mySells.UserTestData.*;
 
@@ -37,9 +35,6 @@ public class UserServiceTest {
     @Autowired
     private UserService service;
 
-    @Autowired
-    private UserRepository repository;
-
     @Test
     public void create() throws Exception {
         User newUser = getNew();
@@ -59,7 +54,7 @@ public class UserServiceTest {
     @Test
     public void delete() throws Exception {
         service.delete(USER_ID);
-        assertNull(repository.get(USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(USER_ID));
     }
 
     @Test
