@@ -14,21 +14,24 @@ import java.time.LocalTime;
 
 public class Product extends AbstractBaseEntity {
 
-    private final LocalDateTime dateTime;
-    private final String title;
+    private LocalDateTime dateTime;
+    private String title;
 
-    private final MarketPlaceEnum marketPlace;
-    private final DeliveryServiceEnum deliveryService;
-    private final PaymentMethodEnum paymentMethod;
-    private final OrderStatusEnum orderStatus;
+    private MarketPlaceEnum marketPlace;
+    private DeliveryServiceEnum deliveryService;
+    private PaymentMethodEnum paymentMethod;
+    private OrderStatusEnum orderStatus;
 
-    private final BigDecimal soldAtPrice;
-    private final BigDecimal spent;
-    private final Integer payoutPercentage;
-    private final BigDecimal payoutCurrency;
-    private final BigDecimal profit;
+    private BigDecimal soldAtPrice;
+    private BigDecimal spent;
+    private Integer payoutPercentage;
+    private BigDecimal payoutCurrency;
+    private BigDecimal profit;
 
-    private final String notes;
+    private String notes;
+
+    public Product() {
+    }
 
     public Product(LocalDateTime dateTime, String title, MarketPlaceEnum marketPlace, DeliveryServiceEnum deliveryService, PaymentMethodEnum paymentMethod, OrderStatusEnum orderStatus, BigDecimal soldAtPrice, BigDecimal spent, Integer payoutPercentage, String notes) {
         this(null, dateTime, title, marketPlace, deliveryService, paymentMethod, orderStatus, soldAtPrice, spent, payoutPercentage, null, null, notes);
@@ -126,6 +129,54 @@ public class Product extends AbstractBaseEntity {
         } else {
             return soldAtPrice;
         }
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setMarketPlace(MarketPlaceEnum marketPlace) {
+        this.marketPlace = marketPlace;
+    }
+
+    public void setDeliveryService(DeliveryServiceEnum deliveryService) {
+        this.deliveryService = deliveryService;
+    }
+
+    public void setPaymentMethod(PaymentMethodEnum paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public void setOrderStatus(OrderStatusEnum orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public void setSoldAtPrice(BigDecimal soldAtPrice) {
+        this.soldAtPrice = soldAtPrice;
+    }
+
+    public void setSpent(BigDecimal spent) {
+        this.spent = spent;
+    }
+
+    public void setPayoutPercentage(Integer payoutPercentage) {
+        this.payoutPercentage = payoutPercentage;
+    }
+
+    public void setPayoutCurrency(BigDecimal payoutCurrency) {
+        this.payoutCurrency = payoutCurrency;
+    }
+
+    public void setProfit(BigDecimal profit) {
+        this.profit = profit;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     @Override
