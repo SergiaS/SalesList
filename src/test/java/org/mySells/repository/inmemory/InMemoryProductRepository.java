@@ -1,12 +1,8 @@
 package org.mySells.repository.inmemory;
 
-import org.mySells.enums.DeliveryServiceEnum;
-import org.mySells.enums.MarketPlaceEnum;
-import org.mySells.enums.OrderStatusEnum;
-import org.mySells.enums.PaymentMethodEnum;
+import org.mySells.ProductTestData;
 import org.mySells.model.Product;
 import org.mySells.repository.ProductRepository;
-import org.mySells.util.ProductsUtil;
 import org.mySells.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -25,7 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static org.mySells.UserTestData.ADMIN_ID;
 import static org.mySells.UserTestData.USER_ID;
 
 @Repository
@@ -34,11 +27,11 @@ public class InMemoryProductRepository implements ProductRepository {
 
     // Map userId -> productRepository
     private final Map<Integer, InMemoryBaseRepository<Product>> usersProductsMap = new ConcurrentHashMap<>();
+
     {
-        ProductsUtil.PRODUCTS.forEach(product -> save(product, USER_ID));
-        save(new Product(LocalDateTime.of(2020, Month.NOVEMBER, 3, 9, 33), "Tyres", MarketPlaceEnum.SITE, DeliveryServiceEnum.NOVA_POST, PaymentMethodEnum.SAVE_SERVICE, OrderStatusEnum.SUCCESS, new BigDecimal("2700"), new BigDecimal("2400"), 0, ""), ADMIN_ID);
-        save(new Product(LocalDateTime.of(2020, Month.NOVEMBER, 3, 15, 18), "Light", MarketPlaceEnum.SITE, DeliveryServiceEnum.NOVA_POST, PaymentMethodEnum.SAVE_SERVICE, OrderStatusEnum.SUCCESS, new BigDecimal("1800"), new BigDecimal("1250"), 0, ""), ADMIN_ID);
-        save(new Product(LocalDateTime.of(2020, Month.NOVEMBER, 3, 23, 45), "Oil", MarketPlaceEnum.SITE, DeliveryServiceEnum.JUSTIN, PaymentMethodEnum.CASH_ON_DELIVERY, OrderStatusEnum.SUCCESS, new BigDecimal("285"), new BigDecimal("180"), 0, ""), ADMIN_ID);
+        InMemoryBaseRepository<Product> userProducts = new InMemoryBaseRepository<>();
+        ProductTestData.PRODUCTS.forEach(product -> userProducts.map.put(product.getId(), product));
+        usersProductsMap.put(USER_ID, userProducts);
     }
 
     @Override
