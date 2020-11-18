@@ -12,10 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static java.time.LocalDateTime.of;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mySells.model.AbstractBaseEntity.START_SEQ;
 
 public class ProductTestData {
+    public static TestMatcher<Product> PRODUCT_MATCHER = TestMatcher.usingFieldsComparator();
 
     public static final int NOT_FOUND = 10;
     public static final int PRODUCT1_ID = START_SEQ + 2;
@@ -38,17 +38,5 @@ public class ProductTestData {
 
     public static Product getUpdated() {
         return new Product(PRODUCT1_ID, PRODUCT1.getDateTime(), "Updated item", MarketPlaceEnum.OLX, DeliveryServiceEnum.NOVA_POST, PaymentMethodEnum.OLX_DELIVERY, OrderStatusEnum.SUCCESS, new BigDecimal("100"), new BigDecimal("0.0"), 30, new BigDecimal("30"), new BigDecimal("70"), "");
-    }
-
-    public static void assertMatch(Product actual, Product expected) {
-        assertThat(actual).isEqualToComparingFieldByField(expected);
-    }
-
-    public static void assertMatch(Iterable<Product> actual, Product... expected) {
-        assertMatch(actual, Arrays.asList(expected));
-    }
-
-    public static void assertMatch(Iterable<Product> actual, Iterable<Product> expected) {
-        assertThat(actual).usingFieldByFieldElementComparator().isEqualTo(expected);
     }
 }

@@ -54,18 +54,18 @@ public class ProductServiceTest {
 
     @Test
     public void create() {
-        Product newProduct = getNew();
-        Product created = service.create(newProduct, USER_ID);
+        Product created = service.create(getNew(), USER_ID);
         Integer newId = created.getId();
+        Product newProduct = getNew();
         newProduct.setId(newId);
-        assertMatch(created, newProduct);
-        assertMatch(service.get(newId, USER_ID), newProduct);
+        PRODUCT_MATCHER.assertMatch(created, newProduct);
+        PRODUCT_MATCHER.assertMatch(service.get(newId, USER_ID), newProduct);
     }
 
     @Test
     public void get() {
         Product product = service.get(ADMIN_PRODUCT_ID, ADMIN_ID);
-        assertMatch(product, ADMIN_PRODUCT1);
+        PRODUCT_MATCHER.assertMatch(product, ADMIN_PRODUCT1);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class ProductServiceTest {
     public void update() {
         Product updated = getUpdated();
         service.update(updated, USER_ID);
-        assertMatch(service.get(PRODUCT1_ID, USER_ID), updated);
+        PRODUCT_MATCHER.assertMatch(service.get(PRODUCT1_ID, USER_ID), getUpdated());
     }
 
     @Test
@@ -92,12 +92,12 @@ public class ProductServiceTest {
 
     @Test
     public void getAll() {
-        assertMatch(service.getAll(USER_ID), PRODUCTS);
+        PRODUCT_MATCHER.assertMatch(service.getAll(USER_ID), PRODUCTS);
     }
 
     @Test
     public void getBetweenInclusive() {
-        assertMatch(service.getBetweenInclusive(
+        PRODUCT_MATCHER.assertMatch(service.getBetweenInclusive(
                 LocalDate.of(2020, Month.OCTOBER, 31),
                 LocalDate.of(2020, Month.OCTOBER, 31), USER_ID),
                 PRODUCT3, PRODUCT2, PRODUCT1);
@@ -105,6 +105,6 @@ public class ProductServiceTest {
 
     @Test
     public void getBetweenWithNullDates() {
-        assertMatch(service.getBetweenInclusive(null, null, USER_ID), PRODUCTS);
+        PRODUCT_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), PRODUCTS);
     }
 }
