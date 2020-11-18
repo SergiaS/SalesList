@@ -40,24 +40,25 @@ public class JdbcProductRepository implements ProductRepository {
                 .addValue("id", product.getId())
                 .addValue("date_time", product.getDateTime())
                 .addValue("title", product.getTitle())
-                .addValue("market_place", product.getMarketPlace())
-                .addValue("delivery_service", product.getDeliveryService())
-                .addValue("payment_method", product.getPaymentMethod())
-                .addValue("order_status", product.getOrderStatus())
+                .addValue("market_place", product.getMarketPlace().toString())
+                .addValue("delivery_service", product.getDeliveryService().toString())
+                .addValue("payment_method", product.getPaymentMethod().toString())
+                .addValue("order_status", product.getOrderStatus().toString())
                 .addValue("sold_at_price", product.getSoldAtPrice())
                 .addValue("spent", product.getSpent())
                 .addValue("payout_percentage", product.getPayoutPercentage())
                 .addValue("payout_currency", product.getPayoutCurrency())
                 .addValue("profit", product.getProfit())
-                .addValue("notes", product.getNotes());
+                .addValue("notes", product.getNotes())
+                .addValue("user_id", userId);
         if (product.isNew()) {
-            Number newKey = insertProduct.executeAndReturnKey(map);
-            product.setId(newKey.intValue());
+            Number newId = insertProduct.executeAndReturnKey(map);
+            product.setId(newId.intValue());
         } else {
             if (namedParameterJdbcTemplate.update(
-                    "UPDATE products SET date_time=:date_time, title=:title, market_place=:market_place, delivery_service=:delivery_service, payment_method=:payment_method, order_status=:order_status, " +
-                            "sold_at_price=:sold_at_price, spent=:spent, payout_percentage=:payout_percentage, payout_currency=:payout_currency, profit=:profit, notes=:notes " +
-                            "WHERE id=:id AND user_id=:user_id", map) == 0) {
+                    "UPDATE products " +
+                    "SET date_time=:date_time, title=:title, market_place=:market_place, delivery_service=:delivery_service, payment_method=:payment_method, order_status=:order_status, sold_at_price=:sold_at_price, spent=:spent, payout_percentage=:payout_percentage, payout_currency=:payout_currency, profit=:profit, notes=:notes " +
+                    "WHERE id=:id AND user_id=:user_id", map) == 0) {
                 return null;
             }
         }
