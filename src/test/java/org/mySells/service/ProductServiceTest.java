@@ -48,7 +48,7 @@ public class ProductServiceTest {
     @Test
     public void create() {
         Product created = service.create(getNew(), USER_ID);
-        Integer newId = created.getId();
+        int newId = created.id();
         Product newProduct = getNew();
         newProduct.setId(newId);
         PRODUCT_MATCHER.assertMatch(created, newProduct);

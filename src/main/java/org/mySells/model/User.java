@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.Set;
 
-import static org.mySells.util.ProductsUtil.PROFIT_PER_DAY;
+import static org.mySells.util.ProductsUtil.DEFAULT_PROFIT_PER_DAY;
 
 public class User extends AbstractNamedEntity {
 
@@ -19,7 +19,7 @@ public class User extends AbstractNamedEntity {
 
     private Set<Role> roles;
 
-    private int profitsPerDay = PROFIT_PER_DAY;
+    private int profitsPerDay = DEFAULT_PROFIT_PER_DAY;
 
     public User() {
     }
@@ -29,7 +29,7 @@ public class User extends AbstractNamedEntity {
     }
 
     public User(Integer id, String nickname, String password, Role role, Role... roles) {
-        this(id, nickname, password, PROFIT_PER_DAY, true, new Date(), EnumSet.of(role, roles));
+        this(id, nickname, password, DEFAULT_PROFIT_PER_DAY, true, new Date(), EnumSet.of(role, roles));
     }
 
     public User(Integer id, String nickName, String password, int profitsPerDay, boolean profited, Date registered, Set<Role> roles) {

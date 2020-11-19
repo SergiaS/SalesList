@@ -2,11 +2,14 @@ package org.mySells.web;
 
 import org.mySells.model.AbstractBaseEntity;
 
-import static org.mySells.util.ProductsUtil.PROFIT_PER_DAY;
+import static org.mySells.util.ProductsUtil.DEFAULT_PROFIT_PER_DAY;
 
 public class SecurityUtil {
 
     private static int id = AbstractBaseEntity.START_SEQ;
+
+    public SecurityUtil() {
+    }
 
     public static int authUserId() {
         return id;
@@ -17,6 +20,6 @@ public class SecurityUtil {
     }
 
     public static int authUserProfitsPerDay() {
-        return PROFIT_PER_DAY;
+        return DEFAULT_PROFIT_PER_DAY;
     }
 }

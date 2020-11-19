@@ -3,6 +3,7 @@ package org.mySells.service;
 import org.mySells.model.User;
 import org.mySells.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class UserService {
     }
 
     public User create(User user) {
+        Assert.notNull(user, "user must not be null");
         return repository.save(user);
     }
 
@@ -31,6 +33,7 @@ public class UserService {
     }
 
     public User getByNickname(String nickname) {
+        Assert.notNull(nickname, "nickname must not be null");
         return checkNotFound(repository.getByNickname(nickname), "nickname=" + nickname);
     }
 
@@ -39,6 +42,7 @@ public class UserService {
     }
 
     public void update(User user) {
-        checkNotFoundWithId(repository.save(user), user.getId());
+        Assert.notNull(user, "user must not be null");
+        checkNotFoundWithId(repository.save(user), user.id());
     }
 }

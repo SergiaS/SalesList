@@ -4,6 +4,7 @@ import org.mySells.model.Product;
 import org.mySells.repository.ProductRepository;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,10 +39,12 @@ public class ProductService {
     }
 
     public void update(Product product, int userId) {
-        checkNotFoundWithId(repository.save(product, userId), product.getId());
+        Assert.notNull(product, "product must not be null");
+        checkNotFoundWithId(repository.save(product, userId), product.id());
     }
 
     public Product create(Product product, int userId) {
+        Assert.notNull(product, "product must not be null");
         return repository.save(product, userId);
     }
 }

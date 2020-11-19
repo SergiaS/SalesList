@@ -14,7 +14,10 @@ import java.util.stream.Collectors;
 
 public class ProductsUtil {
 
-    public static final int PROFIT_PER_DAY = 500;
+    public static final int DEFAULT_PROFIT_PER_DAY = 500;
+
+    public ProductsUtil() {
+    }
 
     public static List<ProductTo> getTos(Collection<Product> products, int profitPerDay) {
         return filteredByPredicate(products, profitPerDay, product -> true);
