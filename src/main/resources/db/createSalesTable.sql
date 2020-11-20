@@ -1,38 +1,65 @@
-CREATE SCHEMA `sales_list` DEFAULT CHARACTER SET utf8;
+DROP TABLE IF EXISTS user_roles;
+DROP TABLE IF EXISTS payouts;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS users;
 
-CREATE TABLE `sales_list`.`sales`
+
+DROP SEQUENCE IF EXISTS user_seq;
+CREATE SEQUENCE user_seq START WITH 100;
+
+CREATE TABLE users
 (
-    `id`                int(11)      NOT NULL AUTO_INCREMENT,
-    `date_time`         datetime     NOT NULL,
-    `title`             varchar(200) NOT NULL,
-    `market_place`      varchar(45)  NOT NULL,
-    `delivery_service`  varchar(45)  NOT NULL,
-    `payment_method`    varchar(45)  NOT NULL,
-    `order_status`      varchar(45)  NOT NULL,
-    `spent`             double       NOT NULL DEFAULT '0',
-    `sold_at_price`     double       NOT NULL,
-    `payout_percentage` int(11)               DEFAULT NULL,
-    `payout_currency`   double                DEFAULT NULL,
-    `profit`            double                DEFAULT NULL,
-    `notes`             varchar(200)          DEFAULT NULL,
-    `is_payout_paid`    tinyint(1)   NOT NULL DEFAULT '0',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 0
-  DEFAULT CHARSET = utf8;
+    id             INTEGER PRIMARY KEY DEFAULT nextval('user_seq'),
+    name           VARCHAR                           NOT NULL,
+    email          VARCHAR UNIQUE                    NOT NULL,
+    password       VARCHAR                           NOT NULL,
+    registered     TIMESTAMP           DEFAULT now() NOT NULL,
+    profited       BOOL                DEFAULT TRUE  NOT NULL,
+    profit_per_day INTEGER             DEFAULT 500   NOT NULL
+);
 
 
-CREATE TABLE `payouts`
+CREATE TABLE user_roles
 (
-    `id`         int(11)   NOT NULL AUTO_INCREMENT,
-    `product_id` int(11)        DEFAULT NULL,
-    `date_time`  timestamp NULL DEFAULT NULL,
-    `amount`     double         DEFAULT NULL,
-    `notes`      varchar(200)   DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `product_id` (`product_id`),
-    CONSTRAINT `payouts_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `sales` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1000
-  DEFAULT CHARSET = utf8;
+    user_id INTEGER NOT NULL,
+    role    VARCHAR,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+
+DROP SEQUENCE IF EXISTS payouts_seq;
+CREATE SEQUENCE payouts_seq START WITH 1000;
+
+CREATE TABLE payouts
+(
+    id        INTEGER PRIMARY KEY DEFAULT nextval('payouts_seq'),
+    user_id   INTEGER                           NOT NULL,
+    date_time TIMESTAMP           DEFAULT now() NOT NULL,
+    amount    DOUBLE PRECISION    DEFAULT 0     NOT NULL,
+    notes     VARCHAR                           NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+
+DROP SEQUENCE IF EXISTS products_seq;
+CREATE SEQUENCE products_seq;
+
+CREATE TABLE products
+(
+    id                INTEGER PRIMARY KEY DEFAULT nextval('products_seq'),
+    user_id           INTEGER                           NOT NULL,
+    date_time         TIMESTAMP           DEFAULT now() NOT NULL,
+    title             VARCHAR                           NOT NULL,
+    market_place      VARCHAR                           NOT NULL,
+    delivery_service  VARCHAR                           NOT NULL,
+    payment_method    VARCHAR                           NOT NULL,
+    order_status      VARCHAR                           NOT NULL,
+    sold_at_price     DOUBLE PRECISION    DEFAULT 0     NOT NULL,
+    spent             DOUBLE PRECISION    DEFAULT 0     NOT NULL,
+    payout_percentage INTEGER             DEFAULT 0     NOT NULL,
+    payout_currency   DOUBLE PRECISION    DEFAULT 0     NOT NULL,
+    profit            DOUBLE PRECISION    DEFAULT 0     NOT NULL,
+    notes             VARCHAR,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+

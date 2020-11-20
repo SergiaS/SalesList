@@ -1,3 +1,3 @@
-insert into sales_list.sales SELECT * from backup.sales_copy;
+INSERT INTO sales_db.public.products SELECT * FROM copy.products_bu;
 
-insert into sales_list.payouts SELECT * from backup.payouts_copy;
+INSERT INTO sales_db.public.payouts SELECT * FROM copy.payouts_bu;
