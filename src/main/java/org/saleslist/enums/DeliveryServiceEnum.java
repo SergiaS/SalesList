@@ -1,4 +1,4 @@
-package org.saleslist.jdbc.enums;
+package org.saleslist.enums;
 
 public enum DeliveryServiceEnum {
 	NOVA_POST,
