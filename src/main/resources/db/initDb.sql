@@ -1,172 +1,65 @@
-INSERT INTO public.users (name, email, password, registered, profited, profit_per_day)
-VALUES ('Admin', 'admin@gmail.com', 'qwerty', '2019-08-07 10:00:00', TRUE, 750),
-       ('SK88', 'sk88@gmail.com', 'password', '2020-11-20 10:00:00', TRUE, 250);
+DROP TABLE IF EXISTS user_roles;
+DROP TABLE IF EXISTS payouts;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS users;
 
 
-INSERT INTO public.user_roles (user_id, role)
-VALUES (100, 'ADMIN'),
-       (101, 'USER');
+DROP SEQUENCE IF EXISTS user_seq;
+CREATE SEQUENCE user_seq START WITH 100;
+
+CREATE TABLE users
+(
+    id             INTEGER PRIMARY KEY DEFAULT nextval('user_seq'),
+    name           VARCHAR                           NOT NULL,
+    email          VARCHAR UNIQUE                    NOT NULL,
+    password       VARCHAR                           NOT NULL,
+    registered     TIMESTAMP           DEFAULT now() NOT NULL,
+    profited       BOOL                DEFAULT TRUE  NOT NULL,
+    profit_per_day INTEGER             DEFAULT 500   NOT NULL
+);
 
 
-
-INSERT INTO public.products (user_id,
-                             date_time,
-                             title,
-                             market_place,
-                             delivery_service,
-                             payment_method,
-                             order_status,
-                             sold_at_price,
-                             spent,
-                             payout_percentage,
-                             payout_currency,
-                             profit,
-                             notes)
-VALUES
-(100, '2019-08-07 10:00:00', 'Шоты/стопки/рюмки Jagermeister 6 шт. Черные (Новые!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 6, 180, 0, 0, 0, 'Покупка упаковки'),
-(100, '2019-08-07 10:00:00', 'Велофара (свет) передняя Lezyne Micro Drive 450XL Black (как новая!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 710, 0, 0, 710, ''),
-(100, '2019-08-07 10:00:00', 'Очки Jagermeister Black (Новые!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 6, 195, 0, 0, 0, 'Покупка упаковки'),
-(100, '2019-08-09 10:00:00', 'Защита колена и голени SixSixOne (661) Comp Knee, размер M, White', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 740, 0, 0, 0, 'Покупка упаковки'),
-(100, '2019-08-10 10:00:00', 'Очки Jagermeister Black (Новые!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 6, 195, 40, 0, 75.6, 'Покупка упаковки'),
-(100, '2019-08-11 10:00:00', 'Now Foods Глицин 1000 мг 100 капсул (новая, закрытая банка)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 6, 291, 0, 0, 0, 'Покупка упаковки'),
-(100, '2019-08-12 10:00:00', 'Очки Jagermeister Black (Новые!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 6, 195, 40, 0, 75.6, 'Покупка упаковки'),
-(100, '2019-08-14 10:00:00', 'Смазка цепи для сухой погоды Muc-Off Dry Lube 120 мл (новая!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 286, 0, 0, 0, 'Покупка упаковки'),
-(100, '2019-08-15 10:00:00', 'Тестер воды Xiaomi Mi TDS Pen', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 160, 0, 0, 0, 'Использована скидка НП (-6 грн.)'),
-(100, '2019-08-20 10:00:00', 'Очки Jagermeister Black-Orange (Новые!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 196, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2019-08-22 10:00:00', 'Очки Jagermeister Black-Orange (Новые!)', 'OLX', 'COLLECTION_IN_PERSON', 'CASH', 'SUCCESS', 0, 176, 40, 0, 0, 'Покупка упаковки'),
-(100, '2019-08-27 10:00:00', 'СРОЧНО! Задний переключатель Shimano ACERA RD-M390 Black (б/у)', 'OLX', 'COLLECTION_IN_PERSON', 'CASH', 'SUCCESS', 0, 300, 0, 0, 0, 'Покупка упаковки'),
-(100, '2019-08-31 10:00:00', 'Силиконовый чехол для GoPro Hero5/6/7 Blue (Новый в пакете!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 95, 0, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2019-09-07 10:00:00', 'Очки Jagermeister Black-Orange (Новые!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 160, 40, 0, 0, ''),
-(100, '2019-09-08 10:00:00', 'Стаканы (бокалы) Baileys с золотым лого 6 шт. в упаковке (Новые!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 350, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2019-09-10 10:00:00', 'Очки Jagermeister Black-Orange (Новые!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 172, 40, 0, 0, ''),
-(100, '2019-09-13 10:00:00', 'Очки Jagermeister Black-Orange (Новые!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 172, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2019-09-16 10:00:00', 'Теодор Драйзер - Финансист, Сестра Керри (Цена за 2 книги!)', 'OLX', 'COLLECTION_IN_PERSON', 'CASH', 'SUCCESS', 0, 50, 0, 0, 0, ''),
-(100, '2019-09-19 10:00:00', 'Б/У Велоштаны демисезонные Cannondale с ветрозащитой, размер L', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 170, 0, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2019-09-19 11:00:00', 'Новые зауженные мужские джинсы 16 Revolution 88 M8315 W34 x L32', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 200, 0, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2019-09-24 10:00:00', 'СРОЧНО! Велокомпьютер Lezyne Mega C GPS Black', 'OLX', 'NOVA_POST', 'PARTIAL_PREPAYMENT', 'SUCCESS', 3764.92, 4650, 0, 0, 0, 'Карта клиента НП (+2 грн.); Предоплата 200 грн; eBay'),
-(100, '2019-09-25 10:00:00', 'СРОЧНО! Велоформа (джерси + трусы с лямками) Monton Pro Sky, размер L', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 480, 1100, 0, 0, 0, 'Покупал форму 5 лет назад'),
-(100, '2019-09-30 10:00:00', 'Очки Jagermeister Black-Orange (Новые!)', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 166, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2019-09-30 12:00:00', 'Очки Jagermeister Black-Orange (Новые!)', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 150, 40, 0, 0, 'Тот же заказ'),
-(100, '2019-10-06 10:00:00', 'Стаканы (бокалы) Baileys с золотым лого (Новые!) 12 шт.', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 700, 40, 0, 0, ''),
-(100, '2019-10-08 10:00:00', 'Набор бокалов для вина Pasabahce Service Line Casablanka 51258 12 шт.', 'OLX', 'COLLECTION_IN_PERSON', 'CASH', 'SUCCESS', 0, 300, 40, 0, 0, ''),
-(100, '2019-10-11 10:00:00', 'Съемник шатунов для велосипеда Bike Hand YC-215CB (б/у)', 'OLX', 'COLLECTION_IN_PERSON', 'CASH', 'SUCCESS', 0, 108, 0, 0, 0, ''),
-(100, '2019-10-11 11:00:00', 'СРОЧНО! Сканер Epson Perfection 1270 USB А4', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 415, 40, 0, 0, ''),
-(100, '2019-10-21 10:00:00', 'Стаканы (бокалы) Baileys с золотым лого (Новые!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 50, 40, 0, 0, ''),
-(100, '2019-10-25 10:00:00', 'Новые Шоты Рюмки Стопки Текила Sauza (Сауза) 3 шт.', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 165, 40, 0, 0, 'Использована скидка НП (-6 грн.)'),
-(100, '2019-10-31 10:00:00', 'Солнцезащитные очки Jagermeister Green (Новые, в упаковке!) 2 шт.', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 270, 40, 0, 0, ''),
-(100, '2019-11-11 10:00:00', 'СРОЧНО! Футболка Ecko Premio 15, размер М, Темно-синяя', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 150, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2019-11-11 10:00:00', 'Смазки цепи Muc-Off для сухой/мокрой погоды Dry/Wet Lube 120 мл', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 147.02, 245, 0, 0, 0, 'Использована скидка НП (-6 грн.); Wiggle 29.09.2019'),
-(100, '2019-12-15 10:00:00', 'Новая Передняя фара (свет) Lezyne Lite Drive 800XL Black', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 1060.33, 1150, 0, 0, 0, ''),
-(100, '2019-12-18 10:00:00', 'Комплект велофар Lezyne Macro 800XL & Micro Drive Pair Black', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 1376.33, 1777, 0, 0, 0, ''),
-(100, '2019-12-19 10:00:00', 'Смазки цепи Muc-Off для сухой/мокрой погоды Dry/Wet Lube 120 мл', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 147.02, 265, 0, 0, 0, 'Wiggle 29.09.2019'),
-(100, '2019-12-25 10:00:00', 'Новые фирменные кружки Captain Morgan', 'OLX', 'COLLECTION_IN_PERSON', 'CASH', 'SUCCESS', 0, 60, 40, 0, 0, ''),
-(100, '2019-12-30 10:00:00', 'Новые Стаканы Captain Morgan Captain & Cola', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 300, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2019-12-31 10:00:00', 'Новые фирменные кружки Captain Morgan', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 250, 40, 0, 0, ''),
-(100, '2020-01-13 11:00:00', 'Съемник каретки для велосипеда Bike Hand YC-26BB (новый!)', 'OLX', 'COLLECTION_IN_PERSON', 'CASH', 'SUCCESS', 0, 150, 0, 0, 0, ''),
-(100, '2020-01-18 11:00:00', 'Новый Велокомпьютер GPS Garmin Edge 520 Plus + Чехол + Стекло!', 'OLX', 'COLLECTION_IN_PERSON', 'CASH', 'SUCCESS', 5945.23, 6000, 0, 0, 0, 'eBay'),
-(100, '2020-01-19 11:00:00', 'Новые Стаканы Johnnie Walker - 5 шт.', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 350, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-02-14 12:00:00', 'Новая Передняя фара (свет) Lezyne Lite Drive 800XL Black', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 1060.33, 1150, 0, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-02-22 12:00:00', 'Новая Передняя фара (свет) Lezyne Lite Drive 800XL Black', 'OTHER', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 1060.33, 1100, 0, 0, 0, ''),
-(100, '2020-02-26 12:00:00', 'Футболка Eighty Eight (88) New York XL Вишневая', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 130, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-03-01 12:00:00', 'Новые Флягодержатели Elite Custom Race Black-Red 2 шт.', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 380, 500, 0, 0, 0, 'Карта клиента НП (+2 грн.); BikeInn'),
-(100, '2020-03-01 12:00:00', 'Подседельная сумка Topeak Aero Wedge Large', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 400, 0, 0, 0, ''),
-(100, '2020-03-01 12:00:00', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, ''),
-(100, '2020-03-01 12:00:00', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, ''),
-(100, '2020-03-01 12:00:00', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, ''),
-(100, '2020-03-01 12:00:00', 'Датчик каденса и скорости для Garmin, Lezyne, Bryton', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 650, 0, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-03-01 12:00:00', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-03-01 12:00:00', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-03-01 12:00:00', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-03-01 12:00:00', 'Регулируемое зеркало заднего вида на шлем', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 95, 0, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-03-01 12:00:00', 'Новые Стаканы Johnnie Walker - 12 шт.', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 600, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-03-01 12:00:00', 'Новые Стаканы Johnnie Walker - 5 шт.', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 250, 40, 0, 0, ''),
-(100, '2020-03-01 12:00:00', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-04-02 10:01:00', 'Велокомпьютер Lezyne Macro GPS Black', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'DENIED', 0, 0, 0, 0, 0, 'Чувак завтыкал'),
-(100, '2020-04-02 10:01:00', 'Велокомпьютер Lezyne Macro GPS Black', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 1248.7, 1500, 0, 0, 0, 'eBay'),
-(100, '2020-04-02 10:03:00', 'Новые Стаканы Johnnie Walker - 4 шт.', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 260, 40, 0, 0, ''),
-(100, '2020-04-05 10:04:00', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, ''),
-(100, '2020-04-10 10:05:00', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 2 шт.', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 350, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-04-10 10:06:00', 'Солнцезащитные очки Jagermeister Green (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'PARTIAL_PREPAYMENT', 'SUCCESS', 0, 160, 40, 0, 0, 'Карта клиента НП (+2 грн.); Предоплата 100 грн'),
-(100, '2020-04-11 10:06:10', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 2 шт.', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 350, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-04-13 10:06:20', 'Комплект велофар Lezyne 800XL & Strip Drive 150 Pair', 'OTHER', 'COLLECTION_IN_PERSON', 'CASH', 'SUCCESS', 1244.02, 1800, 0, 0, 0, 'eBay'),
-(100, '2020-04-13 10:07:00', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-04-14 10:08:00', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 2 шт.', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 350, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-04-18 10:09:00', 'Новые Стаканы Johnnie Walker - 5 шт.', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 325, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-04-23 10:10:00', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-04-23 10:12:00', 'Велокомпьютер/навигатор GPS Lezyne Super Pro', 'OLX', 'COLLECTION_IN_PERSON', 'CASH', 'SUCCESS', 1977.98, 3000, 0, 0, 0, 'Встреча'),
-(100, '2020-04-23 10:13:00', 'Велокомпьютер/навигатор GPS Lezyne Super Pro + Front Mount', 'OLX', 'COLLECTION_IN_PERSON', 'CASH', 'SUCCESS', 1676.67, 3000, 0, 0, 0, 'Встреча'),
-(100, '2020-04-23 10:14:00', 'Новая Передняя фара (свет) Lezyne Lite Drive 1000XL Black', 'OTHER', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 1004.83, 1444, 0, 0, 0, 'Карта клиента НП (+2 грн.); eBay'),
-(100, '2020-04-24 10:15:00', 'Новые Стаканы для виски Johnnie Walker - 4 шт.', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 320, 40, 0, 0, ''),
-(100, '2020-04-28 12:31:00', 'Умный задний вело фонарь фара Meroca', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 134.28, 365, 0, 0, 0, 'Aliexpress'),
-(100, '2020-05-02 09:02:15', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, ''),
-(100, '2020-05-02 09:12:15', 'Умный задний вело фонарь фара Meroca', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 134.28, 365, 0, 0, 0, 'Aliexpress'),
-(100, '2020-05-02 09:25:15', 'Умный задний вело фонарь фара Meroca', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 134.28, 365, 0, 0, 0, 'Aliexpress'),
-(100, '2020-05-02 09:27:35', 'Умный задний вело фонарь фара Meroca', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 134.28, 365, 0, 0, 0, 'Aliexpress'),
-(100, '2020-05-02 09:28:55', 'Умный задний вело фонарь фара Meroca', 'OLX', 'COLLECTION_IN_PERSON', 'CASH', 'SUCCESS', 134.28, 365, 0, 0, 0, 'Aliexpress'),
-(100, '2020-05-02 09:30:15', 'Умный задний вело фонарь фара Meroca', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 134.28, 365, 0, 0, 0, 'Aliexpress'),
-(100, '2020-05-02 09:31:15', 'Умный задний вело фонарь фара Meroca', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 134.28, 365, 0, 0, 0, 'Aliexpress'),
-(100, '2020-05-02 09:32:15', 'Умный задний вело фонарь фара Meroca', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 134.28, 365, 0, 0, 0, 'Aliexpress'),
-(100, '2020-05-02 09:32:35', 'Умный задний вело фонарь фара Meroca', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 168.58, 365, 0, 0, 0, 'Карта клиента НП (+2 грн.); Aliexpress; Реклама 34.3 грн.'),
-(100, '2020-05-02 09:34:55', 'Велокомпьютер/навигатор GPS Lezyne Mega XL Metallic Red', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 3728.44, 4999, 0, 0, 0, 'Карта клиента НП (+2 грн.); Amazon; Предоплата 100 грн.'),
-(100, '2020-05-02 09:37:15', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, ''),
-(100, '2020-05-02 09:38:27', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, ''),
-(100, '2020-05-02 09:39:31', 'Новые Стаканы Johnnie Walker - 2 шт', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 160, 40, 0, 0, ''),
-(100, '2020-05-02 09:40:11', 'Чехол GIYO для инструментов под флягодержатель Цена за 2 шт', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 200, 250, 0, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-05-02 09:42:58', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 3 шт', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 500, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-05-02 09:50:50', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 3 шт', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 500, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-06-05 09:50:50', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 2 шт.', 'OLX', 'COLLECTION_IN_PERSON', 'CASH', 'SUCCESS', 0, 350, 40, 0, 0, ''),
-(100, '2020-06-08 09:51:50', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-06-08 09:52:50', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 2 шт.', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 350, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-06-09 09:53:50', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, ''),
-(100, '2020-06-09 09:54:50', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-06-11 09:55:50', 'Новые Стаканы для виски Johnnie Walker - 6 шт.', 'OLX', 'COLLECTION_IN_PERSON', 'CASH', 'SUCCESS', 0, 350, 40, 0, 0, '100 ПРОДАЖ'),
-(100, '2020-06-22 09:56:50', 'Замковые эксцентрики PZ Racing CR5.3Q MTB Black б/у', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 340, 0, 0, 0, ''),
-(100, '2020-06-28 09:57:50', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 180, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-06-28 09:58:50', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 190, 40, 0, 0, ''),
-(100, '2020-06-30 09:59:55', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 190, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-07-02 10:01:02', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 2 шт.', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 350, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-07-03 10:02:02', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 190, 40, 0, 0, ''),
-(100, '2020-07-04 10:03:02', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 2 шт. + Солнцезащитные очки Jagermeister Green (Новые, в упаковке!) - 1 шт.', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 500, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-07-06 10:04:02', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 190, 40, 0, 0, ''),
-(100, '2020-07-15 10:05:02', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 190, 40, 0, 0, ''),
-(100, '2020-07-16 10:06:02', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 2 шт.', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 350, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-07-16 10:07:02', 'Новые Шоты Рюмки Стопки Jose Cuervo', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 330, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-07-16 10:08:02', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 2 шт.', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 330, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-07-21 10:09:02', 'Новые Фляги Elite Super Corsa 750 мл Цена за 2 штуки!', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 295, 300, 0, 0, 0, ''),
-(100, '2020-07-23 10:11:02', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 190, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-07-25 10:21:02', 'Новые фирменные кружки Captain Morgan - 2 шт.', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 100, 40, 0, 0, ''),
-(100, '2020-07-29 10:31:02', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-07-30 10:41:02', 'Велоодежда джерси Eliel', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 155, 198, 0, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-08-04 10:03:24', 'Новые Фляги Elite Corsa 550 мл Цена за 2 штуки!', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 245, 270, 0, 0, 0, ''),
-(100, '2020-08-05 10:04:24', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, ''),
-(100, '2020-08-05 10:05:24', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-08-09 10:06:24', 'Солнцезащитные очки Jagermeister Green (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 150, 40, 0, 0, ''),
-(100, '2020-08-09 10:07:33', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'DENIED', 0, 0, 0, 0, 0, 'Чувак отказался, взял только зеленые'),
-(100, '2020-08-18 10:07:24', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 3 шт.', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 500, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-08-21 10:08:24', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-08-23 10:09:24', 'Новые Стаканы (бокалы) Baileys с золотым лого - 2 шт.', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 140, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-08-26 10:11:24', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, ''),
-(100, '2020-08-26 10:12:24', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-08-30 10:24:24', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 5 шт.', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 750, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-09-02 13:01:07', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 2 шт.', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 350, 40, 0, 0, ''),
-(100, '2020-09-03 13:02:07', 'Новые Фляги Elite SuperCorsa 750 мл Цена за 2 штуки!', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 290, 320, 0, 0, 0, ''),
-(100, '2020-09-06 13:03:07', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-09-06 13:04:07', 'Солнцезащитные очки Jagermeister Green (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 135, 40, 0, 0, ''),
-(100, '2020-09-07 13:05:07', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-09-07 13:06:07', 'Новые Стаканы (бокалы) Baileys с золотым лого - 7 шт.', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 350, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-09-08 13:07:07', 'Солнцезащитные очки Jagermeister Green (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 135, 40, 0, 0, ''),
-(100, '2020-09-08 13:08:07', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-09-14 13:09:07', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-09-16 13:11:07', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-09-16 13:21:07', 'Солнцезащитные очки Jagermeister Green (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 135, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-09-17 13:31:07', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-09-17 13:41:07', 'Набор Велокомпьютер GPS с фарой Lezyne Mega XL Smart Loaded', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 3528.87, 5500, 0, 0, 0, 'eBay'),
-(100, '2020-09-20 13:51:07', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 2 шт.', 'OLX', 'NOVA_POST', 'CASH_ON_DELIVERY', 'SUCCESS', 0, 350, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-09-20 13:52:07', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!)', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 195, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-09-25 13:55:07', 'Солнцезащитные очки Jagermeister Black-Orange (Новые, в упаковке!) - 2 шт.', 'OLX', 'NOVA_POST', 'COMPLETE_PREPAYMENT', 'SUCCESS', 0, 350, 40, 0, 0, 'Карта клиента НП (+2 грн.)'),
-(100, '2020-10-19 11:16:22', 'Джемпер мужской флисовый Pearl Izumi размер М Салатовый', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 350, 0, 0, 0, ''),
-(100, '2020-10-21 17:40:07', 'Медь Twinlab 2 мг 100 капсул (Новая!)', 'OLX', 'NOVA_POST', 'OLX_DELIVERY', 'SUCCESS', 0, 130, 0, 0, 0, '')
-;
+CREATE TABLE user_roles
+(
+    user_id INTEGER NOT NULL,
+    role    VARCHAR,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
 
 
+DROP SEQUENCE IF EXISTS payouts_seq;
+CREATE SEQUENCE payouts_seq START WITH 1000;
+
+CREATE TABLE payouts
+(
+    id        INTEGER PRIMARY KEY DEFAULT nextval('payouts_seq'),
+    user_id   INTEGER                           NOT NULL,
+    date_time TIMESTAMP           DEFAULT now() NOT NULL,
+    amount    DOUBLE PRECISION    DEFAULT 0     NOT NULL,
+    notes     VARCHAR                           NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+
+DROP SEQUENCE IF EXISTS products_seq;
+CREATE SEQUENCE products_seq;
+
+CREATE TABLE products
+(
+    id                INTEGER PRIMARY KEY DEFAULT nextval('products_seq'),
+    user_id           INTEGER                           NOT NULL,
+    date_time         TIMESTAMP           DEFAULT now() NOT NULL,
+    title             VARCHAR                           NOT NULL,
+    market_place      VARCHAR                           NOT NULL,
+    delivery_service  VARCHAR                           NOT NULL,
+    payment_method    VARCHAR                           NOT NULL,
+    order_status      VARCHAR                           NOT NULL,
+    sold_at_price     DOUBLE PRECISION    DEFAULT 0     NOT NULL,
+    spent             DOUBLE PRECISION    DEFAULT 0     NOT NULL,
+    payout_percentage INTEGER             DEFAULT 0     NOT NULL,
+    payout_currency   DOUBLE PRECISION    DEFAULT 0     NOT NULL,
+    profit            DOUBLE PRECISION    DEFAULT 0     NOT NULL,
+    notes             VARCHAR,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
 

@@ -10,7 +10,7 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
 
 <!--    <servlet>-->
 <!--        <servlet-name>productServlet</servlet-name>-->
-<!--        <servlet-class>org.saleslist.jdbc.servlets.ProductServlet</servlet-class>-->
+<!--        <servlet-class>org.saleslist.web.ProductServlet</servlet-class>-->
 <!--        <load-on-startup>0</load-on-startup>-->
 <!--    </servlet>-->
 <!--    <servlet-mapping>-->

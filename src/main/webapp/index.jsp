@@ -1,12 +1,18 @@
 <html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sales List</title>
+</head>
 <body>
     <h1>Sales List</h1>
     <hr>
-    <ul>
-        <h2>
-            <li><a href="/products">Show All Products in DB</a></li>
-            <li><a href="/payouts">Show Cooperation Payouts</a></li>
-        </h2>
-    </ul>
+    <form method="post" action="users">
+        <b>Products of </b>
+        <select name="userId">
+            <option value="100">Admin</option>
+            <option value="101">User</option>
+        </select>
+        <button type="submit">Select</button>
+    </form>
 </body>
 </html>

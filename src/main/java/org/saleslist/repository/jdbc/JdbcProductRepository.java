@@ -27,7 +27,7 @@ public class JdbcProductRepository implements ProductRepository {
     private final SimpleJdbcInsert insertProduct;
 
     @Autowired
-    public JdbcProductRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, SimpleJdbcInsert insertProduct) {
+    public JdbcProductRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertProduct = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("products")
                 .usingGeneratedKeyColumns("id");
@@ -80,7 +80,7 @@ public class JdbcProductRepository implements ProductRepository {
 
     @Override
     public List<Product> getAll(int userId) {
-        return jdbcTemplate.query("SELECT * FROM products WHERE user_id=? ORDER BY DESC", ROW_MAPPER, userId);
+        return jdbcTemplate.query("SELECT * FROM products WHERE user_id=? ORDER BY date_time DESC", ROW_MAPPER, userId);
     }
 
     @Override
