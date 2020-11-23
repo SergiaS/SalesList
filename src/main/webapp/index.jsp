@@ -9,8 +9,11 @@
     <form method="post" action="users">
         <b>Products of </b>
         <select name="userId">
-            <option value="100">Admin</option>
-            <option value="101">User</option>
+            <option value="100">ADMIN</option>
+            <option value="101">JAG63</option>
+            <option value="102">CAT66</option>
+            <option value="103">JUV91</option>
+            <option value="104">SK88</option>
         </select>
         <button type="submit">Select</button>
     </form>

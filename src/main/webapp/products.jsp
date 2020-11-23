@@ -17,6 +17,11 @@
             <thead>
             <tr>
                 <th>№</th>
+                <c:choose>
+                    <c:when test="${mode == 'admin'}">
+                        <th>Owner</th>
+                    </c:when>
+                </c:choose>
                 <th>Date</th>
                 <th>Title</th>
                 <th>Market Place</th>
@@ -82,14 +87,21 @@
 <%--                <th></th>--%>
 <%--            </tr>--%>
 
-<%--            <c:set var="count" value="0" scope="page" />--%>
             <c:forEach items="${products}" var="product">
                 <jsp:useBean id="product" type="org.saleslist.model.Product"/>
                 <tr data-payoutPercentage="${product.payoutPercentage > 0}">
+<%--                <tr>--%>
                     <td>
                         <c:set var="count" value="${count + 1}" scope="page"/>
                         <c:out value="${count}"/>
                     </td>
+                        <c:choose>
+                            <c:when test="${mode == 'admin'}">
+                                <td>
+                                    <c:out value="${owners[count-1]}"/>
+                                </td>
+                            </c:when>
+                        </c:choose>
                     <td style="white-space: nowrap">${product.dateTime.toLocalDate()}, ${product.dateTime.toLocalTime()}</td>
                     <td>${product.title}</td>
                     <td>${product.marketPlace}</td>

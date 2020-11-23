@@ -43,7 +43,7 @@ td {
 
 tr:hover {
     background-color: #F9F5D1;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 .forms {

@@ -121,6 +121,10 @@ public class ProductServlet extends HttpServlet {
 				request.getRequestDispatcher("/product-form.jsp").forward(request, response);
 			}
 			default -> {
+				if (getAuthUserId() == 100) {
+					request.setAttribute("mode", "admin");
+					request.setAttribute("owners", productRepository.getOwnersNames());
+				}
 				request.setAttribute("products", productRepository.getAll(getAuthUserId()));
 				request.getRequestDispatcher("/products.jsp").forward(request, response);
 			}

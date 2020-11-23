@@ -80,6 +80,9 @@ public class JdbcProductRepository implements ProductRepository {
 
     @Override
     public List<Product> getAll(int userId) {
+        if (userId == 100) {
+            return jdbcTemplate.query("SELECT * FROM products ORDER BY date_time DESC", ROW_MAPPER);
+        }
         return jdbcTemplate.query("SELECT * FROM products WHERE user_id=? ORDER BY date_time DESC", ROW_MAPPER, userId);
     }
 
@@ -88,5 +91,10 @@ public class JdbcProductRepository implements ProductRepository {
         return jdbcTemplate.query(
                 "SELECT * FROM products WHERE user_id=?  AND date_time >=  ? AND date_time < ? ORDER BY date_time DESC",
                 ROW_MAPPER, userId, startDateTime, endDateTime);
+    }
+
+    // only for ADMIN user
+    public List<String> getOwnersNames() {
+        return jdbcTemplate.queryForList("SELECT u.name FROM products INNER JOIN users u ON u.id = products.user_id ORDER BY date_time DESC", String.class);
     }
 }
