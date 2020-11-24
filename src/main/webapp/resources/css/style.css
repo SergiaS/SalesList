@@ -62,3 +62,20 @@ body {
     font: normal small-caps 13px/14px Arial, serif;
     background-color: cadetblue;
 }
+
+dl {
+    background: none repeat scroll 0 0 cadetblue;
+    margin: 8px 0;
+    padding: 0;
+}
+
+dt {
+    display: inline-block;
+    width: 170px;
+}
+
+dd {
+    display: inline-block;
+    margin-left: 8px;
+    vertical-align: top;
+}

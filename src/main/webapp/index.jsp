@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Sales List</title>
+    <link rel="stylesheet" type="text/css" href="resources/css/style.css">
 </head>
 <body>
     <h1>Sales List</h1>
@@ -15,7 +16,7 @@
             <option value="103">JUV91</option>
             <option value="104">SK88</option>
         </select>
-        <button type="submit">Select</button>
+        <button type="submit">Show</button>
     </form>
 </body>
 </html>

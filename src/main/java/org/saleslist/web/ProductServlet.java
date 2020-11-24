@@ -7,10 +7,9 @@ import org.saleslist.enums.PaymentMethodEnum;
 import org.saleslist.model.Product;
 import org.saleslist.repository.jdbc.JdbcProductRepository;
 import org.saleslist.util.Stats;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -31,53 +30,45 @@ import static org.saleslist.web.SecurityUtil.getAuthUserId;
 @WebServlet("/products")
 public class ProductServlet extends HttpServlet {
 
-	private static final Logger logger = LoggerFactory.getLogger(ProductServlet.class);
+    private ConfigurableApplicationContext springContext;
+    private JdbcProductRepository productRepository;
 
-	private ConfigurableApplicationContext springContext;
-	private JdbcProductRepository productRepository;
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
+        productRepository = springContext.getBean(JdbcProductRepository.class);
+    }
 
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-		springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
-		productRepository = springContext.getBean(JdbcProductRepository.class);
-	}
+    @Override
+    public void destroy() {
+        springContext.close();
+        super.destroy();
+    }
 
-	@Override
-	public void destroy() {
-		springContext.close();
-		super.destroy();
-	}
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
+        Product product = new Product(
+                LocalDateTime.parse(request.getParameter("dateTime")),
+                request.getParameter("title").trim(),
+                MarketPlaceEnum.valueOf(request.getParameter("marketPlace")),
+                DeliveryServiceEnum.valueOf(request.getParameter("deliveryService")),
+                PaymentMethodEnum.valueOf(request.getParameter("paymentMethod")),
+                OrderStatusEnum.valueOf(request.getParameter("orderStatus")),
+                new BigDecimal(request.getParameter("soldAtPrice").replace(",", ".")),
+                new BigDecimal(request.getParameter("spent").replace(",", ".")),
+                Integer.parseInt(request.getParameter("payoutPercentage")),
+                request.getParameter("notes").trim()
+        );
 
-//		Product product = new Product(
-//				LocalDateTime.parse(request.getParameter("dateTime")),
-//				request.getParameter("title").trim(),
-//				MarketPlaceEnum.valueOf(request.getParameter("marketPlace")),
-//				DeliveryServiceEnum.valueOf(request.getParameter("deliveryService")),
-//				PaymentMethodEnum.valueOf(request.getParameter("paymentMethod")),
-//				OrderStatusEnum.valueOf(request.getParameter("orderStatus")),
-//				Double.parseDouble(request.getParameter("spent").replace(",", ".")),
-//				Double.parseDouble(request.getParameter("price").replace(",", ".")),
-//				Integer.parseInt(request.getParameter("payoutPercentage")),
-//				request.getParameter("notes").trim(),
-//				request.getParameter("payoutPaid") == null ? false : true
-//		);
-//		product.setPayoutCurrency(product.payoutCurrencyCalculation());
-//		product.setProfit(product.profitCalculation());
-//
-//		int productId = getId(request);
-//		logger.info("doPost: productId = {}, product = {}", productId, product);
-//
-//		if (request.getParameter("id").equals("0")) {
-//			productRepository.save(product);
-//		} else {
-//			productRepository.update(productId, product);
-//		}
-//
+        if (!StringUtils.isEmpty(request.getParameter("id"))) {
+            int productId = getId(request);
+            product.setId(productId);
+        }
+        productRepository.save(product, getAuthUserId());
+
 //		if (product.getPayoutPercentage() > 0) {
 //			Payout payout = new Payout();
 //			if (productId != 0) {
@@ -96,61 +87,61 @@ public class ProductServlet extends HttpServlet {
 //			payoutRepository.delete("product_id", productId);
 //		}
 
-		response.sendRedirect("products");
-	}
+        response.sendRedirect("products");
+    }
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String action = request.getParameter("action");
-		logger.info("doGet: PATH = {}, ACTION = {}", request.getServletPath(), action);
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
 
-		switch (action == null ? "all" : action) {
-			case "delete" -> {
-				productRepository.delete(getId(request), getAuthUserId());
-				response.sendRedirect("products");
-			}
-			case "create", "update" -> {
-				final Product product = "create".equals(action) ?
-						getDefaultProduct() : productRepository.get(getId(request), getAuthUserId());
-				request.setAttribute("product", product);
+        switch (action == null ? "all" : action) {
+            case "delete" -> {
+                productRepository.delete(getId(request), getAuthUserId());
+                response.sendRedirect("products");
+            }
+            case "create", "update" -> {
+                final Product product = "create".equals(action) ?
+                        getDefaultProduct() : productRepository.get(getId(request), getAuthUserId());
+                request.setAttribute("product", product);
 
-				request.setAttribute("marketPlace", new ArrayList<>(Arrays.asList(MarketPlaceEnum.values())));
-				request.setAttribute("deliveryService", new ArrayList<>(Arrays.asList(DeliveryServiceEnum.values())));
-				request.setAttribute("paymentMethod", new ArrayList<>(Arrays.asList(PaymentMethodEnum.values())));
-				request.setAttribute("orderStatus", new ArrayList<>(Arrays.asList(OrderStatusEnum.values())));
+                request.setAttribute("marketPlace", new ArrayList<>(Arrays.asList(MarketPlaceEnum.values())));
+                request.setAttribute("deliveryService", new ArrayList<>(Arrays.asList(DeliveryServiceEnum.values())));
+                request.setAttribute("paymentMethod", new ArrayList<>(Arrays.asList(PaymentMethodEnum.values())));
+                request.setAttribute("orderStatus", new ArrayList<>(Arrays.asList(OrderStatusEnum.values())));
 
-				request.getRequestDispatcher("/product-form.jsp").forward(request, response);
-			}
-			default -> {
-				if (getAuthUserId() == 100) {
-					request.setAttribute("mode", "admin");
-					request.setAttribute("owners", productRepository.getOwnersNames());
-				}
+                request.getRequestDispatcher("/product-form.jsp").forward(request, response);
+            }
+            default -> {
+                if (getAuthUserId() == 100) {
+                    request.setAttribute("mode", "admin");
+                    request.setAttribute("owners", productRepository.getOwnersNames());
+                }
 
-				request.setAttribute("stats", new Stats());
-				request.setAttribute("products", productRepository.getAll(getAuthUserId()));
-				request.getRequestDispatcher("/products.jsp").forward(request, response);
-			}
-		}
-	}
+                request.setAttribute("userId", getAuthUserId());
+                request.setAttribute("stats", new Stats());
+                request.setAttribute("products", productRepository.getAll(getAuthUserId()));
+                request.getRequestDispatcher("/products.jsp").forward(request, response);
+            }
+        }
+    }
 
-	private int getId(HttpServletRequest request) {
-		String paramId = Objects.requireNonNull(request.getParameter("id"));
-		return Integer.parseInt(paramId);
-	}
+    private int getId(HttpServletRequest request) {
+        String paramId = Objects.requireNonNull(request.getParameter("id"));
+        return Integer.parseInt(paramId);
+    }
 
-	private Product getDefaultProduct() {
-		return new Product(
-				LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-				"New product",
-				MarketPlaceEnum.OLX,
-				DeliveryServiceEnum.NOVA_POST,
-				PaymentMethodEnum.OLX_DELIVERY,
-				OrderStatusEnum.SUCCESS,
-				new BigDecimal("0"),
-				new BigDecimal("0"),
-				0,
-				""
-		);
-	}
+    private Product getDefaultProduct() {
+        return new Product(
+                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
+                "New product",
+                MarketPlaceEnum.OLX,
+                DeliveryServiceEnum.NOVA_POST,
+                PaymentMethodEnum.OLX_DELIVERY,
+                OrderStatusEnum.SUCCESS,
+                new BigDecimal("0"),
+                new BigDecimal("0"),
+                0,
+                ""
+        );
+    }
 }

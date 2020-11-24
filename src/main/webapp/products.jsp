@@ -9,11 +9,24 @@
 <body>
 
     <section>
-        <h2>> <a href="/">Home</a></h2>
+        <h2>> <a href="index.jsp">Home</a></h2>
         <hr>
-        <span>Products from sales db.</span><br>
-        <a href="products?action=create">Add new product</a>
-        <hr>
+        <form method="post" action="users">
+            <b>Products from db of </b>
+            <select name="userId">
+                <option value="100" ${userId == 100 ? "selected" : ""}>ADMIN</option>
+                <option value="101" ${userId == 101 ? "selected" : ""}>JAG63</option>
+                <option value="102" ${userId == 102 ? "selected" : ""}>CAT66</option>
+                <option value="103" ${userId == 103 ? "selected" : ""}>JUV91</option>
+                <option value="104" ${userId == 104 ? "selected" : ""}>SK88</option>
+            </select>
+            <button type="submit">Show</button>
+        </form>
+        <c:choose>
+            <c:when test="${mode != 'admin'}">
+                <a href="products?action=create"><img src="https://icons.veryicon.com/png/o/commerce-shopping/merchant-product-icon-library/add-55.png" width="30" height="30" alt="add"></a>
+            </c:when>
+        </c:choose>
         <table>
             <thead>
             <tr>
@@ -34,13 +47,17 @@
                 <th>Payout</th>
                 <th>Profit</th>
                 <th>Notes</th>
-                <th>Edit</th>
+                <c:choose>
+                    <c:when test="${mode != 'admin'}">
+                        <th>Edit</th>
+                    </c:when>
+                </c:choose>
                 <th>Delete</th>
             </tr>
             </thead>
 
             <tr>
-<%--                <jsp:useBean id="stats" class="org.saleslist.util.Stats"/>--%>
+                <%--                <jsp:useBean id="stats" class="org.saleslist.util.Stats"/>--%>
                 <th></th>
                 <c:choose>
                     <c:when test="${mode == 'admin'}">
@@ -78,7 +95,11 @@
                 <th>${stats.amountOfPayouts}</th>
                 <th>${stats.amountOfProfit}</th>
                 <th></th>
-                <th></th>
+                <c:choose>
+                    <c:when test="${mode != 'admin'}">
+                        <th></th>
+                    </c:when>
+                </c:choose>
                 <th></th>
             </tr>
 
@@ -86,32 +107,26 @@
             <c:forEach items="${products}" var="product">
                 <jsp:useBean id="product" type="org.saleslist.model.Product"/>
                 <tr data-payoutPercentage="${product.payoutPercentage > 0}">
-<%--                <tr>--%>
+                        <%--                <tr>--%>
                     <td>
                         <c:set var="count" value="${count + 1}" scope="page"/>
                         <c:out value="${count}"/>
                     </td>
-                        <c:choose>
-                            <c:when test="${mode == 'admin'}">
-                                <td>
-                                    <c:out value="${owners[count-1]}"/>
-                                </td>
-                            </c:when>
-                        </c:choose>
+                    <c:choose>
+                        <c:when test="${mode == 'admin'}">
+                            <td>
+                                <c:out value="${owners[count-1]}"/>
+                            </td>
+                        </c:when>
+                    </c:choose>
                     <td style="white-space: nowrap">${product.dateTime.toLocalDate()}, ${product.dateTime.toLocalTime()}</td>
                     <td>${product.title}</td>
                     <td>${product.marketPlace}</td>
                     <td>${product.deliveryService}</td>
                     <td>${product.paymentMethod}</td>
                     <td>${product.orderStatus}</td>
-                    <td>
-                        <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
-                                          value="${product.soldAtPrice}"/>
-                    </td>
-                    <td>
-                        <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
-                                          value="${product.spent}"/>
-                    </td>
+                    <td>${product.soldAtPrice}</td>
+                    <td>${product.spent}</td>
                     <td style="white-space: nowrap">
                         <c:choose>
                             <c:when test="${product.payoutPercentage > 0}">
@@ -129,14 +144,21 @@
                                           value="${product.profit}"/>
                     </td>
                     <td>${product.notes}</td>
-                    <td><a href="products?action=update&id=${product.id}">✏️</a></td>
+                    <c:choose>
+                        <c:when test="${mode != 'admin'}">
+                            <td><a href="products?action=update&id=${product.id}">✏️</a></td>
+                        </c:when>
+                    </c:choose>
                     <td><a href="products?action=delete&id=${product.id}">❌</a></td>
                 </tr>
             </c:forEach>
         </table>
     </section>
 
-    <hr>
-    <a href="products?action=create">Add new product</a>
+    <c:choose>
+        <c:when test="${mode != 'admin'}">
+            <a href="products?action=create"><img src="https://icons.veryicon.com/png/o/commerce-shopping/merchant-product-icon-library/add-55.png" width="30" height="30" alt="add"></a>
+        </c:when>
+    </c:choose>
 </body>
 </html>
