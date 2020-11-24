@@ -6,6 +6,7 @@ import org.saleslist.enums.OrderStatusEnum;
 import org.saleslist.enums.PaymentMethodEnum;
 import org.saleslist.model.Product;
 import org.saleslist.repository.jdbc.JdbcProductRepository;
+import org.saleslist.util.Stats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -125,6 +126,8 @@ public class ProductServlet extends HttpServlet {
 					request.setAttribute("mode", "admin");
 					request.setAttribute("owners", productRepository.getOwnersNames());
 				}
+
+				request.setAttribute("stats", new Stats());
 				request.setAttribute("products", productRepository.getAll(getAuthUserId()));
 				request.getRequestDispatcher("/products.jsp").forward(request, response);
 			}

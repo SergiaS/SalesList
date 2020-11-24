@@ -1,10 +1,10 @@
-package org.saleslist.jdbc.repository;
+package org.saleslist.repository;
 
-import org.saleslist.jdbc.model.Payout;
+import org.saleslist.model.Payout;
 
 import java.util.List;
 
-public interface PayoutRepository {
+public interface  PayoutRepository {
 
 	Payout addOrUpdate(Payout payout);
 

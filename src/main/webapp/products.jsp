@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="resources/css/style.css">
 </head>
 <body>
+
     <section>
         <h2>> <a href="/">Home</a></h2>
         <hr>
@@ -37,55 +38,50 @@
                 <th>Delete</th>
             </tr>
             </thead>
-<%--            <tr>--%>
+
+            <tr>
 <%--                <jsp:useBean id="stats" class="org.saleslist.util.Stats"/>--%>
-<%--                <th></th>--%>
-<%--                <th></th>--%>
-<%--                <th>--%>
-<%--                    Total Sold Items: ${stats.numberOfSoldItems}<br>--%>
-<%--                    Sold Cooperation Items: ${stats.numberOfCooperationItems}<br>--%>
-<%--                    Sold Own Items: ${stats.numberOfMyItems}--%>
-<%--                </th>--%>
-<%--                <th>--%>
-<%--                    <c:forEach var="entry" items="${stats.marketPlaceCounterMap}">--%>
-<%--                        <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>--%>
-<%--                    </c:forEach>--%>
-<%--                </th>--%>
-<%--                <th>--%>
-<%--                    <c:forEach var="entry" items="${stats.deliveryCounterMap}">--%>
-<%--                        <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>--%>
-<%--                    </c:forEach>--%>
-<%--                </th>--%>
-<%--                <th>--%>
-<%--                    <c:forEach var="entry" items="${stats.paymentMethodCounterMap}">--%>
-<%--                        <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>--%>
-<%--                    </c:forEach>--%>
-<%--                </th>--%>
-<%--                <th>--%>
-<%--                    <c:forEach var="entry" items="${stats.statusOrderCounterMap}">--%>
-<%--                        <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>--%>
-<%--                    </c:forEach>--%>
-<%--                </th>--%>
-<%--                <th>--%>
-<%--                    <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"--%>
-<%--                                      value="${stats.amountOfExpenses}"/>--%>
-<%--                </th>--%>
-<%--                <th>--%>
-<%--                    <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"--%>
-<%--                                      value="${stats.amountAtSoldPrice}"/>--%>
-<%--                </th>--%>
-<%--                <th>--%>
-<%--                    <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"--%>
-<%--                                      value="${stats.amountOfPayouts}"/>--%>
-<%--                </th>--%>
-<%--                <th>--%>
-<%--                    <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"--%>
-<%--                                      value="${stats.amountOfProfit}"/>--%>
-<%--                </th>--%>
-<%--                <th></th>--%>
-<%--                <th></th>--%>
-<%--                <th></th>--%>
-<%--            </tr>--%>
+                <th></th>
+                <c:choose>
+                    <c:when test="${mode == 'admin'}">
+                        <th></th>
+                    </c:when>
+                </c:choose>
+                <th></th>
+                <th>
+                    Total Sold Items: ${stats.numberOfSoldItems}<br>
+                    Sold Cooperation Items: ${stats.numberOfCooperationItems}<br>
+                    Sold Own Items: ${stats.numberOfMyItems}
+                </th>
+                <th>
+                    <c:forEach var="entry" items="${stats.marketPlaceCounterMap}">
+                        <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>
+                    </c:forEach>
+                </th>
+                <th>
+                    <c:forEach var="entry" items="${stats.deliveryCounterMap}">
+                        <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>
+                    </c:forEach>
+                </th>
+                <th>
+                    <c:forEach var="entry" items="${stats.paymentMethodCounterMap}">
+                        <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>
+                    </c:forEach>
+                </th>
+                <th>
+                    <c:forEach var="entry" items="${stats.statusOrderCounterMap}">
+                        <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>
+                    </c:forEach>
+                </th>
+                <th>${stats.amountAtSoldPrice}</th>
+                <th>${stats.amountOfExpenses}</th>
+                <th>${stats.amountOfPayouts}</th>
+                <th>${stats.amountOfProfit}</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+
 
             <c:forEach items="${products}" var="product">
                 <jsp:useBean id="product" type="org.saleslist.model.Product"/>
@@ -139,6 +135,7 @@
             </c:forEach>
         </table>
     </section>
+
     <hr>
     <a href="products?action=create">Add new product</a>
 </body>
