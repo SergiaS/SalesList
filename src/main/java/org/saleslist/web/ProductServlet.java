@@ -113,7 +113,6 @@ public class ProductServlet extends HttpServlet {
             }
             default -> {
                 if (getAuthUserId() == 100) {
-                    request.setAttribute("mode", "admin");
                     request.setAttribute("owners", productRepository.getOwnersNames());
                 }
 

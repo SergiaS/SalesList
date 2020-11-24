@@ -121,11 +121,10 @@
                 <dt>Notes:</dt>
                 <dd>
                     <label>
-                        <textarea cols=40 name="notes" autocomplete="on"> <c:out value="${product.notes}"/> </textarea>
+                        <textarea cols=40 name="notes" autocomplete="on"> <c:out value="${product.notes}"/></textarea>
                     </label>
                 </dd>
             </dl>
-
             <button type="submit">Save ✔️</button>
             <button onclick="window.history.back()" type="button">Cancel ❌</button>
         </form>

@@ -7,7 +7,6 @@
     <link rel="stylesheet" type="text/css" href="resources/css/style.css">
 </head>
 <body>
-
     <section>
         <h2>> <a href="index.jsp">Home</a></h2>
         <hr>
@@ -23,7 +22,7 @@
             <button type="submit">Show</button>
         </form>
         <c:choose>
-            <c:when test="${mode != 'admin'}">
+            <c:when test="${userId != 100}">
                 <a href="products?action=create"><img src="https://icons.veryicon.com/png/o/commerce-shopping/merchant-product-icon-library/add-55.png" width="30" height="30" alt="add"></a>
             </c:when>
         </c:choose>
@@ -32,7 +31,7 @@
             <tr>
                 <th>№</th>
                 <c:choose>
-                    <c:when test="${mode == 'admin'}">
+                    <c:when test="${userId == 100}">
                         <th>Owner</th>
                     </c:when>
                 </c:choose>
@@ -48,19 +47,18 @@
                 <th>Profit</th>
                 <th>Notes</th>
                 <c:choose>
-                    <c:when test="${mode != 'admin'}">
+                    <c:when test="${userId != 100}">
                         <th>Edit</th>
                     </c:when>
                 </c:choose>
                 <th>Delete</th>
             </tr>
             </thead>
-
             <tr>
-                <%--                <jsp:useBean id="stats" class="org.saleslist.util.Stats"/>--%>
+<%--                <jsp:useBean id="stats" class="org.saleslist.util.Stats"/>--%>
                 <th></th>
                 <c:choose>
-                    <c:when test="${mode == 'admin'}">
+                    <c:when test="${userId == 100}">
                         <th></th>
                     </c:when>
                 </c:choose>
@@ -96,24 +94,21 @@
                 <th>${stats.amountOfProfit}</th>
                 <th></th>
                 <c:choose>
-                    <c:when test="${mode != 'admin'}">
+                    <c:when test="${userId != 100}">
                         <th></th>
                     </c:when>
                 </c:choose>
                 <th></th>
             </tr>
-
-
             <c:forEach items="${products}" var="product">
                 <jsp:useBean id="product" type="org.saleslist.model.Product"/>
                 <tr data-payoutPercentage="${product.payoutPercentage > 0}">
-                        <%--                <tr>--%>
                     <td>
                         <c:set var="count" value="${count + 1}" scope="page"/>
                         <c:out value="${count}"/>
                     </td>
                     <c:choose>
-                        <c:when test="${mode == 'admin'}">
+                        <c:when test="${userId == 100}">
                             <td>
                                 <c:out value="${owners[count-1]}"/>
                             </td>
@@ -130,8 +125,7 @@
                     <td style="white-space: nowrap">
                         <c:choose>
                             <c:when test="${product.payoutPercentage > 0}">
-                                <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
-                                                  value="${product.payoutCurrency}"/>
+                                ${product.payoutCurrency}
                                 (${product.payoutPercentage}%)
                             </c:when>
                             <c:otherwise>
@@ -139,13 +133,10 @@
                             </c:otherwise>
                         </c:choose>
                     </td>
-                    <td>
-                        <fmt:formatNumber type="number" maxFractionDigits="2" groupingUsed="false"
-                                          value="${product.profit}"/>
-                    </td>
+                    <td>${product.profit}</td>
                     <td>${product.notes}</td>
                     <c:choose>
-                        <c:when test="${mode != 'admin'}">
+                        <c:when test="${userId != 100}">
                             <td><a href="products?action=update&id=${product.id}">✏️</a></td>
                         </c:when>
                     </c:choose>
@@ -154,9 +145,8 @@
             </c:forEach>
         </table>
     </section>
-
     <c:choose>
-        <c:when test="${mode != 'admin'}">
+        <c:when test="${userId != 100}">
             <a href="products?action=create"><img src="https://icons.veryicon.com/png/o/commerce-shopping/merchant-product-icon-library/add-55.png" width="30" height="30" alt="add"></a>
         </c:when>
     </c:choose>
