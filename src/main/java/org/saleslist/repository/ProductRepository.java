@@ -15,5 +15,5 @@ public interface ProductRepository {
 
     List<Product> getAll(int userId);
 
-    List<Product> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId);
+    List<Product> getBetweenDateTime(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId);
 }

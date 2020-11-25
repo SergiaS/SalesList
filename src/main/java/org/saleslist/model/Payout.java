@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Payout extends AbstractBaseEntity {
-
-	private Integer userId;
 	private LocalDateTime dateTime;
 	private BigDecimal amount;
 	private String notes;
@@ -13,20 +11,15 @@ public class Payout extends AbstractBaseEntity {
 	public Payout() {
 	}
 
-	public Payout(Integer id, Integer userId, LocalDateTime dateTime, BigDecimal amount, String notes) {
+	public Payout(LocalDateTime dateTime, BigDecimal amount, String notes) {
+		this(null, dateTime, amount, notes);
+	}
+
+	public Payout(Integer id, LocalDateTime dateTime, BigDecimal amount, String notes) {
 		super(id);
-		this.userId = userId;
 		this.dateTime = dateTime;
 		this.amount = amount;
 		this.notes = notes;
-	}
-
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
 	}
 
 	public LocalDateTime getDateTime() {
@@ -57,7 +50,6 @@ public class Payout extends AbstractBaseEntity {
 	public String toString() {
 		return "Payout{" +
 				"id=" + id +
-				", userId=" + userId +
 				", dateTime=" + dateTime +
 				", amount=" + amount +
 				", notes='" + notes + '\'' +

@@ -2,19 +2,18 @@ package org.saleslist.repository;
 
 import org.saleslist.model.Payout;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface  PayoutRepository {
 
-	Payout addOrUpdate(Payout payout);
+	Payout save(Payout payout, int userId);
 
-	Payout add(Payout payout);
+	boolean delete(int id, int userId);
 
-	Payout getPayoutById(int id);
+	Payout get(int id, int userId);
 
-	Payout update(int id, Payout payout);
+	List<Payout> getAll(int userId);
 
-	boolean delete(String column, int id);
-
-	List<Payout> getAllPayouts();
+	List<Payout> getBetweenDateTime(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId);
 }

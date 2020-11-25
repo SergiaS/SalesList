@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static org.saleslist.web.SecurityUtil.ADMIN_ID;
 import static org.saleslist.web.SecurityUtil.getAuthUserId;
 
 @WebServlet("/products")
@@ -112,7 +113,7 @@ public class ProductServlet extends HttpServlet {
                 request.getRequestDispatcher("/product-form.jsp").forward(request, response);
             }
             default -> {
-                if (getAuthUserId() == 100) {
+                if (getAuthUserId() == ADMIN_ID) {
                     request.setAttribute("owners", productRepository.getOwnersNames());
                 }
 

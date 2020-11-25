@@ -4,7 +4,9 @@ import static org.saleslist.util.ProductsUtil.DEFAULT_PROFIT_PER_DAY;
 
 public class SecurityUtil {
 
-    private static int id = 101;
+    public static final int ADMIN_ID = 100;
+
+    private static int id = ADMIN_ID;
 
     public SecurityUtil() {
     }

@@ -19,12 +19,21 @@ public class UserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int userId = Integer.parseInt(request.getParameter("userId"));
         SecurityUtil.setAuthUserId(userId);
-        response.sendRedirect("products");
+
+        if (getLastAddressPage(request).equals("payouts")) {
+            response.sendRedirect("payouts");
+        } else {
+            response.sendRedirect("products");
+        }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("forward to users");
         request.getRequestDispatcher("/users.jsp").forward(request, response);
+    }
+
+    private String getLastAddressPage(HttpServletRequest request) {
+        return request.getHeader("referer").replace("http://localhost:8080/", "");
     }
 }

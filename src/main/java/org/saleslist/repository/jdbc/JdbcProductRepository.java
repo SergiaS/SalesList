@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.saleslist.web.SecurityUtil.ADMIN_ID;
+
 @Repository
 public class JdbcProductRepository implements ProductRepository {
 
@@ -69,7 +71,7 @@ public class JdbcProductRepository implements ProductRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        if (userId == 100) {
+        if (userId == ADMIN_ID) {
             return jdbcTemplate.update("DELETE FROM products WHERE id=?", id) != 0;
         }
         return jdbcTemplate.update("DELETE FROM products WHERE id=? AND user_id=?", id, userId) != 0;
@@ -78,7 +80,7 @@ public class JdbcProductRepository implements ProductRepository {
     @Override
     public Product get(int id, int userId) {
         List<Product> products;
-        if (userId == 100) {
+        if (userId == ADMIN_ID) {
             products = jdbcTemplate.query("SELECT * FROM products WHERE id=?", ROW_MAPPER, id);
         } else {
             products = jdbcTemplate.query("SELECT * FROM products WHERE id=? AND user_id=?", ROW_MAPPER, id, userId);
@@ -88,16 +90,16 @@ public class JdbcProductRepository implements ProductRepository {
 
     @Override
     public List<Product> getAll(int userId) {
-        if (userId == 100) {
+        if (userId == ADMIN_ID) {
             return jdbcTemplate.query("SELECT * FROM products ORDER BY date_time DESC", ROW_MAPPER);
         }
         return jdbcTemplate.query("SELECT * FROM products WHERE user_id=? ORDER BY date_time DESC", ROW_MAPPER, userId);
     }
 
     @Override
-    public List<Product> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
+    public List<Product> getBetweenDateTime(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         return jdbcTemplate.query(
-                "SELECT * FROM products WHERE user_id=?  AND date_time >=  ? AND date_time < ? ORDER BY date_time DESC",
+                "SELECT * FROM products WHERE user_id=?  AND date_time>=? AND date_time<? ORDER BY date_time DESC",
                 ROW_MAPPER, userId, startDateTime, endDateTime);
     }
 
