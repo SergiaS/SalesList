@@ -12,14 +12,14 @@
         <hr>
         <form method="post" action="users">
             <b>Products from db of </b>
-            <select name="userId">
+            <select onchange="this.form.submit()" name="userId">
                 <option value="100" ${userId == 100 ? "selected" : ""}>ADMIN</option>
                 <option value="101" ${userId == 101 ? "selected" : ""}>JAG63</option>
                 <option value="102" ${userId == 102 ? "selected" : ""}>CAT66</option>
                 <option value="103" ${userId == 103 ? "selected" : ""}>JUV91</option>
                 <option value="104" ${userId == 104 ? "selected" : ""}>SK88</option>
             </select>
-            <button type="submit">Show</button>
+<%--            <button type="submit">Show</button>--%>
         </form>
         <c:choose>
             <c:when test="${userId != 100}">

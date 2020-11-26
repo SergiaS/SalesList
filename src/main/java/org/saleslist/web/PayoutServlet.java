@@ -4,6 +4,7 @@ import org.saleslist.model.Payout;
 import org.saleslist.repository.jdbc.JdbcPayoutRepository;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 import static org.saleslist.web.SecurityUtil.ADMIN_ID;
 import static org.saleslist.web.SecurityUtil.getAuthUserId;
@@ -42,11 +44,18 @@ public class PayoutServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 
-//		Payout payout = new Payout();
-//		payout.setDateTime(LocalDateTime.parse(request.getParameter("dateTime")));
-////		payout.setAmount(Double.parseDouble(request.getParameter("amount").replace(",", ".")));
-//		payout.setNotes(request.getParameter("notes").trim());
-//
+		Payout payout = new Payout(
+				LocalDateTime.parse(request.getParameter("dateTime")),
+				new BigDecimal(request.getParameter("amount").replace(",", ".")),
+				request.getParameter("notes").trim()
+		);
+
+		if (!StringUtils.isEmpty(request.getParameter("id"))) {
+			int payoutId = getId(request);
+			payout.setId(payoutId);
+		}
+		payoutRepository.save(payout, getAuthUserId());
+
 //		if (request.getParameter("id").equals("0")) {
 //			payoutRepository.add(payout);
 //		} else {
@@ -92,7 +101,7 @@ public class PayoutServlet extends HttpServlet {
 	}
 
 	private int getId(HttpServletRequest request) {
-		String paramId = request.getParameter("id");
+		String paramId = Objects.requireNonNull(request.getParameter("id"));
 		return Integer.parseInt(paramId);
 	}
 

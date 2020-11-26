@@ -12,14 +12,14 @@
         <hr>
         <form method="post" action="users">
             <b>Payouts from db of </b>
-            <select name="userId">
+            <select onchange="this.form.submit()" name="userId">
                 <option value="100" ${userId == 100 ? "selected" : ""}>ADMIN</option>
                 <option value="101" ${userId == 101 ? "selected" : ""}>JAG63</option>
                 <option value="102" ${userId == 102 ? "selected" : ""}>CAT66</option>
                 <option value="103" ${userId == 103 ? "selected" : ""}>JUV91</option>
                 <option value="104" ${userId == 104 ? "selected" : ""}>SK88</option>
             </select>
-            <button type="submit">Show</button>
+<%--            <button type="submit">Show</button>--%>
         </form>
         <c:choose>
             <c:when test="${userId != 100}">
@@ -83,7 +83,7 @@
                             </td>
                         </c:when>
                     </c:choose>
-                    <td style="white-space: nowrap">${payout.dateTime.toLocalDate()}, ${payout.dateTime.toLocalTime()}</td>
+                    <td>${payout.dateTime.toLocalDate()}, ${payout.dateTime.toLocalTime()}</td>
                     <td>${payout.amount}</td>
                     <td>${payout.notes}
 <%--                        <c:choose>--%>
@@ -97,7 +97,7 @@
                     </td>
                     <c:choose>
                         <c:when test="${userId != 100}">
-                            <td><a href="payouts?action=update&id=${product.id}">✏️</a></td>
+                            <td><a href="payouts?action=update&id=${payout.id}">✏️</a></td>
                         </c:when>
                     </c:choose>
                     <td><a href="payouts?action=delete&id=${payout.id}">❌</a></td>

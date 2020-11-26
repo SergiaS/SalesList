@@ -56,25 +56,35 @@ public class JdbcProductRepository implements ProductRepository {
                 .addValue("user_id", userId);
 
         if (product.isNew()) {
-            Number newId = insertProduct.executeAndReturnKey(map);
-            product.setId(newId.intValue());
+            int newId = insertProduct.executeAndReturnKey(map).intValue();
+            product.setId(newId);
         } else {
             if (namedParameterJdbcTemplate.update(
                     "UPDATE products " +
-                           "SET date_time=:date_time, title=:title, market_place=:market_place, delivery_service=:delivery_service, payment_method=:payment_method, order_status=:order_status, sold_at_price=:sold_at_price, spent=:spent, payout_percentage=:payout_percentage, payout_currency=:payout_currency, profit=:profit, notes=:notes " +
-                         "WHERE id=:id AND user_id=:user_id", map) == 0) {
+                        "SET date_time=:date_time, title=:title, market_place=:market_place, delivery_service=:delivery_service, payment_method=:payment_method, order_status=:order_status, sold_at_price=:sold_at_price, spent=:spent, payout_percentage=:payout_percentage, payout_currency=:payout_currency, profit=:profit, notes=:notes " +
+                        "WHERE id=:id AND user_id=:user_id", map) == 0) {
                 return null;
             }
         }
+
+        // for payout
+        jdbcTemplate.update(
+                "INSERT INTO payouts(user_id, product_id, date_time, amount, notes) " +
+                        "VALUES (?,?,?,?,?) " +
+                        "ON CONFLICT (product_id)" +
+                        "DO UPDATE SET user_id=EXCLUDED.user_id, date_time=EXCLUDED.date_time, amount=EXCLUDED.amount, notes=EXCLUDED.notes", userId, product.getId(), product.getDateTime(), product.getPayoutCurrency(), product.getTitle());
+
         return product;
     }
 
     @Override
     public boolean delete(int id, int userId) {
         if (userId == ADMIN_ID) {
-            return jdbcTemplate.update("DELETE FROM products WHERE id=?", id) != 0;
+            return jdbcTemplate.update("DELETE FROM products WHERE id=?", id) != 0 &&
+                    jdbcTemplate.update("DELETE FROM payouts WHERE product_id=?", id) != 0;
         }
-        return jdbcTemplate.update("DELETE FROM products WHERE id=? AND user_id=?", id, userId) != 0;
+        return jdbcTemplate.update("DELETE FROM products WHERE id=? AND user_id=?", id, userId) != 0 &&
+                jdbcTemplate.update("DELETE FROM payouts WHERE product_id=? AND user_id=?", id, userId) != 0;
     }
 
     @Override

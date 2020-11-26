@@ -43,7 +43,9 @@ public class JdbcPayoutRepository implements PayoutRepository {
                 .addValue("id", payout.getId())
                 .addValue("date_time", payout.getDateTime())
                 .addValue("amount", payout.getAmount())
-                .addValue("notes", payout.getNotes());
+                .addValue("notes", payout.getNotes())
+//                .addValue("product_id", payout.getNotes())
+                .addValue("user_id", userId);
 
         if (payout.isNew()) {
             Number newId = insertPayout.executeAndReturnKey(map);

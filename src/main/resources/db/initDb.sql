@@ -27,20 +27,6 @@ CREATE TABLE user_roles
 );
 
 
-DROP SEQUENCE IF EXISTS payouts_seq;
-CREATE SEQUENCE payouts_seq START WITH 1000;
-
-CREATE TABLE payouts
-(
-    id        INTEGER PRIMARY KEY DEFAULT nextval('payouts_seq'),
-    user_id   INTEGER                           NOT NULL,
-    date_time TIMESTAMP           DEFAULT now() NOT NULL,
-    amount    DOUBLE PRECISION    DEFAULT 0     NOT NULL,
-    notes     VARCHAR                           NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-);
-
-
 DROP SEQUENCE IF EXISTS products_seq;
 CREATE SEQUENCE products_seq;
 
@@ -63,3 +49,18 @@ CREATE TABLE products
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
+
+DROP SEQUENCE IF EXISTS payouts_seq;
+CREATE SEQUENCE payouts_seq START WITH 1000;
+
+CREATE TABLE payouts
+(
+    id         INTEGER PRIMARY KEY DEFAULT nextval('payouts_seq'),
+    user_id    INTEGER                           NOT NULL,
+    product_id INTEGER UNIQUE,
+    date_time  TIMESTAMP           DEFAULT now() NOT NULL,
+    amount     DOUBLE PRECISION    DEFAULT 0     NOT NULL,
+    notes      VARCHAR                           NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
+);
