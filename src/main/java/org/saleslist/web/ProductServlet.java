@@ -6,7 +6,6 @@ import org.saleslist.enums.OrderStatusEnum;
 import org.saleslist.enums.PaymentMethodEnum;
 import org.saleslist.model.Product;
 import org.saleslist.repository.jdbc.JdbcProductRepository;
-import org.saleslist.util.Stats;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.StringUtils;
@@ -117,8 +116,13 @@ public class ProductServlet extends HttpServlet {
                     request.setAttribute("owners", productRepository.getOwnersNames());
                 }
 
+//                request.setAttribute("marketPlace", new ArrayList<>(Arrays.asList(MarketPlaceEnum.values())));
+//                request.setAttribute("deliveryService", new ArrayList<>(Arrays.asList(DeliveryServiceEnum.values())));
+//                request.setAttribute("paymentMethod", new ArrayList<>(Arrays.asList(PaymentMethodEnum.values())));
+//                request.setAttribute("orderStatus", new ArrayList<>(Arrays.asList(OrderStatusEnum.values())));
+
                 request.setAttribute("userId", getAuthUserId());
-                request.setAttribute("stats", new Stats());
+//                request.setAttribute("stats", new Stats());
                 request.setAttribute("products", productRepository.getAll(getAuthUserId()));
                 request.getRequestDispatcher("/products.jsp").forward(request, response);
             }

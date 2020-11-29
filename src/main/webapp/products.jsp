@@ -19,14 +19,15 @@
                 <option value="103" ${userId == 103 ? "selected" : ""}>JUV91</option>
                 <option value="104" ${userId == 104 ? "selected" : ""}>SK88</option>
             </select>
-<%--            <button type="submit">Show</button>--%>
         </form>
         <c:choose>
             <c:when test="${userId != 100}">
-                <a href="products?action=create"><img src="https://icons.veryicon.com/png/o/commerce-shopping/merchant-product-icon-library/add-55.png" width="30" height="30" alt="add"></a>
+                <a href="products?action=create"><img
+                        src="https://icons.veryicon.com/png/o/commerce-shopping/merchant-product-icon-library/add-55.png"
+                        width="30" height="30" alt="add"></a>
             </c:when>
         </c:choose>
-        <table>
+        <table id="stats">
             <thead>
             <tr>
                 <th>№</th>
@@ -55,43 +56,26 @@
             </tr>
             </thead>
             <tr>
-<%--                <jsp:useBean id="stats" class="org.saleslist.util.Stats"/>--%>
-                <th></th>
+                <th>${products.size()}</th>
                 <c:choose>
                     <c:when test="${userId == 100}">
-                        <th></th>
+                        <th id="stats-owners"></th>
                     </c:when>
                 </c:choose>
                 <th></th>
-                <th>
-                    Total Sold Items: ${stats.numberOfSoldItems}<br>
-                    Sold Cooperation Items: ${stats.numberOfCooperationItems}<br>
-                    Sold Own Items: ${stats.numberOfMyItems}
+                <th id="stats-total">
+<%--                    Total Items Sold: ${products.size()}<br>--%>
+<%--                    Sold Own Items: ${stats.numberOfMyItems}<br>--%>
+<%--                    Sold Cooperation Items: ${stats.numberOfCooperationItems}--%>
                 </th>
-                <th>
-                    <c:forEach var="entry" items="${stats.marketPlaceCounterMap}">
-                        <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>
-                    </c:forEach>
-                </th>
-                <th>
-                    <c:forEach var="entry" items="${stats.deliveryCounterMap}">
-                        <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>
-                    </c:forEach>
-                </th>
-                <th>
-                    <c:forEach var="entry" items="${stats.paymentMethodCounterMap}">
-                        <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>
-                    </c:forEach>
-                </th>
-                <th>
-                    <c:forEach var="entry" items="${stats.statusOrderCounterMap}">
-                        <c:out value="${entry.key}"/>=<c:out value="${entry.value}"/><br>
-                    </c:forEach>
-                </th>
-                <th>${stats.amountAtSoldPrice}</th>
-                <th>${stats.amountOfExpenses}</th>
-                <th>${stats.amountOfPayouts}</th>
-                <th>${stats.amountOfProfit}</th>
+                <th id="stats-marketplace"></th>
+                <th id="stats-delivery"></th>
+                <th id="stats-paymentMethod"></th>
+                <th id="stats-orderStatus"></th>
+                <th id="stats-amountAtSoldPrice"></th>
+                <th id="stats-amountOfExpenses"></th>
+                <th id="stats-amountOfPayouts"></th>
+                <th id="stats-amountOfProfit"></th>
                 <th></th>
                 <c:choose>
                     <c:when test="${userId != 100}">
@@ -147,8 +131,11 @@
     </section>
     <c:choose>
         <c:when test="${userId != 100}">
-            <a href="products?action=create"><img src="https://icons.veryicon.com/png/o/commerce-shopping/merchant-product-icon-library/add-55.png" width="30" height="30" alt="add"></a>
+            <a href="products?action=create"><img
+                    src="https://icons.veryicon.com/png/o/commerce-shopping/merchant-product-icon-library/add-55.png"
+                    width="30" height="30" alt="add"></a>
         </c:when>
     </c:choose>
+    <script src="resources/js/stats-products.js"></script>
 </body>
 </html>
