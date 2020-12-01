@@ -6,14 +6,12 @@ import org.saleslist.enums.OrderStatusEnum;
 import org.saleslist.enums.PaymentMethodEnum;
 import org.saleslist.model.Product;
 import org.saleslist.repository.jdbc.JdbcProductRepository;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.saleslist.web.user.MainServlet;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,33 +20,24 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 import static org.saleslist.web.SecurityUtil.ADMIN_ID;
 import static org.saleslist.web.SecurityUtil.getAuthUserId;
 
 @WebServlet("/products")
-public class ProductServlet extends HttpServlet {
+public class ProductServlet extends MainServlet {
 
-    private ConfigurableApplicationContext springContext;
     private JdbcProductRepository productRepository;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
         productRepository = springContext.getBean(JdbcProductRepository.class);
     }
 
     @Override
-    public void destroy() {
-        springContext.close();
-        super.destroy();
-    }
-
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
+        super.doPost(request, response);
 
         Product product = new Product(
                 LocalDateTime.parse(request.getParameter("dateTime")),
@@ -92,6 +81,7 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        super.doGet(request, response);
         String action = request.getParameter("action");
 
         switch (action == null ? "all" : action) {
@@ -116,22 +106,11 @@ public class ProductServlet extends HttpServlet {
                     request.setAttribute("owners", productRepository.getOwnersNames());
                 }
 
-//                request.setAttribute("marketPlace", new ArrayList<>(Arrays.asList(MarketPlaceEnum.values())));
-//                request.setAttribute("deliveryService", new ArrayList<>(Arrays.asList(DeliveryServiceEnum.values())));
-//                request.setAttribute("paymentMethod", new ArrayList<>(Arrays.asList(PaymentMethodEnum.values())));
-//                request.setAttribute("orderStatus", new ArrayList<>(Arrays.asList(OrderStatusEnum.values())));
-
                 request.setAttribute("userId", getAuthUserId());
-//                request.setAttribute("stats", new Stats());
                 request.setAttribute("products", productRepository.getAll(getAuthUserId()));
                 request.getRequestDispatcher("/products.jsp").forward(request, response);
             }
         }
-    }
-
-    private int getId(HttpServletRequest request) {
-        String paramId = Objects.requireNonNull(request.getParameter("id"));
-        return Integer.parseInt(paramId);
     }
 
     private Product getDefaultProduct() {
