@@ -68,11 +68,14 @@ public class JdbcProductRepository implements ProductRepository {
         }
 
         // for payout
-        jdbcTemplate.update(
-                "INSERT INTO payouts(user_id, product_id, date_time, amount, notes) " +
-                        "VALUES (?,?,?,?,?) " +
-                        "ON CONFLICT (product_id)" +
-                        "DO UPDATE SET user_id=EXCLUDED.user_id, date_time=EXCLUDED.date_time, amount=EXCLUDED.amount, notes=EXCLUDED.notes", userId, product.getId(), product.getDateTime(), product.getPayoutCurrency(), product.getTitle());
+        if (product.getPayoutPercentage() > 0) {
+            jdbcTemplate.update("INSERT INTO payouts(user_id, product_id, date_time, amount, notes) " +
+                    "VALUES (?,?,?,?,?) " +
+                    "ON CONFLICT (product_id)" +
+                    "DO UPDATE SET user_id=EXCLUDED.user_id, date_time=EXCLUDED.date_time, amount=EXCLUDED.amount, notes=EXCLUDED.notes", userId, product.getId(), product.getDateTime(), product.getPayoutCurrency(), product.getTitle());
+        } else {
+            jdbcTemplate.update("DELETE FROM payouts WHERE product_id=?", product.getId());
+        }
 
         return product;
     }

@@ -29,31 +29,31 @@
         </c:choose>
         <table id="stats">
             <thead>
-            <tr>
-                <th>№</th>
-                <c:choose>
-                    <c:when test="${userId == 100}">
-                        <th>Owner</th>
-                    </c:when>
-                </c:choose>
-                <th>Date</th>
-                <th>Title</th>
-                <th>Market Place</th>
-                <th>Delivery Service</th>
-                <th>Payment Method</th>
-                <th>Order Status</th>
-                <th>Sold At Price</th>
-                <th>Spent</th>
-                <th>Payout</th>
-                <th>Profit</th>
-                <th>Notes</th>
-                <c:choose>
-                    <c:when test="${userId != 100}">
-                        <th>Edit</th>
-                    </c:when>
-                </c:choose>
-                <th>Delete</th>
-            </tr>
+                <tr>
+                    <th>№</th>
+                    <c:choose>
+                        <c:when test="${userId == 100}">
+                            <th>Owner</th>
+                        </c:when>
+                    </c:choose>
+                    <th>Date</th>
+                    <th>Title</th>
+                    <th>Market Place</th>
+                    <th>Delivery Service</th>
+                    <th>Payment Method</th>
+                    <th>Order Status</th>
+                    <th>Sold At Price</th>
+                    <th>Spent</th>
+                    <th>Payout</th>
+                    <th>Profit</th>
+                    <th>Notes</th>
+                    <c:choose>
+                        <c:when test="${userId != 100}">
+                            <th>Edit</th>
+                        </c:when>
+                    </c:choose>
+                    <th>Delete</th>
+                </tr>
             </thead>
             <tr>
                 <th>${products.size()}</th>
@@ -98,7 +98,7 @@
                             </td>
                         </c:when>
                     </c:choose>
-                    <td style="white-space: nowrap">${product.dateTime.toLocalDate()}, ${product.dateTime.toLocalTime()}</td>
+                    <td>${product.dateTime.toLocalDate()}, ${product.dateTime.toLocalTime()}</td>
                     <td>${product.title}</td>
                     <td>${product.marketPlace}</td>
                     <td>${product.deliveryService}</td>
@@ -106,7 +106,7 @@
                     <td>${product.orderStatus}</td>
                     <td>${product.soldAtPrice}</td>
                     <td>${product.spent}</td>
-                    <td style="white-space: nowrap">
+                    <td>
                         <c:choose>
                             <c:when test="${product.payoutPercentage > 0}">
                                 ${product.payoutCurrency}

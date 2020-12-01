@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,12 +40,19 @@ public class JdbcPayoutRepository implements PayoutRepository {
 
     @Override
     public Payout save(Payout payout, int userId) {
+
+        BigDecimal payoutAmount;
+        if (payout.getId() == null) {
+            payoutAmount = new BigDecimal("-" + payout.getAmount());
+        } else {
+            payoutAmount = payout.getAmount();
+        }
+
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", payout.getId())
                 .addValue("date_time", payout.getDateTime())
-                .addValue("amount", payout.getAmount())
+                .addValue("amount", payoutAmount)
                 .addValue("notes", payout.getNotes())
-//                .addValue("product_id", payout.getNotes())
                 .addValue("user_id", userId);
 
         if (payout.isNew()) {
@@ -98,20 +106,5 @@ public class JdbcPayoutRepository implements PayoutRepository {
     // only for ADMIN user
     public List<String> getOwnersNames() {
         return jdbcTemplate.queryForList("SELECT u.name FROM payouts INNER JOIN users u ON u.id = payouts.user_id ORDER BY date_time DESC", String.class);
-    }
-
-    public int getLastProductIdFromDb() {
-//        String sql = "select id from sales order by id desc limit 1";
-//		int productId = 0;
-//		try (PreparedStatement ps = conn.getConnection().prepareStatement(sql)) {
-//			ResultSet rs = ps.executeQuery();
-//			while (rs.next()) {
-//				productId = rs.getInt(1);
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		return productId;
-        return 0;
     }
 }

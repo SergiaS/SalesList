@@ -19,14 +19,13 @@
                 <option value="103" ${userId == 103 ? "selected" : ""}>JUV91</option>
                 <option value="104" ${userId == 104 ? "selected" : ""}>SK88</option>
             </select>
-<%--            <button type="submit">Show</button>--%>
         </form>
         <c:choose>
             <c:when test="${userId != 100}">
                 <a href="payouts?action=create"><img src="https://icons.veryicon.com/png/o/commerce-shopping/merchant-product-icon-library/add-55.png" width="30" height="30" alt="add"></a>
             </c:when>
         </c:choose>
-        <table>
+        <table id="stats">
             <thead>
                 <tr>
                     <th>№</th>
@@ -37,7 +36,7 @@
                     </c:choose>
                     <th>Date</th>
                     <th>Amount</th>
-                    <th>Notes</th>
+                    <th style="width: 75%">Notes</th>
                     <c:choose>
                         <c:when test="${userId != 100}">
                             <th>Edit</th>
@@ -46,29 +45,23 @@
                     <th>Delete</th>
                 </tr>
             </thead>
-<%--            <tr>--%>
-<%--                <jsp:useBean id="payoutsStats" scope="request" type="org.saleslist.util.PayoutsStats"/>--%>
-<%--                <th></th>--%>
-<%--                <th></th>--%>
-<%--                <th>--%>
-<%--                    <span style="color: blue"><b>Cooperations: <fmt:formatNumber type="number" maxFractionDigits="2"--%>
-<%--                                                                                 groupingUsed="false"--%>
-<%--                                                                                 value="${payoutsStats.cooperationsAmount}"/></b></span><br>--%>
-<%--                    <span style="color: green"><b>Payouts: <fmt:formatNumber type="number" maxFractionDigits="2"--%>
-<%--                                                                             groupingUsed="false"--%>
-<%--                                                                             value="${payoutsStats.payoutsAmount}"/></b></span><br>--%>
-<%--                    <span style=${payoutsStats.totalAmount < 0 ? '"color: red"' : '"color: purple"'}><b>Pay: <fmt:formatNumber--%>
-<%--                            type="number" maxFractionDigits="2" groupingUsed="false"--%>
-<%--                            value="${payoutsStats.totalAmount}"/></b></span>--%>
-<%--                </th>--%>
-<%--                <th>--%>
-<%--                    <span style="color: blue"><b>Qty Cooperations: ${payoutsStats.qtyCooperations}</b></span><br>--%>
-<%--                    <span style="color: green"><b>Qty Payouts: ${payoutsStats.qtyPayouts}</b></span><br>--%>
-<%--                    <span><b>Total Qty: ${payoutsStats.qtyCooperations + payoutsStats.qtyPayouts}</b></span>--%>
-<%--                </th>--%>
-<%--                <th></th>--%>
-<%--                <th></th>--%>
-<%--            </tr>--%>
+            <tr>
+                <th>${payouts.size()}</th>
+                <c:choose>
+                    <c:when test="${userId == 100}">
+                        <th></th>
+                    </c:when>
+                </c:choose>
+                <th></th>
+                <th id="stats-amount"></th>
+                <th></th>
+                <c:choose>
+                    <c:when test="${userId != 100}">
+                        <th></th>
+                    </c:when>
+                </c:choose>
+                <th></th>
+            </tr>
             <c:forEach items="${payouts}" var="payout">
                 <jsp:useBean id="payout" type="org.saleslist.model.Payout"/>
                 <tr data-payoutPercentage="${payout.amount < 0}">
@@ -86,14 +79,6 @@
                     <td>${payout.dateTime.toLocalDate()}, ${payout.dateTime.toLocalTime()}</td>
                     <td>${payout.amount}</td>
                     <td>${payout.notes}
-<%--                        <c:choose>--%>
-<%--                            <c:when test="${payout.amount < 0}">--%>
-<%--                                <a href="products?action=update&id=${payout.productId}">${payout.notes}</a>--%>
-<%--                            </c:when>--%>
-<%--                            <c:otherwise>--%>
-<%--                                ${payout.notes}--%>
-<%--                            </c:otherwise>--%>
-<%--                        </c:choose>--%>
                     </td>
                     <c:choose>
                         <c:when test="${userId != 100}">
@@ -110,5 +95,6 @@
             <a href="payouts?action=create"><img src="https://icons.veryicon.com/png/o/commerce-shopping/merchant-product-icon-library/add-55.png" width="30" height="30" alt="add"></a>
         </c:when>
     </c:choose>
+    <script src="resources/js/stats-payouts.js"></script>
 </body>
 </html>
