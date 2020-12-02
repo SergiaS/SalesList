@@ -7,7 +7,6 @@ import org.saleslist.enums.PaymentMethodEnum;
 import org.saleslist.model.Product;
 import org.saleslist.repository.jdbc.JdbcProductRepository;
 import org.saleslist.web.user.MainServlet;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -25,59 +24,35 @@ import static org.saleslist.web.SecurityUtil.ADMIN_ID;
 import static org.saleslist.web.SecurityUtil.getAuthUserId;
 
 @WebServlet("/products")
-public class ProductServlet extends MainServlet {
-
-    private JdbcProductRepository productRepository;
+public class ProductServlet extends MainServlet<Product> {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        productRepository = springContext.getBean(JdbcProductRepository.class);
+        repository = springContext.getBean(JdbcProductRepository.class);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        super.doPost(request, response);
-
-        Product product = new Product(
-                LocalDateTime.parse(request.getParameter("dateTime")),
-                request.getParameter("title").trim(),
-                MarketPlaceEnum.valueOf(request.getParameter("marketPlace")),
-                DeliveryServiceEnum.valueOf(request.getParameter("deliveryService")),
-                PaymentMethodEnum.valueOf(request.getParameter("paymentMethod")),
-                OrderStatusEnum.valueOf(request.getParameter("orderStatus")),
-                new BigDecimal(request.getParameter("soldAtPrice").replace(",", ".")),
-                new BigDecimal(request.getParameter("spent").replace(",", ".")),
-                Integer.parseInt(request.getParameter("payoutPercentage")),
-                request.getParameter("notes").trim()
-        );
-
-        if (!StringUtils.isEmpty(request.getParameter("id"))) {
-            int productId = getId(request);
-            product.setId(productId);
-        }
-        productRepository.save(product, getAuthUserId());
-
-//		if (product.getPayoutPercentage() > 0) {
-//			Payout payout = new Payout();
-//			if (productId != 0) {
-//				payout.setUserId(productId);
-//			} else {
-//				payout.setUserId(payoutRepository.getLastProductIdFromDb());
-//			}
-//			payout.setDateTime(product.getDateTime());
-//			payout.setAmount(-product.getPayoutCurrency());
-//			payout.setNotes("За товар:\n" + product.getTitle());
+//    @Override
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //
-//			System.out.println("record to PAYOUT db");
-//			payoutRepository.addOrUpdate(payout);
-//		} else {
-//			System.out.println("delete from PAYOUT db");
-//			payoutRepository.delete("product_id", productId);
-//		}
-
-        response.sendRedirect("products");
-    }
+////		if (product.getPayoutPercentage() > 0) {
+////			Payout payout = new Payout();
+////			if (productId != 0) {
+////				payout.setUserId(productId);
+////			} else {
+////				payout.setUserId(payoutRepository.getLastProductIdFromDb());
+////			}
+////			payout.setDateTime(product.getDateTime());
+////			payout.setAmount(-product.getPayoutCurrency());
+////			payout.setNotes("За товар:\n" + product.getTitle());
+////
+////			System.out.println("record to PAYOUT db");
+////			payoutRepository.addOrUpdate(payout);
+////		} else {
+////			System.out.println("delete from PAYOUT db");
+////			payoutRepository.delete("product_id", productId);
+////		}
+//    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -86,12 +61,12 @@ public class ProductServlet extends MainServlet {
 
         switch (action == null ? "all" : action) {
             case "delete" -> {
-                productRepository.delete(getId(request), getAuthUserId());
+                repository.delete(getId(request), getAuthUserId());
                 response.sendRedirect("products");
             }
             case "create", "update" -> {
                 final Product product = "create".equals(action) ?
-                        getDefaultProduct() : productRepository.get(getId(request), getAuthUserId());
+                        getDefaultProduct() : repository.get(getId(request), getAuthUserId());
                 request.setAttribute("product", product);
 
                 request.setAttribute("marketPlace", new ArrayList<>(Arrays.asList(MarketPlaceEnum.values())));
@@ -103,11 +78,11 @@ public class ProductServlet extends MainServlet {
             }
             default -> {
                 if (getAuthUserId() == ADMIN_ID) {
-                    request.setAttribute("owners", productRepository.getOwnersNames());
+                    request.setAttribute("owners", repository.getOwnersNames());
                 }
 
                 request.setAttribute("userId", getAuthUserId());
-                request.setAttribute("products", productRepository.getAll(getAuthUserId()));
+                request.setAttribute("products", repository.getAll(getAuthUserId()));
                 request.getRequestDispatcher("/products.jsp").forward(request, response);
             }
         }
@@ -126,5 +101,25 @@ public class ProductServlet extends MainServlet {
                 0,
                 ""
         );
+    }
+
+    @Override
+    protected Product fillModel(HttpServletRequest request) {
+        return new Product(
+                LocalDateTime.parse(request.getParameter("dateTime")),
+                request.getParameter("title").trim(),
+                MarketPlaceEnum.valueOf(request.getParameter("marketPlace")),
+                DeliveryServiceEnum.valueOf(request.getParameter("deliveryService")),
+                PaymentMethodEnum.valueOf(request.getParameter("paymentMethod")),
+                OrderStatusEnum.valueOf(request.getParameter("orderStatus")),
+                new BigDecimal(request.getParameter("soldAtPrice").replace(",", ".")),
+                new BigDecimal(request.getParameter("spent").replace(",", ".")),
+                Integer.parseInt(request.getParameter("payoutPercentage")),
+                request.getParameter("notes").trim());
+    }
+
+    @Override
+    protected String getTableName() {
+        return "products";
     }
 }
