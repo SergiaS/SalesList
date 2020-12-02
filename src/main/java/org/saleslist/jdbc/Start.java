@@ -1,21 +1,15 @@
 package org.saleslist.jdbc;
 
-import org.saleslist.jdbc.enums.DeliveryServiceEnum;
-import org.saleslist.jdbc.enums.MarketPlaceEnum;
-import org.saleslist.jdbc.enums.OrderStatusEnum;
-import org.saleslist.jdbc.enums.PaymentMethodEnum;
 import org.saleslist.jdbc.model.Payout;
-import org.saleslist.jdbc.model.Product;
 import org.saleslist.jdbc.repository.JdbcPayoutRepository;
 import org.saleslist.jdbc.repository.JdbcProductRepository;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class Start {
 
-	private static JdbcProductRepository jdbcProductRepository = new JdbcProductRepository();
+	private static JdbcProductRepository productRepository = new JdbcProductRepository();
+	private static JdbcPayoutRepository payoutRepository = new JdbcPayoutRepository();
 
 	public static void main(String[] args) {
 		// Payout functionality
@@ -44,9 +38,15 @@ public class Start {
 //		System.out.println(byId);
 
 		// get all products from DB
-		List<Product> productList = jdbcProductRepository.getAllProducts();
-		for (Product p : productList) {
-			System.out.println(p);
+//		List<Product> productList = productRepository.getAllProducts();
+//		for (Product p : productList) {
+//			System.out.println("(userId, '" + p.getDateTime() + "', '" + p.getTitle() + "', '" + p.getMarketPlace() + "', '" + p.getDeliveryService() + "', '" + p.getPaymentMethod() + "', '" + p.getOrderStatus() + "', " + p.getSpent() + "," + p.getSoldAtPrice() + "," + p.getPayoutPercentage() + "," + p.getPayoutCurrency() + "," + p.getProfit() + ",'" + p.getNotes() + "'),");
+//		}
+
+		// get all payouts from DB
+		List<Payout> payoutList = payoutRepository.getAllPayouts();
+		for (Payout payout : payoutList) {
+			System.out.println(payout);
 		}
 	}
 }
