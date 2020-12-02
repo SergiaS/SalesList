@@ -1,9 +1,7 @@
 package org.saleslist.repository.jdbc;
 
 import org.saleslist.model.Payout;
-import org.saleslist.repository.PayoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,34 +11,23 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.saleslist.web.SecurityUtil.ADMIN_ID;
 
 @Repository
-public class JdbcPayoutRepository implements PayoutRepository {
+public class JdbcPayoutRepository extends JdbcMainRepository<Payout> {
 
     private static final RowMapper<Payout> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Payout.class);
 
-    private final JdbcTemplate jdbcTemplate;
-
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    private final SimpleJdbcInsert insertPayout;
-
     @Autowired
     public JdbcPayoutRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        this.insertPayout = new SimpleJdbcInsert(jdbcTemplate)
+        super(jdbcTemplate, namedParameterJdbcTemplate);
+        this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("payouts")
                 .usingGeneratedKeyColumns("id");
-        this.jdbcTemplate = jdbcTemplate;
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
-    @Override
     public Payout save(Payout payout, int userId) {
-
         BigDecimal payoutAmount;
         if (payout.getId() == null) {
             payoutAmount = new BigDecimal("-" + payout.getAmount());
@@ -56,7 +43,7 @@ public class JdbcPayoutRepository implements PayoutRepository {
                 .addValue("user_id", userId);
 
         if (payout.isNew()) {
-            Number newId = insertPayout.executeAndReturnKey(map);
+            Number newId = simpleJdbcInsert.executeAndReturnKey(map);
             payout.setId(newId.intValue());
         } else {
             if (namedParameterJdbcTemplate.update(
@@ -68,7 +55,6 @@ public class JdbcPayoutRepository implements PayoutRepository {
         return payout;
     }
 
-    @Override
     public boolean delete(int id, int userId) {
         if (userId == ADMIN_ID) {
             return jdbcTemplate.update("DELETE FROM payouts WHERE id=?", id) != 0;
@@ -77,34 +63,12 @@ public class JdbcPayoutRepository implements PayoutRepository {
     }
 
     @Override
-    public Payout get(int id, int userId) {
-        List<Payout> payouts;
-        if (userId == ADMIN_ID) {
-            payouts = jdbcTemplate.query("SELECT * FROM payouts WHERE id=?", ROW_MAPPER, id);
-        } else {
-            payouts = jdbcTemplate.query("SELECT * FROM payouts WHERE id=? AND user_id=?", ROW_MAPPER, id, userId);
-        }
-        return DataAccessUtils.singleResult(payouts);
+    protected RowMapper<Payout> getRowMapper() {
+        return ROW_MAPPER;
     }
 
     @Override
-    public List<Payout> getAll(int userId) {
-        if (userId == ADMIN_ID) {
-            return jdbcTemplate.query("SELECT * FROM payouts ORDER BY date_time DESC",ROW_MAPPER);
-        }
-        return jdbcTemplate.query("SELECT * FROM payouts WHERE user_id=? ORDER BY date_time DESC", ROW_MAPPER, userId);
-    }
-
-    @Override
-    public List<Payout> getBetweenDateTime(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        return jdbcTemplate.query(
-                "SELECT * FROM payouts WHERE user_id=? AND date_time>=? AND date_time<=? ORDER BY date_time DESC",
-                ROW_MAPPER, userId, startDateTime, endDateTime
-        );
-    }
-
-    // only for ADMIN user
-    public List<String> getOwnersNames() {
-        return jdbcTemplate.queryForList("SELECT u.name FROM payouts INNER JOIN users u ON u.id = payouts.user_id ORDER BY date_time DESC", String.class);
+    protected String getTableName() {
+        return "payouts";
     }
 }
