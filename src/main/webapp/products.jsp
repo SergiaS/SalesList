@@ -99,7 +99,7 @@
                         </c:when>
                     </c:choose>
                     <td>${product.dateTime.toLocalDate()}, ${product.dateTime.toLocalTime()}</td>
-                    <td>${product.title}</td>
+                    <td class="long-names">${product.title}</td>
                     <td>${product.marketPlace}</td>
                     <td>${product.deliveryService}</td>
                     <td>${product.paymentMethod}</td>
@@ -118,7 +118,7 @@
                         </c:choose>
                     </td>
                     <td>${product.profit}</td>
-                    <td>${product.notes}</td>
+                    <td style="white-space: pre">${product.notes}</td>
                     <c:choose>
                         <c:when test="${userId != 100}">
                             <td><a href="products?action=update&id=${product.id}">✏️</a></td>

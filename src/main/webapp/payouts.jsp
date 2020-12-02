@@ -36,7 +36,7 @@
                     </c:choose>
                     <th>Date</th>
                     <th>Amount</th>
-                    <th style="width: 75%">Notes</th>
+                    <th>Notes</th>
                     <c:choose>
                         <c:when test="${userId != 100}">
                             <th>Edit</th>
@@ -78,7 +78,7 @@
                     </c:choose>
                     <td>${payout.dateTime.toLocalDate()}, ${payout.dateTime.toLocalTime()}</td>
                     <td>${payout.amount}</td>
-                    <td>${payout.notes}
+                    <td class="long-names">${payout.notes}
                     </td>
                     <c:choose>
                         <c:when test="${userId != 100}">

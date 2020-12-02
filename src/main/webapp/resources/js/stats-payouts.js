@@ -10,16 +10,16 @@ function calculateAmount() {
     let rowNumber = 2;
     let arrLength = document.getElementById("stats").rows.length;
     for (let i = rowNumber; i < arrLength; i++) {
-        let tmpVal = document.getElementById("stats").rows[i].cells[2 + isAdminPage].innerHTML;
+        let tmpVal = +(document.getElementById("stats").rows[i].cells[2 + isAdminPage].innerHTML);
         if (tmpVal > 0) {
-            needToPay += +tmpVal;
+            needToPay += tmpVal;
         } else {
-            payed += +tmpVal;
+            payed += tmpVal;
         }
     }
 
     document.getElementById("stats-amount").innerHTML =
-        "Cooperation: " + needToPay + "<br>" +
-        "Payed: " + payed + "<br>" +
-        "Left: " + (payed + needToPay);
+        "Cooperation: " + needToPay.toFixed(2)+ "<br>" +
+        "Payed: " + payed.toFixed(2) + "<br>" +
+        "Left: " + (payed + needToPay).toFixed(2);
 }

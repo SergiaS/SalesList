@@ -9,7 +9,7 @@ tr[data-payoutPercentage="true"] {
 }
 
 a {
-    text-decoration: none;  /* links without underlines */
+    text-decoration: none; /* links without underlines */
 }
 
 select {
@@ -21,7 +21,7 @@ select {
     color: lightgray;
 }
 
-.asterisk{
+.asterisk {
     color: red;
 }
 
@@ -33,12 +33,17 @@ table {
 }
 
 th {
+    white-space: nowrap;
     background-color: gainsboro;
     padding: 5px;
 }
 
 td {
+    /*white-space: pre;*/
     padding: 5px;
+}
+
+td:not([class^="long-names"]) {
     white-space: nowrap;
 }
 
