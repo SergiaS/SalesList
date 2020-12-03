@@ -1,38 +1,25 @@
-package org.saleslist.jdbc.model;
+package org.saleslist.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class Payout {
-
-	private int id;
-	private int productId;
+public class Payout extends AbstractBaseEntity {
 	private LocalDateTime dateTime;
-	private double amount;
+	private BigDecimal amount;
 	private String notes;
 
 	public Payout() {
 	}
 
-	public Payout(LocalDateTime dateTime, double amount, String notes) {
+	public Payout(LocalDateTime dateTime, BigDecimal amount, String notes) {
+		this(null, dateTime, amount, notes);
+	}
+
+	public Payout(Integer id, LocalDateTime dateTime, BigDecimal amount, String notes) {
+		super(id);
 		this.dateTime = dateTime;
 		this.amount = amount;
 		this.notes = notes;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getProductId() {
-		return productId;
-	}
-
-	public void setProductId(int productId) {
-		this.productId = productId;
 	}
 
 	public LocalDateTime getDateTime() {
@@ -43,11 +30,11 @@ public class Payout {
 		this.dateTime = dateTime;
 	}
 
-	public double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
@@ -63,7 +50,6 @@ public class Payout {
 	public String toString() {
 		return "Payout{" +
 				"id=" + id +
-				", productId=" + productId +
 				", dateTime=" + dateTime +
 				", amount=" + amount +
 				", notes='" + notes + '\'' +

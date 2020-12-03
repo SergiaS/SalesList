@@ -7,45 +7,41 @@
 </head>
 <body>
     <section>
-        <h2>> <a href="/">Home</a></h2>
+        <h2>> <a href="index.jsp">Home</a></h2>
         <hr>
         <h1 style="text-align: center">${param.action == 'create' ? 'Make new payout' : 'Edit'}</h1>
-        <hr>
-        <jsp:useBean id="payout" type="org.saleslist.jdbc.model.Payout" scope="request"/>
+        <jsp:useBean id="payout" type="org.saleslist.model.Payout" scope="request"/>
         <form method="post" action="payouts">
             <input type="hidden" name="id" value="${payout.id}">
-            <input type="hidden" name="productId" value="${payout.productId}">
-            <table class="forms">
-                <tr>
-                    <th>DateTime:</th>
-                    <td>
-                        <label><input type="datetime-local" value="${payout.dateTime}" name="dateTime" required></label>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Amount:</th>
-                    <td>
-                        <label><input type="text" value="${payout.amount}" name="amount" required></label>
-                        <span class="asterisk">*</span>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Notes:</th>
-                    <td>
-                        <label>
-                            <textarea cols=40 name="notes" autocomplete="on" required> <c:out
-                                    value="${param.action == 'create' ? 'Выплата' : payout.notes}"/> </textarea>
-                        </label>
-                    </td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td>
-                        <button type="submit">Save</button>
-                        <button onclick="window.history.back()" type="button">Cancel</button>
-                    </td>
-                </tr>
-            </table>
+<%--            <input type="hidden" name="productId" value="${payout.userId}">--%>
+            <dl>
+                <dt>DateTime:</dt>
+                <dd>
+                    <label>
+                        <input type="datetime-local" value="${payout.dateTime}" name="dateTime" required>
+                    </label>
+                </dd>
+            </dl>
+            <dl>
+                <dt>Amount:</dt>
+                <dd>
+                    <label>
+                        <input type="text" value="${payout.amount}" name="amount" required>
+                    </label>
+                    <span class="asterisk">*</span>
+                </dd>
+            </dl>
+            <dl>
+                <dt>Notes:</dt>
+                <dd>
+                    <label>
+                        <textarea cols=40 name="notes" autocomplete="on" required> <c:out
+                                value="${param.action == 'create' ? 'Выплата' : payout.notes}"/> </textarea>
+                    </label>
+                </dd>
+            </dl>
+            <button type="submit">Save ✔️</button>
+            <button onclick="window.history.back()" type="button">Cancel ❌</button>
         </form>
     </section>
 </body>

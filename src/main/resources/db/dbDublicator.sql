@@ -1,19 +1,17 @@
-DROP TABLE IF EXISTS backup.sales_copy;
-DROP TABLE IF EXISTS backup.payouts_copy;
+DROP TABLE IF EXISTS copy.users_bu CASCADE;
+DROP TABLE IF EXISTS copy.payments_bu CASCADE;
+DROP TABLE IF EXISTS copy.products_bu CASCADE;
+DROP TABLE IF EXISTS copy.users_bu CASCADE;
 
-DROP SCHEMA IF EXISTS backup;
+DROP SCHEMA IF EXISTS copy CASCADE;
 
 
-CREATE SCHEMA backup DEFAULT CHARACTER SET utf8;
+CREATE SCHEMA copy;
 
-CREATE TABLE backup.sales_copy
-    LIKE sales_list.sales;
-INSERT backup.sales_copy
-SELECT *
-FROM sales_list.sales;
+-- CREATE TABLE copy.users_bu (LIKE public.users INCLUDING ALL);
+-- INSERT INTO copy.users_bu SELECT * FROM public.users;
 
-CREATE TABLE backup.payouts_copy
-    LIKE sales_list.payouts;
-INSERT backup.payouts_copy
-SELECT *
-FROM sales_list.payouts;
+CREATE TABLE copy.users_bu AS SELECT * FROM public.users;
+CREATE TABLE copy.user_roles_bu AS SELECT * FROM public.user_roles;
+CREATE TABLE copy.payouts_bu AS SELECT * FROM public.payouts;
+CREATE TABLE copy.products_bu AS SELECT * FROM public.products;
