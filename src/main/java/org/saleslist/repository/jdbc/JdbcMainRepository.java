@@ -60,7 +60,7 @@ public abstract class JdbcMainRepository<T extends AbstractBaseEntity> implement
     // only for ADMIN user
     public List<String> getOwnersNames() {
         return jdbcTemplate.queryForList(
-                "SELECT u.name FROM products INNER JOIN users u ON u.id = products.user_id ORDER BY date_time DESC",
+                String.format("SELECT u.name FROM %s INNER JOIN users u ON u.id = %s.user_id ORDER BY date_time DESC", getTableName(), getTableName()),
                 String.class);
     }
 }

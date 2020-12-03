@@ -9,6 +9,7 @@
 <body>
     <section>
         <h2>> <a href="index.jsp">Home</a></h2>
+        <h3>> <a href="/payouts">Show all payouts</a></h3>
         <hr>
         <form method="post" action="users">
             <b>Products from db of </b>

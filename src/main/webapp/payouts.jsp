@@ -9,6 +9,7 @@
 <body>
     <section>
         <h2>> <a href="index.jsp">Home</a></h2>
+        <h3>> <a href="/products">Show all products</a></h3>
         <hr>
         <form method="post" action="users">
             <b>Payouts from db of </b>
@@ -17,7 +18,7 @@
                 <option value="101" ${userId == 101 ? "selected" : ""}>JAG63</option>
                 <option value="102" ${userId == 102 ? "selected" : ""}>CAT66</option>
                 <option value="103" ${userId == 103 ? "selected" : ""}>JUV91</option>
-<%--                <option value="104" ${userId == 104 ? "selected" : ""}>SK88</option>--%>
+                <option value="104" ${userId == 104 ? "selected" : ""}>SK88</option>
             </select>
         </form>
         <c:choose>
