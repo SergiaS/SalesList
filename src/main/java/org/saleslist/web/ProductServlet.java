@@ -4,7 +4,10 @@ import org.saleslist.enums.DeliveryServiceEnum;
 import org.saleslist.enums.MarketPlaceEnum;
 import org.saleslist.enums.OrderStatusEnum;
 import org.saleslist.enums.PaymentMethodEnum;
+import org.saleslist.model.Payout;
 import org.saleslist.model.Product;
+import org.saleslist.repository.jdbc.JdbcMainRepository;
+import org.saleslist.repository.jdbc.JdbcPayoutRepository;
 import org.saleslist.repository.jdbc.JdbcProductRepository;
 
 import javax.servlet.ServletConfig;
@@ -25,42 +28,24 @@ import static org.saleslist.web.SecurityUtil.getAuthUserId;
 @WebServlet("/products")
 public class ProductServlet extends MainServlet<Product> {
 
+    private JdbcMainRepository<Payout> payoutRepository;
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         repository = springContext.getBean(JdbcProductRepository.class);
+        payoutRepository = springContext.getBean(JdbcPayoutRepository.class);
     }
-
-//    @Override
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//
-////		if (product.getPayoutPercentage() > 0) {
-////			Payout payout = new Payout();
-////			if (productId != 0) {
-////				payout.setUserId(productId);
-////			} else {
-////				payout.setUserId(payoutRepository.getLastProductIdFromDb());
-////			}
-////			payout.setDateTime(product.getDateTime());
-////			payout.setAmount(-product.getPayoutCurrency());
-////			payout.setNotes("За товар:\n" + product.getTitle());
-////
-////			System.out.println("record to PAYOUT db");
-////			payoutRepository.addOrUpdate(payout);
-////		} else {
-////			System.out.println("delete from PAYOUT db");
-////			payoutRepository.delete("product_id", productId);
-////		}
-//    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        super.doGet(request, response);
         String action = request.getParameter("action");
 
         switch (action == null ? "all" : action) {
             case "delete" -> {
-                repository.delete(getId(request), getAuthUserId());
+                int id = getId(request);
+                repository.delete(id, getAuthUserId());
+                payoutRepository.delete(id, getAuthUserId());
                 response.sendRedirect("products");
             }
             case "create", "update" -> {

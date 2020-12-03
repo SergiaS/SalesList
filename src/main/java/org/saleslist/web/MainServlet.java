@@ -37,21 +37,16 @@ public abstract class MainServlet<T extends AbstractBaseEntity> extends HttpServ
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        T t = fillModel(request);
+        T model = fillModel(request);
 
         if (!StringUtils.isEmpty(request.getParameter("id"))) {
             int modelId = getId(request);
-            t.setId(modelId);
+            model.setId(modelId);
         }
 
-        repository.save(t, getAuthUserId());
+        repository.save(model, getAuthUserId());
 
         response.sendRedirect(getTableName());
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
-        String action = request.getParameter("action");
     }
 
     protected static int getId(HttpServletRequest request) {

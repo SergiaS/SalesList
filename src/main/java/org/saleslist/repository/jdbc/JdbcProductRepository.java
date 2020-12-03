@@ -70,11 +70,9 @@ public class JdbcProductRepository extends JdbcMainRepository<Product> {
 
     public boolean delete(int id, int userId) {
         if (userId == ADMIN_ID) {
-            return jdbcTemplate.update("DELETE FROM products WHERE id=?", id) != 0 &&
-                    jdbcTemplate.update("DELETE FROM payouts WHERE product_id=?", id) != 0;
+            return jdbcTemplate.update("DELETE FROM products WHERE id=?", id) != 0;
         }
-        return jdbcTemplate.update("DELETE FROM products WHERE id=? AND user_id=?", id, userId) != 0 &&
-                jdbcTemplate.update("DELETE FROM payouts WHERE product_id=? AND user_id=?", id, userId) != 0;
+        return jdbcTemplate.update("DELETE FROM products WHERE id=? AND user_id=?", id, userId) != 0;
     }
 
     @Override

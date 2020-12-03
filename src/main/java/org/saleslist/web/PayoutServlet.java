@@ -25,22 +25,8 @@ public class PayoutServlet extends MainServlet<Payout> {
 		repository = springContext.getBean(JdbcPayoutRepository.class);
 	}
 
-//	@Override
-//	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-////		if (request.getParameter("id").equals("0")) {
-////			payoutRepository.add(payout);
-////		} else {
-////			if (!request.getParameter("productId").equals("0")) {
-////				payout.setUserId(Integer.parseInt(request.getParameter("productId")));
-////			}
-////			int id = getId(request);
-////			payoutRepository.update(id, payout);
-////		}
-//	}
-
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		super.doGet(request, response);
 		String action = request.getParameter("action");
 
 		switch (action == null ? "all" : action) {
