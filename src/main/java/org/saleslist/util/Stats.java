@@ -1,78 +1,67 @@
-package org.saleslist.jdbc.util;
+package org.saleslist.util;
 
-import org.saleslist.jdbc.enums.OrderStatusEnum;
-import org.saleslist.jdbc.model.Product;
-import org.saleslist.jdbc.repository.JdbcProductRepository;
+import org.saleslist.enums.OrderStatusEnum;
+import org.saleslist.model.Product;
+import org.saleslist.repository.jdbc.JdbcProductRepository;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.saleslist.web.SecurityUtil.getAuthUserId;
+
 public class Stats {
 
-	private final JdbcProductRepository repository = new JdbcProductRepository();
-	private final List<Product> productList = repository.getAllProducts();
-	public static final DecimalFormat doubleTemplate = new DecimalFormat("#.##");
+	private final ConfigurableApplicationContext springContext;
+	private final JdbcProductRepository repository;
+	private final List<Product> productList;
 
-	// how much total money i spent (include ads, delivery...)
-	public double getAmountOfExpenses() {
-		return productList.stream()
-				.mapToDouble(Product::getSpent)
-				.sum();
+	{
+		springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
+		repository = springContext.getBean(JdbcProductRepository.class);
+		productList = repository.getAll(getAuthUserId());
 	}
 
-	// how much total money did i get
-	public double getAmountAtSoldPrice() {
+	public BigDecimal getAmountOfExpenses() {
 		return productList.stream()
-				.mapToDouble(Product::getSoldAtPrice)
-				.sum();
+				.map(Product::getSpent)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 
-	// how much profit did i get on each product
-	public List<Double> getEachItemProfit() {
+	public BigDecimal getAmountAtSoldPrice() {
+		return productList.stream()
+				.map(Product::getSoldAtPrice)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+	}
+
+	public BigDecimal getAmountOfProfit() {
 		return productList.stream()
 				.map(Product::getProfit)
-				.collect(Collectors.toList());
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 
-	// how much total profit did i get
-	public double getAmountOfProfit() {
+	public BigDecimal getAmountOfPayouts() {
 		return productList.stream()
-				.mapToDouble(Product::getProfit)
-				.sum();
+				.map(Product::getPayoutCurrency)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 
-	// how much i paid for each product
-	public List<Double> getEachItemPayout() {
-		return productList.stream()
-				.map(p -> Double.parseDouble(doubleTemplate.format(p.getPayoutCurrency())))
-				.collect(Collectors.toList());
-	}
-
-	// how much total did i pay
-	public double getAmountOfPayouts() {
-		return productList.stream()
-				.mapToDouble(p -> Double.parseDouble(doubleTemplate.format(p.getPayoutCurrency())))
-				.sum();
-	}
-
-	// how much products have i sold
 	public long getNumberOfSoldItems() {
 		return productList.stream()
 				.filter(p -> p.getOrderStatus() == OrderStatusEnum.SUCCESS)
 				.count();
 	}
 
-	// how many sold items was by cooperation
 	public long getNumberOfCooperationItems() {
 		return productList.stream()
 				.filter(p -> p.getPayoutPercentage() > 0)
 				.count();
 	}
 
-	// how many sold items was only mine
 	public long getNumberOfMyItems() {
 		return productList.stream()
 				.filter(p -> p.getPayoutPercentage() == 0)

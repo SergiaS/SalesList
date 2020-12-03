@@ -1,7 +1,8 @@
-package org.saleslist.jdbc.enums;
+package org.saleslist.enums;
 
 public enum MarketPlaceEnum {
+	SITE,
 	OLX,
 	FACEBOOK,
-	OTHER
+	CONTACTS
 }

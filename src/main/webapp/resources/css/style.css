@@ -9,7 +9,7 @@ tr[data-payoutPercentage="true"] {
 }
 
 a {
-    text-decoration: none;  /* links without underlines */
+    text-decoration: none; /* links without underlines */
 }
 
 select {
@@ -21,7 +21,7 @@ select {
     color: lightgray;
 }
 
-.asterisk{
+.asterisk {
     color: red;
 }
 
@@ -33,17 +33,23 @@ table {
 }
 
 th {
+    white-space: nowrap;
     background-color: gainsboro;
     padding: 5px;
 }
 
 td {
+    /*white-space: pre;*/
     padding: 5px;
+}
+
+td:not([class^="long-names"]) {
+    white-space: nowrap;
 }
 
 tr:hover {
     background-color: #F9F5D1;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 .forms {
@@ -61,4 +67,21 @@ tr:hover {
 body {
     font: normal small-caps 13px/14px Arial, serif;
     background-color: cadetblue;
+}
+
+dl {
+    background: none repeat scroll 0 0 cadetblue;
+    margin: 8px 0;
+    padding: 0;
+}
+
+dt {
+    display: inline-block;
+    width: 170px;
+}
+
+dd {
+    display: inline-block;
+    margin-left: 8px;
+    vertical-align: top;
 }
