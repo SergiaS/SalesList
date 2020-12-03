@@ -6,7 +6,6 @@ import org.saleslist.enums.OrderStatusEnum;
 import org.saleslist.enums.PaymentMethodEnum;
 import org.saleslist.model.Product;
 import org.saleslist.repository.jdbc.JdbcProductRepository;
-import org.saleslist.web.user.MainServlet;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;

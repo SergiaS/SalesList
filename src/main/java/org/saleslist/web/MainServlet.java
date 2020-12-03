@@ -1,4 +1,4 @@
-package org.saleslist.web.user;
+package org.saleslist.web;
 
 import org.saleslist.model.AbstractBaseEntity;
 import org.saleslist.repository.jdbc.JdbcMainRepository;

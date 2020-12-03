@@ -2,7 +2,6 @@ package org.saleslist.web;
 
 import org.saleslist.model.Payout;
 import org.saleslist.repository.jdbc.JdbcPayoutRepository;
-import org.saleslist.web.user.MainServlet;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
