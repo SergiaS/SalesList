@@ -4,11 +4,12 @@ import org.saleslist.enums.DeliveryServiceEnum;
 import org.saleslist.enums.MarketPlaceEnum;
 import org.saleslist.enums.OrderStatusEnum;
 import org.saleslist.enums.PaymentMethodEnum;
-import org.saleslist.model.Payout;
 import org.saleslist.model.Product;
 import org.saleslist.repository.jdbc.JdbcMainRepository;
-import org.saleslist.repository.jdbc.JdbcPayoutRepository;
 import org.saleslist.repository.jdbc.JdbcProductRepository;
+import org.saleslist.web.controller.PayoutRestController;
+import org.saleslist.web.controller.ProductRestController;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -28,13 +29,31 @@ import static org.saleslist.web.SecurityUtil.getAuthUserId;
 @WebServlet("/products")
 public class ProductServlet extends MainServlet<Product> {
 
-    private JdbcMainRepository<Payout> payoutRepository;
+    private ProductRestController productController;
+    private PayoutRestController payoutController;
+    private JdbcMainRepository<Product> productRepository;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        repository = springContext.getBean(JdbcProductRepository.class);
-        payoutRepository = springContext.getBean(JdbcPayoutRepository.class);
+        productController = springContext.getBean(ProductRestController.class);
+        payoutController = springContext.getBean(PayoutRestController.class);
+        productRepository = springContext.getBean(JdbcProductRepository.class);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+
+        Product product = fillModel(request);
+
+        if (StringUtils.isEmpty(request.getParameter("id"))) {
+            productController.create(product);
+        } else {
+            productController.update(product, getId(request));
+        }
+
+        response.sendRedirect(getTableName());
     }
 
     @Override
@@ -44,13 +63,13 @@ public class ProductServlet extends MainServlet<Product> {
         switch (action == null ? "all" : action) {
             case "delete" -> {
                 int id = getId(request);
-                repository.delete(id, getAuthUserId());
-                payoutRepository.delete(id, getAuthUserId());
+                payoutController.delete(id);
+                productController.delete(id);
                 response.sendRedirect("products");
             }
             case "create", "update" -> {
                 final Product product = "create".equals(action) ?
-                        getDefaultProduct() : repository.get(getId(request), getAuthUserId());
+                        getDefaultProduct() : productController.get(getId(request));
                 request.setAttribute("product", product);
 
                 request.setAttribute("marketPlace", new ArrayList<>(Arrays.asList(MarketPlaceEnum.values())));
@@ -62,11 +81,11 @@ public class ProductServlet extends MainServlet<Product> {
             }
             default -> {
                 if (getAuthUserId() == ADMIN_ID) {
-                    request.setAttribute("owners", repository.getOwnersNames());
+                    request.setAttribute("owners", productRepository.getOwnersNames());
                 }
 
                 request.setAttribute("userId", getAuthUserId());
-                request.setAttribute("products", repository.getAll(getAuthUserId()));
+                request.setAttribute("products", productController.getAll());
                 request.getRequestDispatcher("/products.jsp").forward(request, response);
             }
         }
@@ -90,7 +109,7 @@ public class ProductServlet extends MainServlet<Product> {
     @Override
     protected Product fillModel(HttpServletRequest request) {
         return new Product(
-                LocalDateTime.parse(request.getParameter("dateTime")),
+                LocalDateTime.parse(request.getParameter("dateTime")).truncatedTo(ChronoUnit.MINUTES),
                 request.getParameter("title").trim(),
                 MarketPlaceEnum.valueOf(request.getParameter("marketPlace")),
                 DeliveryServiceEnum.valueOf(request.getParameter("deliveryService")),

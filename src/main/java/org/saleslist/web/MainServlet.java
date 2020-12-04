@@ -1,24 +1,17 @@
 package org.saleslist.web;
 
 import org.saleslist.model.AbstractBaseEntity;
-import org.saleslist.repository.jdbc.JdbcMainRepository;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Objects;
-
-import static org.saleslist.web.SecurityUtil.getAuthUserId;
 
 public abstract class MainServlet<T extends AbstractBaseEntity> extends HttpServlet {
 
-    protected JdbcMainRepository<T> repository;
     protected ConfigurableApplicationContext springContext;
 
     @Override
@@ -31,22 +24,6 @@ public abstract class MainServlet<T extends AbstractBaseEntity> extends HttpServ
     public void destroy() {
         springContext.close();
         super.destroy();
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-
-        T model = fillModel(request);
-
-        if (!StringUtils.isEmpty(request.getParameter("id"))) {
-            int modelId = getId(request);
-            model.setId(modelId);
-        }
-
-        repository.save(model, getAuthUserId());
-
-        response.sendRedirect(getTableName());
     }
 
     protected static int getId(HttpServletRequest request) {
