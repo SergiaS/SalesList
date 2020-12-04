@@ -12,5 +12,5 @@ public interface MainRepository<T> {
 
     List<T> getAll(int userId);
 
-    List<T> getBetweenDateTime(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId);
+    List<T> getBetween(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId);
 }

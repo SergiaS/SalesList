@@ -1,7 +1,10 @@
 package org.saleslist.web;
 
 import org.saleslist.model.Payout;
+import org.saleslist.repository.jdbc.JdbcMainRepository;
 import org.saleslist.repository.jdbc.JdbcPayoutRepository;
+import org.saleslist.web.controller.PayoutRestController;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -19,10 +22,30 @@ import static org.saleslist.web.SecurityUtil.getAuthUserId;
 @WebServlet("/payouts")
 public class PayoutServlet extends MainServlet<Payout> {
 
+	private PayoutRestController controller;
+	private JdbcMainRepository<Payout> repository;
+
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
+		controller = springContext.getBean(PayoutRestController.class);
 		repository = springContext.getBean(JdbcPayoutRepository.class);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+
+		Payout payout = fillModel(request);
+
+		if (!StringUtils.isEmpty(request.getParameter("id"))) {
+			int modelId = getId(request);
+			payout.setId(modelId);
+		}
+
+		controller.create(payout);
+
+		response.sendRedirect(getTableName());
 	}
 
 	@Override
@@ -31,12 +54,12 @@ public class PayoutServlet extends MainServlet<Payout> {
 
 		switch (action == null ? "all" : action) {
 			case "delete" -> {
-				repository.delete(getId(request), getAuthUserId());
+				controller.delete(getId(request));
 				response.sendRedirect("payouts");
 			}
 			case "create", "update" -> {
 				final Payout payout = "create".equals(action) ?
-						getDefaultPayout() : repository.get(getId(request), getAuthUserId());
+						getDefaultPayout() : controller.get(getId(request));
 
 				request.setAttribute("payout", payout);
 				request.getRequestDispatcher("/payout-form.jsp").forward(request, response);
@@ -47,7 +70,7 @@ public class PayoutServlet extends MainServlet<Payout> {
 				}
 
 				request.setAttribute("userId", getAuthUserId());
-				request.setAttribute("payouts", repository.getAll(getAuthUserId()));
+				request.setAttribute("payouts", controller.getAll());
 				request.getRequestDispatcher("/payouts.jsp").forward(request, response);
 			}
 		}

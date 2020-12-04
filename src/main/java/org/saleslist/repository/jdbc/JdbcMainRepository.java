@@ -47,7 +47,7 @@ public abstract class JdbcMainRepository<T extends AbstractBaseEntity> implement
         return jdbcTemplate.query(String.format("SELECT * FROM %s WHERE user_id=? ORDER BY date_time DESC", getTableName()), getRowMapper(), userId);
     }
 
-    public List<T> getBetweenDateTime(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
+    public List<T> getBetween(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         return jdbcTemplate.query(
                 String.format("SELECT * FROM %s WHERE user_id=? AND date_time>=? AND date_time<? ORDER BY date_time DESC", getTableName()),
                 getRowMapper(), userId, startDateTime, endDateTime);

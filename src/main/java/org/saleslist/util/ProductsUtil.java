@@ -22,7 +22,7 @@ public class ProductsUtil {
     }
 
     public static List<ProductTo> getFilteredTos(Collection<Product> products, int profitedPerDay, LocalDate startDate, LocalDate endDate) {
-        return filteredByPredicate(products, profitedPerDay, product -> Util.isBetweenDateOrTime(product.getDate(), startDate, endDate));
+        return filteredByPredicate(products, profitedPerDay, product -> Util.isBetween(product.getDate(), startDate, endDate));
     }
 
     public static List<ProductTo> filteredByPredicate(Collection<Product> products, int profitedPerDay, Predicate<Product> filter) {

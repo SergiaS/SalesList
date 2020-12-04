@@ -86,7 +86,7 @@
                 <th></th>
             </tr>
             <c:forEach items="${products}" var="product">
-                <jsp:useBean id="product" type="org.saleslist.model.Product"/>
+                <jsp:useBean id="product" type="org.saleslist.to.ProductTo"/>
                 <c:choose>
                     <c:when test="${product.soldAtPrice == 0 && product.profit == 0}">
                         <tr class="denied-free">
