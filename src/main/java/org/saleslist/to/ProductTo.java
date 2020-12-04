@@ -102,9 +102,10 @@ public class ProductTo {
 
     public BigDecimal payoutCurrencyCalculation() {
         if (payoutPercentage > 0) {
-            double calcPers = payoutPercentage / 100.0;
+            double calculatePercent = payoutPercentage / 100.0;
             BigDecimal tmp = soldAtPrice.subtract(spent);
-            return tmp.multiply(BigDecimal.valueOf(calcPers)).setScale(2, RoundingMode.CEILING);
+            String multiply = tmp.multiply(BigDecimal.valueOf(calculatePercent)).setScale(2, RoundingMode.CEILING).stripTrailingZeros().toPlainString();
+            return new BigDecimal(multiply);
         }
         return new BigDecimal(BigInteger.ZERO);
     }
