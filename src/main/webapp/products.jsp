@@ -110,7 +110,16 @@
                         </c:when>
                     </c:choose>
                     <td>${product.dateTime.toLocalDate()}, ${product.dateTime.toLocalTime()}</td>
-                    <td class="long-names">${product.title}</td>
+                    <td class="long-names">
+                        <c:choose>
+                            <c:when test="${product.profited}">
+                                ⭐ ${product.title}
+                            </c:when>
+                            <c:otherwise>
+                                ${product.title}
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
                     <td>${product.marketPlace}</td>
                     <td>${product.deliveryService}</td>
                     <td>${product.paymentMethod}</td>
