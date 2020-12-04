@@ -63,7 +63,7 @@ public class PayoutServlet extends MainServlet<Payout> {
 	@Override
 	protected Payout fillModel(HttpServletRequest request) {
 		return new Payout(
-				LocalDateTime.parse(request.getParameter("dateTime")),
+				LocalDateTime.parse(request.getParameter("dateTime")).truncatedTo(ChronoUnit.MINUTES),
 				new BigDecimal(request.getParameter("amount").replace(",", ".")),
 				request.getParameter("notes").trim()
 		);

@@ -90,7 +90,7 @@ public class ProductServlet extends MainServlet<Product> {
     @Override
     protected Product fillModel(HttpServletRequest request) {
         return new Product(
-                LocalDateTime.parse(request.getParameter("dateTime")),
+                LocalDateTime.parse(request.getParameter("dateTime")).truncatedTo(ChronoUnit.MINUTES),
                 request.getParameter("title").trim(),
                 MarketPlaceEnum.valueOf(request.getParameter("marketPlace")),
                 DeliveryServiceEnum.valueOf(request.getParameter("deliveryService")),
