@@ -162,7 +162,7 @@ public class Product extends AbstractBaseEntity {
 			return soldAtPrice.subtract(spent);
 		} else if (spent.compareTo(BigDecimal.ZERO) == 0 && payoutPercentage != 0) {
 			return soldAtPrice.subtract(payoutCurrency);
-		} else if (payoutPercentage != 0 && spent.compareTo(BigDecimal.ZERO) != 0) {
+		} else if ((payoutPercentage != 0 && spent.compareTo(BigDecimal.ZERO) != 0) || (payoutPercentage == 0 && spent.compareTo(BigDecimal.ZERO) <= 0)) {
 			return soldAtPrice.subtract(spent).subtract(payoutCurrency);
 		} else {
 			return soldAtPrice;

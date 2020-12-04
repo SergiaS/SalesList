@@ -8,6 +8,16 @@ tr[data-payoutPercentage="true"] {
     background-color: #D1E8F9;
 }
 
+.denied-free {
+    color: red;
+    background-color: bisque;
+}
+
+.denied-loss {
+    color: black;
+    background-color: red;
+}
+
 a {
     text-decoration: none; /* links without underlines */
 }
@@ -48,7 +58,8 @@ td:not([class^="long-names"]) {
 }
 
 tr:hover {
-    background-color: #F9F5D1;
+    /*background-color: #F9F5D1;*/
+    background-color: yellow;
     /*font-weight: bold;*/
 }
 

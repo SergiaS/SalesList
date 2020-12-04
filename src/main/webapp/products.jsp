@@ -87,7 +87,17 @@
             </tr>
             <c:forEach items="${products}" var="product">
                 <jsp:useBean id="product" type="org.saleslist.model.Product"/>
-                <tr data-payoutPercentage="${product.payoutPercentage > 0}">
+                <c:choose>
+                    <c:when test="${product.soldAtPrice == 0 && product.profit == 0}">
+                        <tr class="denied-free">
+                    </c:when>
+                    <c:when test="${product.profit < 0}">
+                        <tr class="denied-loss">
+                    </c:when>
+                    <c:otherwise>
+                        <tr data-payoutPercentage="${product.payoutPercentage > 0}">
+                    </c:otherwise>
+                </c:choose>
                     <td>
                         <c:set var="count" value="${count + 1}" scope="page"/>
                         <c:out value="${count}"/>
