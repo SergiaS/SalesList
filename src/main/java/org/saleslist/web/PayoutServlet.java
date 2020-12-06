@@ -22,78 +22,79 @@ import static org.saleslist.web.SecurityUtil.getAuthUserId;
 @WebServlet("/payouts")
 public class PayoutServlet extends MainServlet<Payout> {
 
-	private PayoutRestController controller;
-	private JdbcMainRepository<Payout> repository;
+    private PayoutRestController controller;
+    private JdbcMainRepository<Payout> repository;
 
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-		controller = springContext.getBean(PayoutRestController.class);
-		repository = springContext.getBean(JdbcPayoutRepository.class);
-	}
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        controller = springContext.getBean(PayoutRestController.class);
+        repository = springContext.getBean(JdbcPayoutRepository.class);
+    }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
 
-		Payout payout = fillModel(request);
+        Payout payout = fillModel(request);
 
-		if (!StringUtils.isEmpty(request.getParameter("id"))) {
-			int modelId = getId(request);
-			payout.setId(modelId);
-		}
+        if (!StringUtils.isEmpty(request.getParameter("id"))) {
+            int modelId = getId(request);
+            payout.setId(modelId);
+            controller.update(payout, payout.getId());
+        } else {
+            controller.create(payout);
+        }
 
-		controller.create(payout);
+        response.sendRedirect(getTableName());
+    }
 
-		response.sendRedirect(getTableName());
-	}
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String action = request.getParameter("action");
+        switch (action == null ? "all" : action) {
+            case "delete" -> {
+                controller.delete(getId(request));
+                response.sendRedirect("payouts");
+            }
+            case "create", "update" -> {
+                final Payout payout = "create".equals(action) ?
+                        getDefaultPayout() : controller.get(getId(request));
 
-		switch (action == null ? "all" : action) {
-			case "delete" -> {
-				controller.delete(getId(request));
-				response.sendRedirect("payouts");
-			}
-			case "create", "update" -> {
-				final Payout payout = "create".equals(action) ?
-						getDefaultPayout() : controller.get(getId(request));
+                request.setAttribute("payout", payout);
+                request.getRequestDispatcher("/payout-form.jsp").forward(request, response);
+            }
+            default -> {
+                if (getAuthUserId() == ADMIN_ID) {
+                    request.setAttribute("owners", repository.getOwnersNames());
+                }
 
-				request.setAttribute("payout", payout);
-				request.getRequestDispatcher("/payout-form.jsp").forward(request, response);
-			}
-			default -> {
-				if (getAuthUserId() == ADMIN_ID) {
-					request.setAttribute("owners", repository.getOwnersNames());
-				}
+                request.setAttribute("userId", getAuthUserId());
+                request.setAttribute("payouts", controller.getAll());
+                request.getRequestDispatcher("/payouts.jsp").forward(request, response);
+            }
+        }
+    }
 
-				request.setAttribute("userId", getAuthUserId());
-				request.setAttribute("payouts", controller.getAll());
-				request.getRequestDispatcher("/payouts.jsp").forward(request, response);
-			}
-		}
-	}
+    private Payout getDefaultPayout() {
+        return new Payout(
+                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
+                new BigDecimal("0"),
+                "");
+    }
 
-	private Payout getDefaultPayout() {
-		return new Payout(
-				LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-				new BigDecimal("0"),
-				"");
-	}
+    @Override
+    protected Payout fillModel(HttpServletRequest request) {
+        return new Payout(
+                LocalDateTime.parse(request.getParameter("dateTime")).truncatedTo(ChronoUnit.MINUTES),
+                new BigDecimal(request.getParameter("amount").replace(",", ".")),
+                request.getParameter("notes").trim()
+        );
+    }
 
-	@Override
-	protected Payout fillModel(HttpServletRequest request) {
-		return new Payout(
-				LocalDateTime.parse(request.getParameter("dateTime")).truncatedTo(ChronoUnit.MINUTES),
-				new BigDecimal(request.getParameter("amount").replace(",", ".")),
-				request.getParameter("notes").trim()
-		);
-	}
-
-	@Override
-	protected String getTableName() {
-		return "payouts";
-	}
+    @Override
+    protected String getTableName() {
+        return "payouts";
+    }
 }
