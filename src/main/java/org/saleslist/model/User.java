@@ -28,7 +28,7 @@ public class User extends AbstractBaseEntity {
     }
 
     public User(User u) {
-
+        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.getProfitPerDay(), u.isEnabled(), u.getRegistered(), u.getRoles());
     }
 
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
@@ -111,9 +111,7 @@ public class User extends AbstractBaseEntity {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", enabled=" + enabled +
-                ", registered=" + registered +
                 ", roles=" + roles +
                 ", profitPerDay=" + profitPerDay +
                 '}';

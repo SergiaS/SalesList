@@ -14,7 +14,7 @@ CREATE TABLE users
     email          VARCHAR UNIQUE                    NOT NULL,
     password       VARCHAR                           NOT NULL,
     registered     TIMESTAMP           DEFAULT now() NOT NULL,
-    profited       BOOL                DEFAULT TRUE  NOT NULL,
+    enabled        BOOL                DEFAULT TRUE  NOT NULL,
     profit_per_day INTEGER             DEFAULT 500   NOT NULL
 );
 
