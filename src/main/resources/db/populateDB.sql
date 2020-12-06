@@ -1,4 +1,4 @@
-INSERT INTO public.users (name, email, password, registered, profited, profit_per_day)
+INSERT INTO public.users (name, email, password, registered, enabled, profit_per_day)
 VALUES ('Admin', 'admin@gmail.com', 'qwerty', '2019-08-07 10:00:00', TRUE, 500),
        ('JAG63', 'vovan@gmail.com', 'alco', '2019-08-10 10:00:00', TRUE, 300),
        ('CAT66', 'cat@gmail.com', 'mew', '2020-01-10 10:00:00', TRUE, 100),
