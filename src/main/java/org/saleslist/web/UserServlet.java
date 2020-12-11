@@ -20,7 +20,7 @@ public class UserServlet extends HttpServlet {
         int userId = Integer.parseInt(request.getParameter("userId"));
         SecurityUtil.setAuthUserId(userId);
 
-        if (getLastAddressPage(request).equals("payouts")) {
+        if (getLastAddressPage(request).contains("payouts")) {
             response.sendRedirect("payouts");
         } else {
             response.sendRedirect("products");
