@@ -7,8 +7,11 @@ import org.saleslist.util.ProductsUtil;
 import org.saleslist.web.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.saleslist.util.ValidationUtil.assureIdConsistent;
@@ -54,5 +57,20 @@ public class ProductRestController {
         assureIdConsistent(product, id);
         log.info("update {} for user {}", product, userId);
         service.update(product, userId);
+    }
+
+    /**
+     * <ol>Filter separately
+     * <li>by date</li>
+     * <li>by time for every date</li>
+     * </ol>
+     */
+    public List<ProductTo> getBetween(@Nullable LocalDate startDate, @Nullable LocalTime startTime,
+                                      @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
+        int userId = SecurityUtil.getAuthUserId();
+        log.info("getBetween dates({} - {}) time({} - {}) for user {}", startDate, endDate, startTime, endTime, userId);
+
+        List<Product> productsDatesFiltered = service.getBetweenInclusive(startDate, endDate, userId);
+        return ProductsUtil.getFilteredTos(productsDatesFiltered, SecurityUtil.authUserProfitPerDay(), startDate, endDate);
     }
 }

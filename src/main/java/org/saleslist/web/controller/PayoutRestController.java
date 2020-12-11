@@ -5,8 +5,11 @@ import org.saleslist.service.PayoutService;
 import org.saleslist.web.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.saleslist.util.ValidationUtil.assureIdConsistent;
@@ -52,5 +55,13 @@ public class PayoutRestController {
         assureIdConsistent(payout, id);
         log.info("update {} for user {}", payout, userId);
         service.update(payout, userId);
+    }
+
+    public List<Payout> getBetween(@Nullable LocalDate startDate, @Nullable LocalTime startTime,
+                                      @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
+        int userId = SecurityUtil.getAuthUserId();
+        log.info("getBetween dates({} - {}) time({} - {}) for user {}", startDate, endDate, startTime, endTime, userId);
+
+        return service.getBetweenInclusive(startDate, endDate, userId);
     }
 }
