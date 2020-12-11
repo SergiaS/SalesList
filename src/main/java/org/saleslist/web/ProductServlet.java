@@ -18,11 +18,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static org.saleslist.util.DateTimeUtil.parseLocalDate;
+import static org.saleslist.util.DateTimeUtil.parseLocalTime;
 import static org.saleslist.web.SecurityUtil.ADMIN_ID;
 import static org.saleslist.web.SecurityUtil.getAuthUserId;
 
@@ -78,6 +82,20 @@ public class ProductServlet extends MainServlet<Product> {
                 request.setAttribute("orderStatus", new ArrayList<>(Arrays.asList(OrderStatusEnum.values())));
 
                 request.getRequestDispatcher("/product-form.jsp").forward(request, response);
+            }
+            case "filter" -> {
+                LocalDate startDate = parseLocalDate(request.getParameter("startDate"));
+                LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
+                LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
+                LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
+
+                if (getAuthUserId() == ADMIN_ID) {
+                    request.setAttribute("owners", productRepository.getOwnersNames());
+                }
+
+                request.setAttribute("userId", getAuthUserId());
+                request.setAttribute("products", productController.getBetween(startDate, startTime, endDate, endTime));
+                request.getRequestDispatcher("/products.jsp").forward(request, response);
             }
             default -> {
                 if (getAuthUserId() == ADMIN_ID) {
