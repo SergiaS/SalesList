@@ -5,6 +5,8 @@ import org.saleslist.enums.MarketPlaceEnum;
 import org.saleslist.enums.OrderStatusEnum;
 import org.saleslist.enums.PaymentMethodEnum;
 
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -28,6 +30,9 @@ public class Product extends AbstractBaseEntity {
     private BigDecimal profit;
 
     private String notes;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
     public Product() {
     }
