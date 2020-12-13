@@ -154,6 +154,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!--other-->
+        <!--проблемы с JAXBException (пакет java.xml.bind) при Java 9 и выше - https://www.concretepage.com/questions/531-->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+
     </dependencies>
 
     <profiles>
