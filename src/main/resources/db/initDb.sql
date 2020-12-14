@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS users;
 
 
 DROP SEQUENCE IF EXISTS user_seq;
-CREATE SEQUENCE user_seq START WITH 100;
+CREATE SEQUENCE user_seq START WITH 105;
 
 CREATE TABLE users
 (
@@ -17,7 +17,7 @@ CREATE TABLE users
     enabled        BOOL                DEFAULT TRUE  NOT NULL,
     profit_per_day INTEGER             DEFAULT 500   NOT NULL
 );
-
+CREATE UNIQUE INDEX users_unique_email_idx ON users (email);
 
 CREATE TABLE user_roles
 (
