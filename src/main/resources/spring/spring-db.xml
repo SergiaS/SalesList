@@ -8,7 +8,9 @@
 
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <context:property-placeholder location="classpath:db/database.properties" system-properties-mode="OVERRIDE"/>
+    <!-- Change DB by comment/uncomment property-placeholder -->
+    <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE"/>
+<!--    <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>-->
 
     <!--
         For postgres driver logging
@@ -23,14 +25,14 @@
 
     <!--  !!!  db initialization !!! -->
 <!--    <jdbc:initialize-database data-source="dataSource" enabled="${database.init}">-->
-<!--        <jdbc:script location="classpath:db/initDb.sql"/>-->
-<!--        <jdbc:script encoding="utf-8" location="classpath:db/populateDB.sql"/>-->
+<!--        <jdbc:script location="${jdbc.initLocation}"/>-->
+<!--        <jdbc:script encoding="utf-8" location="classpath:db/hsqldb_populateDB.sql"/>-->
 <!--    </jdbc:initialize-database>-->
 
     <!--no pooling-->
     <bean id="dataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="driverClassName" value="${database.driverClassName}"/>
         <property name="url" value="${database.url}"/>
         <property name="username" value="${database.username}"/>
         <property name="password" value="${database.password}"/>
