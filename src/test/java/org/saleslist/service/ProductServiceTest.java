@@ -19,15 +19,14 @@ import static org.saleslist.UserTestData.ADMIN_ID;
 import static org.saleslist.UserTestData.USER_ID;
 
 /**
- * Test just for example - not recommended to use!
- * ProductTestData is different from db data
+ * Test for use with HSQLDB only!
  */
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
 @RunWith(SpringRunner.class)
-@Sql(scripts = "classpath:db/copyFromBackup.sql", config = @SqlConfig(encoding = "UTF-8"))
+@Sql(scripts = "classpath:db/hsqldb_populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class ProductServiceTest {
 
     @Autowired
