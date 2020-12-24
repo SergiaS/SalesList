@@ -5,8 +5,7 @@ import org.saleslist.enums.MarketPlaceEnum;
 import org.saleslist.enums.OrderStatusEnum;
 import org.saleslist.enums.PaymentMethodEnum;
 import org.saleslist.model.Product;
-import org.saleslist.repository.jdbc.JdbcMainRepository;
-import org.saleslist.repository.jdbc.JdbcProductRepository;
+import org.saleslist.repository.ProductRepository;
 import org.saleslist.web.controller.PayoutRestController;
 import org.saleslist.web.controller.ProductRestController;
 import org.springframework.util.StringUtils;
@@ -35,14 +34,14 @@ public class ProductServlet extends MainServlet<Product> {
 
     private ProductRestController productController;
     private PayoutRestController payoutController;
-    private JdbcMainRepository<Product> productRepository;
+    private ProductRepository productRepository;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         productController = springContext.getBean(ProductRestController.class);
         payoutController = springContext.getBean(PayoutRestController.class);
-        productRepository = springContext.getBean(JdbcProductRepository.class);
+        productRepository = springContext.getBean(ProductRepository.class);
     }
 
     @Override

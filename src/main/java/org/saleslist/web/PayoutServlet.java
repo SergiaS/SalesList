@@ -1,8 +1,7 @@
 package org.saleslist.web;
 
 import org.saleslist.model.Payout;
-import org.saleslist.repository.jdbc.JdbcMainRepository;
-import org.saleslist.repository.jdbc.JdbcPayoutRepository;
+import org.saleslist.repository.PayoutRepository;
 import org.saleslist.web.controller.PayoutRestController;
 import org.springframework.util.StringUtils;
 
@@ -27,13 +26,13 @@ import static org.saleslist.web.SecurityUtil.getAuthUserId;
 public class PayoutServlet extends MainServlet<Payout> {
 
     private PayoutRestController controller;
-    private JdbcMainRepository<Payout> repository;
+    private PayoutRepository repository;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         controller = springContext.getBean(PayoutRestController.class);
-        repository = springContext.getBean(JdbcPayoutRepository.class);
+        repository = springContext.getBean(PayoutRepository.class);
     }
 
     @Override
