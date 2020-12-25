@@ -7,15 +7,13 @@ import org.saleslist.enums.PaymentMethodEnum;
 import org.saleslist.model.Product;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.time.LocalDateTime.of;
 import static org.saleslist.UserTestData.START_SEQ;
 
 /**
- * Tests just for example - not recommended to use!
- * ProductTestData is different from db data
+ * Test for use with HSQLDB only!
  */
 //@ContextConfiguration({
 //        "classpath:spring/spring-app.xml",
@@ -38,7 +36,7 @@ public class ProductTestData {
     public static final Product ADMIN_PRODUCT1 = new Product(ADMIN_PRODUCT_ID, of(2020, 2, 21, 13, 31), "Omega", MarketPlaceEnum.OLX, DeliveryServiceEnum.NOVA_POST, PaymentMethodEnum.OLX_DELIVERY, OrderStatusEnum.SUCCESS, new BigDecimal("130"), new BigDecimal("0"), 0, "Карта клиента НП (+2 грн.)");
     public static final Product ADMIN_PRODUCT2 = new Product(ADMIN_PRODUCT_ID + 1, of(2020, 2, 25, 13, 21), "Headphones", MarketPlaceEnum.CONTACTS, DeliveryServiceEnum.COLLECTION_IN_PERSON, PaymentMethodEnum.CASH, OrderStatusEnum.SUCCESS, new BigDecimal("400"), new BigDecimal("0"), 0, "eBay");
 
-    public static final List<Product> PRODUCTS = Arrays.asList(PRODUCT5, PRODUCT4, PRODUCT3, PRODUCT2, PRODUCT1);
+    public static final List<Product> PRODUCTS = List.of(PRODUCT5, PRODUCT4, PRODUCT3, PRODUCT2, PRODUCT1);
 
     public static Product getNew() {
         return new Product(null, of(2020, 2, 1, 18, 0), "Some new product", MarketPlaceEnum.OLX, DeliveryServiceEnum.NOVA_POST, PaymentMethodEnum.OLX_DELIVERY, OrderStatusEnum.SUCCESS, new BigDecimal("200"), new BigDecimal("115"), 0, "");
