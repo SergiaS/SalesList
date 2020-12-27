@@ -1,7 +1,9 @@
 package org.saleslist.repository.jdbc;
 
 import org.saleslist.model.Product;
+import org.saleslist.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -10,16 +12,23 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import static org.saleslist.web.SecurityUtil.ADMIN_ID;
 
 @Repository
-public class JdbcProductRepository extends JdbcMainRepository<Product> {
+public class JdbcProductRepository implements ProductRepository {
 
+    private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final SimpleJdbcInsert simpleJdbcInsert;
     private static final RowMapper<Product> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Product.class);
 
     @Autowired
     public JdbcProductRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        super(jdbcTemplate, namedParameterJdbcTemplate);
+        this.jdbcTemplate = jdbcTemplate;
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("products")
                 .usingGeneratedKeyColumns("id");
@@ -49,8 +58,8 @@ public class JdbcProductRepository extends JdbcMainRepository<Product> {
         } else {
             if (namedParameterJdbcTemplate.update(
                     "UPDATE products " +
-                        "SET date_time=:date_time, title=:title, market_place=:market_place, delivery_service=:delivery_service, payment_method=:payment_method, order_status=:order_status, sold_at_price=:sold_at_price, spent=:spent, payout_percentage=:payout_percentage, payout_currency=:payout_currency, profit=:profit, notes=:notes " +
-                        "WHERE id=:id AND user_id=:user_id", map) == 0) {
+                    "SET date_time=:date_time, title=:title, market_place=:market_place, delivery_service=:delivery_service, payment_method=:payment_method, order_status=:order_status, sold_at_price=:sold_at_price, spent=:spent, payout_percentage=:payout_percentage, payout_currency=:payout_currency, profit=:profit, notes=:notes " +
+                    "WHERE id=:id AND user_id=:user_id", map) == 0) {
                 return null;
             }
         }
@@ -64,7 +73,6 @@ public class JdbcProductRepository extends JdbcMainRepository<Product> {
         } else {
             jdbcTemplate.update("DELETE FROM payouts WHERE product_id=?", product.getId());
         }
-
         return product;
     }
 
@@ -75,13 +83,35 @@ public class JdbcProductRepository extends JdbcMainRepository<Product> {
         return jdbcTemplate.update("DELETE FROM products WHERE id=? AND user_id=?", id, userId) != 0;
     }
 
-    @Override
-    protected RowMapper<Product> getRowMapper() {
-        return ROW_MAPPER;
+    public Product get(int id, int userId) {
+        List<Product> products;
+        if (userId == ADMIN_ID) {
+            products = jdbcTemplate.query("SELECT * FROM products WHERE id=?", ROW_MAPPER, id);
+        } else {
+            products = jdbcTemplate.query("SELECT * FROM products WHERE id=? AND user_id=?", ROW_MAPPER, id, userId);
+        }
+        return DataAccessUtils.singleResult(products);
     }
 
-    @Override
-    protected String getTableName() {
-        return "products";
+    public List<Product> getAll(int userId) {
+        if (userId == ADMIN_ID) {
+            return jdbcTemplate.query("SELECT * FROM products ORDER BY date_time DESC", ROW_MAPPER);
+        }
+        return jdbcTemplate.query("SELECT * FROM products WHERE user_id=? ORDER BY date_time DESC", ROW_MAPPER, userId);
+    }
+
+    public List<Product> getBetween(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
+        if (userId == ADMIN_ID) {
+            return jdbcTemplate.query(
+                    "SELECT * FROM products WHERE date_time>=? AND date_time<? ORDER BY date_time DESC", ROW_MAPPER, startDateTime, endDateTime);
+        }
+        return jdbcTemplate.query(
+                "SELECT * FROM products WHERE user_id=? AND date_time>=? AND date_time<? ORDER BY date_time DESC", ROW_MAPPER, userId, startDateTime, endDateTime);
+    }
+
+    public List<String> getOwnersNames() {
+        return jdbcTemplate.queryForList(
+                "SELECT u.name FROM products INNER JOIN users u ON u.id = products.user_id ORDER BY date_time DESC",
+                String.class);
     }
 }

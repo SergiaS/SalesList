@@ -1,16 +1,11 @@
 package org.saleslist.service;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.saleslist.enums.Role;
 import org.saleslist.model.User;
 import org.saleslist.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
@@ -18,15 +13,14 @@ import static org.junit.Assert.assertThrows;
 import static org.saleslist.UserTestData.*;
 
 /**
- * Tests just for example - not recommended to use!
- * Data maybe different
+ * Test for use with HSQLDB only!
  */
-@ContextConfiguration({
-        "classpath:spring/spring-app.xml",
-        "classpath:spring/spring-db.xml"
-})
-@RunWith(SpringRunner.class)
-@Sql(scripts = "classpath:db/copyFromBackup.sql", config = @SqlConfig(encoding = "UTF-8"))
+//@ContextConfiguration({
+//        "classpath:spring/spring-app.xml",
+//        "classpath:spring/spring-db.xml"
+//})
+//@RunWith(SpringRunner.class)
+//@Sql(scripts = "classpath:db/hsqldb_populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class UserServiceTest {
 
     @Autowired
@@ -45,7 +39,7 @@ public class UserServiceTest {
     @Test
     public void duplicateMailCreate() throws Exception {
         assertThrows(DataAccessException.class, () ->
-                service.create(new User(null, "Duplicate", "user@gmail.com", "newPass", Role.USER)));
+                service.create(new User(null, "Duplicate", "user@ukr.net", "newPass", Role.USER)));
     }
 
     @Test

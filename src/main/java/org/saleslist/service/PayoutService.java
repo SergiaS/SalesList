@@ -1,7 +1,7 @@
 package org.saleslist.service;
 
 import org.saleslist.model.Payout;
-import org.saleslist.repository.jdbc.JdbcMainRepository;
+import org.saleslist.repository.PayoutRepository;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -15,9 +15,9 @@ import static org.saleslist.util.DateTimeUtil.atStartOfNextDayOrMax;
 @Service
 public class PayoutService {
 
-    private final JdbcMainRepository<Payout> repository;
+    private final PayoutRepository repository;
 
-    public PayoutService(JdbcMainRepository<Payout> repository) {
+    public PayoutService(PayoutRepository repository) {
         this.repository = repository;
     }
 
