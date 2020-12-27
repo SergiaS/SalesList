@@ -1,14 +1,9 @@
 package org.saleslist.service;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.saleslist.model.Product;
 import org.saleslist.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -21,12 +16,12 @@ import static org.saleslist.UserTestData.USER_ID;
 /**
  * Test for use with HSQLDB only!
  */
-@ContextConfiguration({
-        "classpath:spring/spring-app.xml",
-        "classpath:spring/spring-db.xml"
-})
-@RunWith(SpringRunner.class)
-@Sql(scripts = "classpath:db/hsqldb_populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+//@ContextConfiguration({
+//        "classpath:spring/spring-app.xml",
+//        "classpath:spring/spring-db.xml"
+//})
+//@RunWith(SpringRunner.class)
+//@Sql(scripts = "classpath:db/hsqldb_populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class ProductServiceTest {
 
     @Autowired

@@ -10,8 +10,8 @@
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!-- Change DB by comment/uncomment property-placeholder -->
-<!--    <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE"/>-->
-    <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>
+    <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE"/>
+<!--    <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>-->
 
     <!--
         For postgres driver logging
@@ -25,10 +25,10 @@
     <context:component-scan base-package="org.saleslist.repository.jpa"/>
 
     <!--  !!!  db initialization !!! -->
-    <jdbc:initialize-database data-source="dataSource" enabled="${database.init}">
-        <jdbc:script location="${jdbc.initLocation}"/>
-        <jdbc:script encoding="utf-8" location="classpath:db/hsqldb_populateDB.sql"/>
-    </jdbc:initialize-database>
+<!--    <jdbc:initialize-database data-source="dataSource" enabled="${database.init}">-->
+<!--        <jdbc:script location="${jdbc.initLocation}"/>-->
+<!--        <jdbc:script encoding="utf-8" location="classpath:db/hsqldb_populateDB.sql"/>-->
+<!--    </jdbc:initialize-database>-->
 
     <!--no pooling-->
     <bean id="dataSource"
