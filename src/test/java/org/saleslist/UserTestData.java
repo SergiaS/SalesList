@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class UserTestData {
 
-    public static final int START_SEQ = 100000;
+    public static final int START_SEQ = 101;
 
     public static TestMatcher<User> USER_MATCHER = TestMatcher.usingFieldsComparator("registered", "roles");
 

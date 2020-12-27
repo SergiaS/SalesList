@@ -38,7 +38,6 @@ public class JpaUserRepository implements UserRepository {
         return em.createNamedQuery(User.DELETE)
                 .setParameter("id", id)
                 .executeUpdate() != 0;
-
     }
 
     @Override

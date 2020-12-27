@@ -95,8 +95,8 @@ public class ProductServiceTest {
     @Test
     public void getBetweenInclusive() throws Exception {
         PRODUCT_MATCHER.assertMatch(service.getBetweenInclusive(
-                LocalDate.of(2020, Month.JANUARY, 30),
-                LocalDate.of(2020, Month.JANUARY, 30), USER_ID),
+                LocalDate.of(2020, Month.FEBRUARY, 14),
+                LocalDate.of(2020, Month.FEBRUARY, 15), USER_ID),
                 PRODUCT3, PRODUCT2, PRODUCT1);
     }
 

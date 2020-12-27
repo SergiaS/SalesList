@@ -12,6 +12,7 @@ import java.util.List;
 import static org.saleslist.util.DateTimeUtil.atStartOfDayOrMin;
 import static org.saleslist.util.DateTimeUtil.atStartOfNextDayOrMax;
 import static org.saleslist.util.ValidationUtil.checkNotFoundWithId;
+import static org.saleslist.web.SecurityUtil.ADMIN_ID;
 
 @Service
 public class ProductService {
@@ -40,7 +41,12 @@ public class ProductService {
 
     public void update(Product product, int userId) {
         Assert.notNull(product, "product must be not null");
-        repository.save(product, userId);
+        if (userId == ADMIN_ID) {
+            repository.save(product, userId);
+        } else {
+            checkNotFoundWithId(repository.save(product, userId), product.getId());
+        }
+
     }
 
     public Product create(Product product, int userId) {

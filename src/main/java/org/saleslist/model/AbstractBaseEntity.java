@@ -7,7 +7,12 @@ import javax.persistence.*;
 public abstract class AbstractBaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // for postgres
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    // for hsqldb
+    @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1, initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq")
     protected Integer id;
 
     protected AbstractBaseEntity() {
