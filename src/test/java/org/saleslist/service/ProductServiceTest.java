@@ -1,17 +1,25 @@
 package org.saleslist.service;
 
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Stopwatch;
+import org.junit.runner.Description;
 import org.saleslist.model.Product;
 import org.saleslist.util.exception.NotFoundException;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertThrows;
 import static org.saleslist.ProductTestData.*;
 import static org.saleslist.UserTestData.ADMIN_ID;
 import static org.saleslist.UserTestData.USER_ID;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Test for use with HSQLDB only!
@@ -23,9 +31,31 @@ import static org.saleslist.UserTestData.USER_ID;
 //@RunWith(SpringRunner.class)
 //@Sql(scripts = "classpath:db/hsqldb_populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class ProductServiceTest {
+    private static final Logger log = getLogger("result");
+
+    private static final StringBuilder results = new StringBuilder();
+
+    @Rule
+    public final Stopwatch stopwatch = new Stopwatch() {
+        @Override
+        protected void finished(long nanos, Description description) {
+            String result = String.format("\n%-25s %7d", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
+            results.append(result);
+            log.info(result + " ms\n");
+        }
+    };
 
     @Autowired
     private ProductService service;
+
+    @AfterClass
+    public static void printResult() {
+        log.info("\n---------------------------------" +
+                "\nTest                 Duration, ms" +
+                "\n---------------------------------" +
+                results +
+                "\n---------------------------------");
+    }
 
     @Test
     public void delete() throws Exception {
@@ -79,7 +109,8 @@ public class ProductServiceTest {
 
     @Test
     public void updateNotOwn() throws Exception {
-        assertThrows(NotFoundException.class, () -> service.update(PRODUCT1, ADMIN_ID));
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> service.update(PRODUCT1, ADMIN_ID));
+        Assert.assertEquals("Not found entity with id=" + PRODUCT1, exception.getMessage());
     }
 
     @Test
