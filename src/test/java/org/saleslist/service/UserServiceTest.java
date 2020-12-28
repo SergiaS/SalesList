@@ -2,7 +2,7 @@ package org.saleslist.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.saleslist.Profiles;
+import org.saleslist.ActiveDbProfileResolver;
 import org.saleslist.enums.Role;
 import org.saleslist.model.User;
 import org.saleslist.util.exception.NotFoundException;
@@ -28,7 +28,7 @@ import static org.saleslist.UserTestData.*;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/hsqldb_populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@ActiveProfiles(Profiles.ACTIVE_DB)
+@ActiveProfiles(resolver = ActiveDbProfileResolver.class)
 public class UserServiceTest {
 
     @Autowired
