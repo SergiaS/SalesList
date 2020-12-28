@@ -6,10 +6,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
+import org.junit.runner.RunWith;
+import org.saleslist.Profiles;
 import org.saleslist.model.Product;
 import org.saleslist.util.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -24,12 +31,13 @@ import static org.slf4j.LoggerFactory.getLogger;
 /**
  * Test for use with HSQLDB only!
  */
-//@ContextConfiguration({
-//        "classpath:spring/spring-app.xml",
-//        "classpath:spring/spring-db.xml"
-//})
-//@RunWith(SpringRunner.class)
-//@Sql(scripts = "classpath:db/hsqldb_populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@ContextConfiguration({
+        "classpath:spring/spring-app.xml",
+        "classpath:spring/spring-db.xml"
+})
+@RunWith(SpringRunner.class)
+@Sql(scripts = "classpath:db/hsqldb_populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@ActiveProfiles(Profiles.ACTIVE_DB)
 public class ProductServiceTest {
     private static final Logger log = getLogger("result");
 

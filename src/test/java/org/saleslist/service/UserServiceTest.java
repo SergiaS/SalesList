@@ -1,11 +1,18 @@
 package org.saleslist.service;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.saleslist.Profiles;
 import org.saleslist.enums.Role;
 import org.saleslist.model.User;
 import org.saleslist.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
@@ -15,12 +22,13 @@ import static org.saleslist.UserTestData.*;
 /**
  * Test for use with HSQLDB only!
  */
-//@ContextConfiguration({
-//        "classpath:spring/spring-app.xml",
-//        "classpath:spring/spring-db.xml"
-//})
-//@RunWith(SpringRunner.class)
-//@Sql(scripts = "classpath:db/hsqldb_populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@ContextConfiguration({
+        "classpath:spring/spring-app.xml",
+        "classpath:spring/spring-db.xml"
+})
+@RunWith(SpringRunner.class)
+@Sql(scripts = "classpath:db/hsqldb_populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@ActiveProfiles(Profiles.ACTIVE_DB)
 public class UserServiceTest {
 
     @Autowired
