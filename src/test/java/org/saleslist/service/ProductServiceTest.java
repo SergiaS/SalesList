@@ -118,7 +118,7 @@ public class ProductServiceTest {
     @Test
     public void updateNotOwn() throws Exception {
         NotFoundException exception = assertThrows(NotFoundException.class, () -> service.update(PRODUCT1, ADMIN_ID));
-        Assert.assertEquals("Not found entity with id=" + PRODUCT1, exception.getMessage());
+        Assert.assertEquals("Not found entity with id=" + PRODUCT1_ID, exception.getMessage());
     }
 
     @Test

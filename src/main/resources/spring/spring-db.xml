@@ -52,10 +52,10 @@
         <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>
 
         <!--  !!!  db initialization !!! -->
-<!--        <jdbc:initialize-database data-source="dataSource" enabled="${database.init}">-->
-<!--            <jdbc:script location="${jdbc.initLocation}"/>-->
-<!--            <jdbc:script encoding="utf-8" location="classpath:db/hsqldb_populateDB.sql"/>-->
-<!--        </jdbc:initialize-database>-->
+        <jdbc:initialize-database data-source="dataSource" enabled="${database.init}">
+            <jdbc:script location="${jdbc.initLocation}"/>
+            <jdbc:script encoding="utf-8" location="classpath:db/hsqldb_populateDB.sql"/>
+        </jdbc:initialize-database>
 
         <!--no pooling-->
         <bean id="dataSource"

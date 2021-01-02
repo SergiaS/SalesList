@@ -18,7 +18,7 @@
         </encoder>
     </appender>
     <logger name="result" level="INFO" additivity="false">
-        <appernder-ref ref="result"/>
+        <appender-ref ref="result"/>
     </logger>
 
 <!--    <logger name="org.postgresql" level="debug"/>-->
