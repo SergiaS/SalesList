@@ -1,5 +1,6 @@
 package org.saleslist.web;
 
+import org.saleslist.Profiles;
 import org.saleslist.enums.DeliveryServiceEnum;
 import org.saleslist.enums.MarketPlaceEnum;
 import org.saleslist.enums.OrderStatusEnum;
@@ -8,6 +9,7 @@ import org.saleslist.model.Product;
 import org.saleslist.repository.ProductRepository;
 import org.saleslist.web.controller.PayoutRestController;
 import org.saleslist.web.controller.ProductRestController;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletConfig;
@@ -32,6 +34,7 @@ import static org.saleslist.web.SecurityUtil.getAuthUserId;
 @WebServlet("/products")
 public class ProductServlet extends MainServlet<Product> {
 
+    private ClassPathXmlApplicationContext springContext;
     private ProductRestController productController;
     private PayoutRestController payoutController;
     private ProductRepository productRepository;
@@ -39,6 +42,10 @@ public class ProductServlet extends MainServlet<Product> {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        springContext = new ClassPathXmlApplicationContext(new String[]{"spring/spring-app.xml", "spring/spring-db.xml"}, false);
+        springContext.getEnvironment().setActiveProfiles(Profiles.getActiveDbProfile(), Profiles.REPOSITORY_IMPLEMENTATION);
+        springContext.refresh();
+
         productController = springContext.getBean(ProductRestController.class);
         payoutController = springContext.getBean(PayoutRestController.class);
         productRepository = springContext.getBean(ProductRepository.class);

@@ -1,5 +1,6 @@
 package org.saleslist;
 
+import org.junit.rules.ExternalResource;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.slf4j.Logger;
