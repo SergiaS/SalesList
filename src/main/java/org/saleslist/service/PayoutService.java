@@ -11,6 +11,7 @@ import java.util.List;
 
 import static org.saleslist.util.DateTimeUtil.atStartOfDayOrMin;
 import static org.saleslist.util.DateTimeUtil.atStartOfNextDayOrMax;
+import static org.saleslist.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class PayoutService {
@@ -49,5 +50,9 @@ public class PayoutService {
     public Payout create(Payout payout, int userId) {
         Assert.notNull(payout, "payout must be not null");
         return repository.save(payout, userId);
+    }
+
+    public Payout getWithUser(int id, int userId) {
+        return checkNotFoundWithId(repository.getWithUser(id, userId), id);
     }
 }

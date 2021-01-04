@@ -1,6 +1,7 @@
 package org.saleslist.repository.datajpa;
 
 import org.saleslist.model.User;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +16,12 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
     int delete(int id);
 
     User getByEmail(String email);
+
+    @EntityGraph(attributePaths = {"products", "roles"})
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.products WHERE u.id = ?1")
+    User getWithProducts(int id);
+
+    @EntityGraph(attributePaths = {"payouts", "roles"})
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.payouts WHERE u.id = ?1")
+    User getWithPayouts(int id);
 }

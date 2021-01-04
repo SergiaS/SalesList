@@ -13,8 +13,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface CrudProductRepository extends JpaRepository<Product, Integer> {
 
-    @Transactional
     @Modifying
+    @Transactional
     @Query("DELETE FROM Product p WHERE p.id = :id AND p.user.id = :userId")
     int delete(@Param("id") int id, @Param("userId") int userId);
 //    deleteProductWhereIdAndUserid
@@ -27,6 +27,9 @@ public interface CrudProductRepository extends JpaRepository<Product, Integer> {
 
     @Query("SELECT p FROM Product p WHERE p.dateTime >= :startDate AND p.dateTime < :endDate ORDER BY p.dateTime DESC")
     List<Product> getBetweenAdmin(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
+    @Query("SELECT p FROM Product p JOIN FETCH p.user WHERE p.id=?1 AND p.user.id=?2")
+    Product getWithUser(int id, int userId);
 
 //    @Query(Product.ADMIN_GET_OWNERS_NAMES)
     @Query("SELECT u.name FROM Product p INNER JOIN User u ON u.id = p.user.id ORDER BY p.dateTime DESC")

@@ -57,4 +57,12 @@ public class UserService {
         checkNotFoundWithId(repository.save(user), user.getId());
 //        repository.save(user)
     }
+
+    public User getWithProducts(int id) {
+        return checkNotFoundWithId(repository.getWithProducts(id), id);
+    }
+
+    public User getWithPayouts(int id) {
+        return checkNotFoundWithId(repository.getWithProducts(id), id);
+    }
 }

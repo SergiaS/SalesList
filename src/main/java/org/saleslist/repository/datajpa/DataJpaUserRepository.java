@@ -39,6 +39,16 @@ public class DataJpaUserRepository implements UserRepository {
     }
 
     @Override
+    public User getWithProducts(int id) {
+        return crudRepository.getWithProducts(id);
+    }
+
+    @Override
+    public User getWithPayouts(int id) {
+        return crudRepository.getWithPayouts(id);
+    }
+
+    @Override
     public List<User> getAll() {
         return crudRepository.findAll(SORT_NAME_EMAIL);
     }

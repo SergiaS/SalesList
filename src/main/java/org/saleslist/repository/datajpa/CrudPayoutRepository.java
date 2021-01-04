@@ -34,4 +34,7 @@ public interface CrudPayoutRepository extends JpaRepository<Payout, Integer> {
 
     @Query("SELECT u.name FROM Payout pa INNER JOIN User u ON u.id = pa.user.id ORDER BY pa.dateTime DESC")
     List<String> getOwnersNames();
+
+    @Query("SELECT pa FROM Payout pa JOIN FETCH pa.user WHERE pa.id=?1 AND pa.user.id=?2")
+    Payout getWithUser(int id, int userId);
 }

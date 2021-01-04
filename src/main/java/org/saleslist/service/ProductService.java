@@ -53,4 +53,8 @@ public class ProductService {
         Assert.notNull(product, "product must be not null");
         return repository.save(product, userId);
     }
+
+    public Product getWithUser(int id, int userId) {
+        return checkNotFoundWithId(repository.getWithUser(id, userId), id);
+    }
 }

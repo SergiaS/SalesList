@@ -14,4 +14,12 @@ public interface UserRepository {
     User getByEmail(String email);
 
     List<User> getAll();
+
+    default User getWithProducts(int id) {
+        throw new UnsupportedOperationException();
+    }
+
+    default User getWithPayouts(int id) {
+        throw new UnsupportedOperationException();
+    }
 }

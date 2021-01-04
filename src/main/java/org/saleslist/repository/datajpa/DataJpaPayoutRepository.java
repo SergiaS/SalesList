@@ -32,7 +32,6 @@ public class DataJpaPayoutRepository implements PayoutRepository {
         if (userId == ADMIN_ID) {
             crudPayoutRepository.deleteById(id);
         }
-
         return crudPayoutRepository.delete(id, userId) != 0;
     }
 
@@ -64,6 +63,11 @@ public class DataJpaPayoutRepository implements PayoutRepository {
             return crudPayoutRepository.getBetweenAdmin(startDateTime, endDateTime);
         }
         return crudPayoutRepository.getBetween(startDateTime, endDateTime, userId);
+    }
+
+    @Override
+    public Payout getWithUser(int id, int userId) {
+        return crudPayoutRepository.getWithUser(id, userId);
     }
 
     @Override

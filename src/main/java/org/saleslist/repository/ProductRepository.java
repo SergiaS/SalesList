@@ -17,5 +17,9 @@ public interface ProductRepository {
 
     List<Product> getBetween(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId);
 
+    default Product getWithUser(int id, int userId) {
+        throw new UnsupportedOperationException();
+    }
+
     List<String> getOwnersNames();
 }

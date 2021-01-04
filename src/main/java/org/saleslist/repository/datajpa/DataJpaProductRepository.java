@@ -82,6 +82,11 @@ public class DataJpaProductRepository implements ProductRepository {
     }
 
     @Override
+    public Product getWithUser(int id, int userId) {
+        return crudProductRepository.getWithUser(id, userId);
+    }
+
+    @Override
     public List<String> getOwnersNames() {
         return crudProductRepository.getOwnersNames();
     }

@@ -17,7 +17,7 @@ import static org.saleslist.UserTestData.USER_ID;
 public abstract class AbstractProductServiceTest extends AbstractServiceTest {
 
     @Autowired
-    private ProductService service;
+    protected ProductService service;
 
     @Test
     public void delete() throws Exception {
