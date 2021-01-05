@@ -13,6 +13,9 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.junit.Assert.assertThrows;
+import static org.saleslist.util.ValidationUtil.getRootCause;
+
 /**
  * Test for use with HSQLDB only!
  */
@@ -30,4 +33,15 @@ abstract public class AbstractServiceTest {
 
     @Rule
     public final Stopwatch stopwatch = TimingRules.STOPWATCH;
+
+    // Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778
+    public <T extends Throwable> void validateRootCause(Runnable runnable, Class<T> rootExceptionClass) {
+        assertThrows(rootExceptionClass, () -> {
+            try {
+                runnable.run();
+            } catch (Exception e) {
+                throw getRootCause(e);
+            }
+        });
+    }
 }

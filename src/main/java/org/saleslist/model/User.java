@@ -60,7 +60,7 @@ public class User extends AbstractBaseEntity {
     private Set<Role> roles;
 
     @Column(name = "profit_per_day", nullable = false, columnDefinition = "int default 500")
-    @Range(min = 50, max = 5000)
+    @Range(min = 10, max = 10000)
     private int profitPerDay = DEFAULT_PROFIT_PER_DAY;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
@@ -69,7 +69,7 @@ public class User extends AbstractBaseEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @OrderBy("dateTime DESC")
-    private List<Product> payouts;
+    private List<Payout> payouts;
 
     public User() {
     }
@@ -161,7 +161,7 @@ public class User extends AbstractBaseEntity {
         return products;
     }
 
-    public List<Product> getPayouts() {
+    public List<Payout> getPayouts() {
         return payouts;
     }
 

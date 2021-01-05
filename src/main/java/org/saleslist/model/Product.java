@@ -76,6 +76,7 @@ public class Product extends AbstractBaseEntity {
     private BigDecimal payoutCurrency;
 
     @Column(name = "profit", nullable = false)
+    @Range(min = 10, max = 5000)
     private BigDecimal profit;
 
     @Column(name = "notes")

@@ -33,7 +33,7 @@ public class Payout extends AbstractBaseEntity {
 	@Column(name = "notes", nullable = false)
 	private String notes;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
