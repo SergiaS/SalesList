@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.saleslist.enums.Role;
 import org.saleslist.model.User;
+import org.saleslist.repository.JpaUtil;
 import org.saleslist.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
@@ -25,9 +26,13 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Autowired
     private CacheManager cacheManager;
 
+    @Autowired
+    protected JpaUtil jpaUtil;
+
     @Before
     public void setUp() throws Exception {
         cacheManager.getCache("users").clear();
+        jpaUtil.clear2ndLevelHibernateCache();
     }
 
     @Test
