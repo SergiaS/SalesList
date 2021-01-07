@@ -2,6 +2,7 @@ package org.saleslist.repository.datajpa;
 
 import org.saleslist.model.Payout;
 import org.saleslist.repository.PayoutRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,8 @@ import static org.saleslist.web.SecurityUtil.ADMIN_ID;
 
 @Repository
 public class DataJpaPayoutRepository implements PayoutRepository {
+
+    private static final Sort SORT_DATE_TIME = Sort.by(Sort.Direction.DESC, "dateTime");
 
     private final CrudPayoutRepository crudPayoutRepository;
 
@@ -49,10 +52,10 @@ public class DataJpaPayoutRepository implements PayoutRepository {
     @Override
     public List<Payout> getAll(int userId) {
         if (userId == ADMIN_ID){
-            return crudPayoutRepository.findAll();
+            return crudPayoutRepository.findAll(SORT_DATE_TIME);
         }
 //        return crudPayoutRepository.getAll(userId);
-        return crudPayoutRepository.findAll().stream()
+        return crudPayoutRepository.findAll(SORT_DATE_TIME).stream()
                 .filter(payout -> payout.getUser().getId() == userId)
                 .collect(Collectors.toList());
     }

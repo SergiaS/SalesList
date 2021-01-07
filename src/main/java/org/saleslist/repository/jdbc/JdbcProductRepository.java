@@ -2,6 +2,7 @@ package org.saleslist.repository.jdbc;
 
 import org.saleslist.model.Product;
 import org.saleslist.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,6 +25,7 @@ public abstract class JdbcProductRepository implements ProductRepository {
     private final SimpleJdbcInsert simpleJdbcInsert;
     private static final RowMapper<Product> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Product.class);
 
+    @Autowired
     public JdbcProductRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;

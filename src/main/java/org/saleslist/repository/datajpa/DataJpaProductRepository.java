@@ -14,7 +14,7 @@ import static org.saleslist.web.SecurityUtil.ADMIN_ID;
 @Repository
 public class DataJpaProductRepository implements ProductRepository {
 
-    private static final Sort SORT_DATE_TIME = Sort.by(Sort.Direction.DESC, "date_time");
+    private static final Sort SORT_DATE_TIME = Sort.by(Sort.Direction.DESC, "dateTime");
 
     private final CrudProductRepository crudProductRepository;
     private final CrudPayoutRepository crudPayoutRepository;
@@ -29,17 +29,22 @@ public class DataJpaProductRepository implements ProductRepository {
     @Override
     public Product save(Product product, int userId) {
 
+        int productId = product.getId() == null ? 0 : product.getId();
+
         if (product.getPayoutPercentage() > 0) {
             Payout payout = new Payout(
                     product.getDateTime(),
                     product.getPayoutCurrency(),
                     product.getTitle());
+            payout.setUser(crudUserRepository.getOne(userId));
+            payout.setProduct(crudProductRepository.getOne(productId));
             crudPayoutRepository.save(payout);
-        } else if(get(product.getId(), userId).getPayoutPercentage() > 0 && product.getPayoutPercentage() == 0){
+        } else if (get(productId, userId) != null &&
+                get(productId, userId).getPayoutPercentage() > 0 && product.getPayoutPercentage() == 0) {
             crudPayoutRepository.deleteByProductId(product.getId());
         }
 
-        if (!product.isNew() && get(product.getId(), userId) == null) {
+        if (!product.isNew() && get(productId, userId) == null) {
             return null;
         }
         product.setUser(crudUserRepository.getOne(userId));
