@@ -5,6 +5,8 @@ import org.saleslist.model.Product;
 import org.saleslist.repository.ProductRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,29 +28,41 @@ public class DataJpaProductRepository implements ProductRepository {
         this.crudUserRepository = crudUserRepository;
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public Product save(Product product, int userId) {
 
         int productId = product.getId() == null ? 0 : product.getId();
+        Product productExistInDB = get(productId, userId);
 
-        if (product.getPayoutPercentage() > 0) {
+        // product
+        if (!product.isNew() && get(product.getId(), userId) == null) {
+            return null;
+        }
+        product.setUser(crudUserRepository.getOne(userId));
+        crudProductRepository.save(product);
+
+        // payout
+        if ((productExistInDB == null && product.getPayoutPercentage() > 0) ||
+                (productExistInDB != null && productExistInDB.getPayoutPercentage() == 0 && product.getPayoutPercentage() > 0)) {
             Payout payout = new Payout(
                     product.getDateTime(),
                     product.getPayoutCurrency(),
                     product.getTitle());
             payout.setUser(crudUserRepository.getOne(userId));
-            payout.setProduct(crudProductRepository.getOne(productId));
+            payout.setProduct(product);
             crudPayoutRepository.save(payout);
-        } else if (get(productId, userId) != null &&
-                get(productId, userId).getPayoutPercentage() > 0 && product.getPayoutPercentage() == 0) {
+        } else if (productExistInDB != null && product.getPayoutPercentage() > 0) {
+            crudProductRepository.updatePayout(
+                    product.getDateTime(),
+                    product.getPayoutCurrency(),
+                    product.getTitle(),
+                    productId);
+        } else if (productExistInDB != null && productExistInDB.getPayoutPercentage() > 0 && product.getPayoutPercentage() == 0){
             crudPayoutRepository.deleteByProductId(product.getId());
         }
 
-        if (!product.isNew() && get(productId, userId) == null) {
-            return null;
-        }
-        product.setUser(crudUserRepository.getOne(userId));
-        return crudProductRepository.save(product);
+        return product;
     }
 
     @Override

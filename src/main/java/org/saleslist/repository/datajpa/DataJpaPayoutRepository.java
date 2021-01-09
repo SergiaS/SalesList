@@ -17,9 +17,11 @@ public class DataJpaPayoutRepository implements PayoutRepository {
     private static final Sort SORT_DATE_TIME = Sort.by(Sort.Direction.DESC, "dateTime");
 
     private final CrudPayoutRepository crudPayoutRepository;
+    private final CrudUserRepository crudUserRepository;
 
-    public DataJpaPayoutRepository(CrudPayoutRepository crudPayoutRepository) {
+    public DataJpaPayoutRepository(CrudPayoutRepository crudPayoutRepository, CrudUserRepository crudUserRepository) {
         this.crudPayoutRepository = crudPayoutRepository;
+        this.crudUserRepository = crudUserRepository;
     }
 
     @Override
@@ -27,6 +29,7 @@ public class DataJpaPayoutRepository implements PayoutRepository {
         if (!payout.isNew() && get(payout.getId(), userId) == null) {
             return null;
         }
+        payout.setUser(crudUserRepository.getOne(userId));
         return crudPayoutRepository.save(payout);
     }
 

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public interface CrudPayoutRepository extends JpaRepository<Payout, Integer> {
     @Query("DELETE FROM Payout pa WHERE pa.id=:id AND pa.user.id=:userId")
     int delete(@Param("id") int id, @Param("userId") int userId);
 
-    @Transactional
+    @Transactional(propagation = Propagation.NESTED)
     @Modifying
     @Query("DELETE FROM Payout pa WHERE pa.product.id=:productId")
     void deleteByProductId(@Param("productId") int productId);

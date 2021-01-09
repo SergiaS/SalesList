@@ -11,11 +11,11 @@ public abstract class AbstractBaseEntity implements Persistable<Integer> {
 
     @Id
     // for postgres
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     // for hsqldb
-    @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1, initialValue = 101)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq")
+//    @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1, initialValue = 101)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq")
     protected Integer id;
 
     protected AbstractBaseEntity() {
