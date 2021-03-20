@@ -1,8 +1,10 @@
 package org.saleslist.web;
 
+import org.saleslist.Profiles;
 import org.saleslist.model.Payout;
 import org.saleslist.repository.PayoutRepository;
 import org.saleslist.web.controller.PayoutRestController;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletConfig;
@@ -25,12 +27,17 @@ import static org.saleslist.web.SecurityUtil.getAuthUserId;
 @WebServlet("/payouts")
 public class PayoutServlet extends MainServlet<Payout> {
 
+    private ClassPathXmlApplicationContext springContext;
     private PayoutRestController controller;
     private PayoutRepository repository;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        springContext = new ClassPathXmlApplicationContext(new String[]{"spring/spring-app.xml", "spring/spring-db.xml"}, false);
+        springContext.getEnvironment().setActiveProfiles(Profiles.getActiveDbProfile(), Profiles.REPOSITORY_IMPLEMENTATION);
+        springContext.refresh();
+
         controller = springContext.getBean(PayoutRestController.class);
         repository = springContext.getBean(PayoutRepository.class);
     }

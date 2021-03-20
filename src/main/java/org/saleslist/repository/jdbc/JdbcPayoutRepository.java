@@ -19,7 +19,7 @@ import java.util.List;
 import static org.saleslist.web.SecurityUtil.ADMIN_ID;
 
 @Repository
-public class JdbcPayoutRepository implements PayoutRepository {
+public abstract class JdbcPayoutRepository implements PayoutRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -90,10 +90,12 @@ public class JdbcPayoutRepository implements PayoutRepository {
     public List<Payout> getBetween(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         if (userId == ADMIN_ID) {
             return jdbcTemplate.query(
-                    "SELECT * FROM payouts WHERE date_time>=? AND date_time<? ORDER BY date_time DESC", ROW_MAPPER, startDateTime, endDateTime);
+                    "SELECT * FROM payouts WHERE date_time>=? AND date_time<? ORDER BY date_time DESC", ROW_MAPPER,
+                    startDateTime, endDateTime);
         }
         return jdbcTemplate.query(
-                "SELECT * FROM payouts WHERE user_id=? AND date_time>=? AND date_time<? ORDER BY date_time DESC", ROW_MAPPER, userId, startDateTime, endDateTime);
+                "SELECT * FROM payouts WHERE user_id=? AND date_time>=? AND date_time<? ORDER BY date_time DESC", ROW_MAPPER,
+                userId, startDateTime, endDateTime);
     }
 
     public List<String> getOwnersNames() {

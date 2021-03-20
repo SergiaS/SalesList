@@ -17,5 +17,9 @@ public interface  PayoutRepository {
 
 	List<Payout> getBetween(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId);
 
+	default Payout getWithUser(int id, int userId) {
+		throw new UnsupportedOperationException();
+	}
+
 	List<String> getOwnersNames();
 }

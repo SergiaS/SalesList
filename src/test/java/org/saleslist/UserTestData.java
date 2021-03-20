@@ -10,7 +10,7 @@ public class UserTestData {
 
     public static final int START_SEQ = 101;
 
-    public static TestMatcher<User> USER_MATCHER = TestMatcher.usingFieldsComparator("registered", "roles");
+    public static TestMatcher<User> USER_MATCHER = TestMatcher.usingFieldsComparator("registered", "roles", "products", "payouts");
 
     public static final int NOT_FOUND = 10;
     public static final int USER_ID = START_SEQ;

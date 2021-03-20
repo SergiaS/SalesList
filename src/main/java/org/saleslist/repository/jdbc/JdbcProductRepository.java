@@ -18,7 +18,7 @@ import java.util.List;
 import static org.saleslist.web.SecurityUtil.ADMIN_ID;
 
 @Repository
-public class JdbcProductRepository implements ProductRepository {
+public abstract class JdbcProductRepository implements ProductRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -58,21 +58,34 @@ public class JdbcProductRepository implements ProductRepository {
         } else {
             if (namedParameterJdbcTemplate.update(
                     "UPDATE products " +
-                    "SET date_time=:date_time, title=:title, market_place=:market_place, delivery_service=:delivery_service, payment_method=:payment_method, order_status=:order_status, sold_at_price=:sold_at_price, spent=:spent, payout_percentage=:payout_percentage, payout_currency=:payout_currency, profit=:profit, notes=:notes " +
-                    "WHERE id=:id AND user_id=:user_id", map) == 0) {
+                            "SET date_time=:date_time, title=:title, market_place=:market_place, delivery_service=:delivery_service, payment_method=:payment_method, order_status=:order_status, sold_at_price=:sold_at_price, spent=:spent, payout_percentage=:payout_percentage, payout_currency=:payout_currency, profit=:profit, notes=:notes " +
+                            "WHERE id=:id AND user_id=:user_id", map) == 0) {
                 return null;
             }
         }
 
         // for payout
+//        if (product.getPayoutPercentage() > 0) {
+//            jdbcTemplate.update("INSERT INTO payouts(user_id, product_id, date_time, amount, notes) " +
+//                    "VALUES (?,?,?,?,?) " +
+//                    "ON CONFLICT (product_id)" +
+//                    "DO UPDATE SET user_id=EXCLUDED.user_id, date_time=EXCLUDED.date_time, amount=EXCLUDED.amount, notes=EXCLUDED.notes",
+//                    userId, product.getId(), toDbDateTime(product.getDateTime()), product.getPayoutCurrency(), product.getTitle());
+//        } else {
+//            jdbcTemplate.update("DELETE FROM payouts WHERE product_id=?", product.getId());
+//        }
+
         if (product.getPayoutPercentage() > 0) {
+//            Payout payout = new Payout(product.getDateTime(), product.getPayoutCurrency(), product.getTitle());
             jdbcTemplate.update("INSERT INTO payouts(user_id, product_id, date_time, amount, notes) " +
-                    "VALUES (?,?,?,?,?) " +
-                    "ON CONFLICT (product_id)" +
-                    "DO UPDATE SET user_id=EXCLUDED.user_id, date_time=EXCLUDED.date_time, amount=EXCLUDED.amount, notes=EXCLUDED.notes", userId, product.getId(), product.getDateTime(), product.getPayoutCurrency(), product.getTitle());
-        } else {
+                            "VALUES (?,?,?,?,?) " +
+                            "ON CONFLICT (product_id)" +
+                            "DO UPDATE SET user_id=EXCLUDED.user_id, date_time=EXCLUDED.date_time, amount=EXCLUDED.amount, notes=EXCLUDED.notes",
+                    userId, product.getId(), product.getDateTime(), product.getPayoutCurrency(), product.getTitle());
+        } else if (get(product.getId(), userId).getPayoutPercentage() > 0 && product.getPayoutPercentage() == 0) {
             jdbcTemplate.update("DELETE FROM payouts WHERE product_id=?", product.getId());
         }
+
         return product;
     }
 
@@ -103,10 +116,12 @@ public class JdbcProductRepository implements ProductRepository {
     public List<Product> getBetween(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         if (userId == ADMIN_ID) {
             return jdbcTemplate.query(
-                    "SELECT * FROM products WHERE date_time>=? AND date_time<? ORDER BY date_time DESC", ROW_MAPPER, startDateTime, endDateTime);
+                    "SELECT * FROM products WHERE date_time>=? AND date_time<? ORDER BY date_time DESC", ROW_MAPPER,
+                    startDateTime, endDateTime);
         }
         return jdbcTemplate.query(
-                "SELECT * FROM products WHERE user_id=? AND date_time>=? AND date_time<? ORDER BY date_time DESC", ROW_MAPPER, userId, startDateTime, endDateTime);
+                "SELECT * FROM products WHERE user_id=? AND date_time>=? AND date_time<? ORDER BY date_time DESC", ROW_MAPPER,
+                userId, startDateTime, endDateTime);
     }
 
     public List<String> getOwnersNames() {

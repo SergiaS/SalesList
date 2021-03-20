@@ -8,6 +8,7 @@ import org.saleslist.enums.PaymentMethodEnum;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -37,6 +38,7 @@ public class Product extends AbstractBaseEntity {
     public static final String ADMIN_GET_OWNERS_NAMES = "Product.getOwnersNames";
 
     @Column(name = "date_time", nullable = false)
+    @NotNull
     private LocalDateTime dateTime;
 
     @Column(name = "title", nullable = false)
@@ -76,6 +78,7 @@ public class Product extends AbstractBaseEntity {
     private BigDecimal payoutCurrency;
 
     @Column(name = "profit", nullable = false)
+    @Range(min = 10, max = 5000)
     private BigDecimal profit;
 
     @Column(name = "notes")

@@ -1,30 +1,39 @@
 package org.saleslist.service;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.saleslist.enums.Role;
 import org.saleslist.model.User;
+import org.saleslist.repository.JpaUtil;
 import org.saleslist.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
 
+import javax.validation.ConstraintViolationException;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertThrows;
 import static org.saleslist.UserTestData.*;
 
-/**
- * Test for use with HSQLDB only!
- */
-//@ContextConfiguration({
-//        "classpath:spring/spring-app.xml",
-//        "classpath:spring/spring-db.xml"
-//})
-//@RunWith(SpringRunner.class)
-//@Sql(scripts = "classpath:db/hsqldb_populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-public class UserServiceTest {
+public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Autowired
-    private UserService service;
+    protected UserService service;
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Autowired
+    protected JpaUtil jpaUtil;
+
+    @Before
+    public void setUp() throws Exception {
+        cacheManager.getCache("users").clear();
+        jpaUtil.clear2ndLevelHibernateCache();
+    }
 
     @Test
     public void create() throws Exception {
@@ -81,5 +90,14 @@ public class UserServiceTest {
     public void getAll() throws Exception {
         List<User> all = service.getAll();
         USER_MATCHER.assertMatch(all, ADMIN, USER);
+    }
+
+    @Test
+    public void createWithException() throws Exception {
+        validateRootCause(() -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.USER)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(null, "User", "  ", "password", Role.USER)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.USER)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "password", 9, true, new Date(), Set.of())), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "password", 10001, true, new Date(), Set.of())), ConstraintViolationException.class);
     }
 }
